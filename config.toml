@@ -1,3 +1,7 @@
-baseurl = "http://example.org/"
-title = "My New Hugo Site"
+baseurl = "https://im5tu.io/"
+
+title = "Stuart Blackler's Tech Blog"
+
 languageCode = "en-us"
+
+theme = "hugo-bones"
