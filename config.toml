@@ -5,3 +5,7 @@ title = "Stuart Blackler's Tech Blog"
 languageCode = "en-us"
 
 theme = "hugo-bones"
+metaDataFormat = "json"
+enableRobotsTXT = true
+[permalinks]
+  article = "article/:year/:month/:title/"
