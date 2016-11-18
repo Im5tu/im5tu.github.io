@@ -2,8 +2,7 @@
    "categories": ["Building a blog"],
    "date": "2016-11-17T19:34:17Z",
    "description": "This is my introductionary blog post saying hello to the world.",
-   "draft": true,
-   "tags": ["Hello", "Blog"],
+   "tags": ["blogging"],
    "title": "Hello World"
 }
 
