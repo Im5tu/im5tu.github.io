@@ -1,5 +1,5 @@
 node_modules/
 data/**/hash.*
-static/css/site.css
-static/js/site.js
+static/css/*.css
+static/js/*.js
 public/

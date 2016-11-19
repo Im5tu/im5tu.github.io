@@ -37,8 +37,8 @@ Before we begin installing packages inside of our project, I am going to add a `
 
     node_modules/
     data/**/hash.*
-    static/css/site.css
-    static/js/site.js
+    static/css/*.css
+    static/js/*.js
     public/
 
 Now we can setup our project to use yarn:
