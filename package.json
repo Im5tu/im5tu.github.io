@@ -1,0 +1,17 @@
+{
+  "name": "im5tu",
+  "version": "0.0.1",
+  "description": "Stuart Blackler's Tech Blog",
+  "main": "index.js",
+  "repository": "https://github.com/Im5tu/im5tu-hugo.git",
+  "author": "Stuart Blackler (@im5tu) <im5tu@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-sass": "^2.3.2"
+  },
+  "scripts": {
+    "gulp": "gulp"
+  }
+}
