@@ -1,7 +1,7 @@
 {
    "categories": ["Building a blog"],
    "date": "2016-11-19T08:01:38Z",
-   "description": "Setting up a theme and creating our first article using hugo and bones",
+   "description": "Setting up a frontend pipeline powered by yarn & gulp.",
    "tags": ["hugo", "blog", "js", "yarn", "node"],
    "title": "Blog Building - Part 4 - Frontend"
 }
