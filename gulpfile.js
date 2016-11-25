@@ -20,7 +20,7 @@ gulp.task("js", function() {
     gulp
         .src(srcJs)
         .pipe(concat("site.js"))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(hash())
         .pipe(gulp.dest(destJsDir))
         .pipe(hash.manifest("hash.json"))
