@@ -3,11 +3,13 @@ var gulp         = require("gulp"),
     autoprefixer = require("gulp-autoprefixer"),
     hash         = require("gulp-hash"),
     del          = require("del"),
+    concat       = require("gulp-concat"),
+    uglify       = require("gulp-uglify"),
     srcRootDir   = "src/",
     destRootDir  = "static/",
-    srcCssDir    = srcRootDir + "css/",
+    srcCssDir    = srcRootDir + "sass/",
     srcJsDir     = srcRootDir + "js/",
-    srcCss       = srcCssDir + "**/*.scss",
+    srcCss       = srcCssDir + "**/site.scss",
     srcJs        = srcJsDir + "**/*.js",
     destCssDir   = destRootDir + "css",
     destJsDir    = destRootDir + "js";
@@ -17,6 +19,8 @@ gulp.task("js", function() {
 
     gulp
         .src(srcJs)
+        .pipe(concat("site.js"))
+        .pipe(uglify())
         .pipe(hash())
         .pipe(gulp.dest(destJsDir))
         .pipe(hash.manifest("hash.json"))
@@ -27,7 +31,7 @@ gulp.task("css", function() {
     del.sync([destCssDir]);
 
     gulp
-        .src(srcCss)
+        .src([srcCss])
         .pipe(sass({
             outputStyle: "compressed"
         }))
@@ -45,7 +49,8 @@ gulp.task("clean", function(){
 })
 
 gulp.task("watch", ["css", "js"], function() {
-    gulp.watch([srcCss, srcJs], ["css", "js"]);
+    gulp.watch([srcCssDir + "**/*.scss"], ["css"]);
+    gulp.watch([srcJs], ["js"]);
 });
 
 gulp.task("default", ["watch"]);
