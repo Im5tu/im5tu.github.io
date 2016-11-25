@@ -5,7 +5,6 @@ languageCode = "en-us"
 theme = "hugo-bones"
 metaDataFormat = "json"
 enableRobotsTXT = true
-pygmentsCodeFences = true
 pygmentsuseclasses = true
 
 [permalinks]
