@@ -5,13 +5,14 @@ $secondaryColour: lighten($primaryColour, 25%);
 
 // Body
 $bodyCopyColour: #000; // 222
-$bodyBackgroundColour: $defaultColour; 
-$headingsDefaultColour: #000; // 111
+$bodyBackgroundColour: #ecf0ef;// $defaultColour; 
+$headingsDefaultColour: #161616; // 111
 
 // Header
-$headerBackgroundColour: #000;
+$headerBackgroundColour: #111;
 $headerBackgroundHoverColour: $headerBackgroundColour;
 $headerBorderColour: lighten($secondaryColour, 50%);
+$headerFontColour: #fff;
 
 // Logo
 $logoFillColour: #fff;
@@ -19,9 +20,13 @@ $logoFillHoverColour: #fff;
 
 // Links
 $defaultLinkColour: $primaryColour;
-$defaultLinkHoverColour: darken($defaultLinkColour, 25%);
-
+$defaultLinkHoverColour: #A83840; //darken($defaultLinkColour, 25%);
 
 // footer 
-$footerBackgroundColour: #ddd;
+$footerBackgroundColour: #dedede;
 $footerTextColour: darken($footerBackgroundColour, 25%);
+
+// misc
+$defaultPreBorderColour: #cdcdcd;
+$defaultPreFontColour: #222;
+$inlineCodeColour: #973255;

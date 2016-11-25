@@ -6,12 +6,12 @@ html, body {
     background: $bodyBackgroundColour;
     color: $bodyCopyColour;
     text-align: justify;
-    @include font("source-sans-pro");
+    @include font("Raleway");
 }
 
 h1, h2, h3, h4, h5
 {
-    @include font("Open Sans");
+    @include font("Exo");
     margin: 1.25em 0 0.25em 0;
     font-weight: 800;
     color: $headingsDefaultColour;
@@ -40,6 +40,14 @@ h5 {
 p {
     @include fontSize(1em);
     margin-bottom: 1em;
+
+    & code {
+        color: $inlineCodeColour;
+
+        &:hover{
+            color: lighten($inlineCodeColour, 15%);
+        }
+    }
 }
 
 a {
@@ -51,4 +59,18 @@ a {
     &:hover {
         color: $defaultLinkHoverColour;
     }
+}
+
+pre {
+    background: $defaultColour;
+    border: 1px solid $defaultPreBorderColour;
+    color: $defaultPreFontColour;
+
+    &:hover {
+        border-color: darken($defaultPreBorderColour, 25%);
+    }
+
+    &, code {
+        font-family: 'Droid Sans Mono', monospace;
+    } 
 }

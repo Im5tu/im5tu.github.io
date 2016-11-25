@@ -29,13 +29,14 @@ article.article{
 
     & pre {
         @include fontSize(1em);
-        margin: $defaultMargin;
+        margin: $defaultMargin / 2;
+        padding: $defaultMargin / 2;
         white-space: pre-wrap;
     }
 }
 
 time.article-header-time {
-
+    font-style: italic;
 }
 
 ul.article-tags {
@@ -58,6 +59,10 @@ ul.article-tags {
 
 a.article-tag {
     &:link, &:visited {
+        color: $defaultLinkHoverColour;
+    }
+
+    &:hover {
         color: $secondaryColour;
     }
 }

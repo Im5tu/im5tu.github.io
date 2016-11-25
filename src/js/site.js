@@ -50,11 +50,12 @@
 
 window.site.init(function () {
     window.site.listenFor("click", function(e) {
-        window.onNextAnimation(function () {
+        window.site.log("click");
+        window.site.onNextAnimation(function () {
             window.scroll(0, 0);
         });
         e.preventDefault();
-    }, document.getElementById("#pageFooter-scroll-link"));
+    }, document.getElementById("pageFooter-scroll-link"));
 
     var renderableTimeElements = [], timePortions = document.getElementsByClassName("article-header-time");
     for (var i = 0; i < timePortions.length; i++) {
