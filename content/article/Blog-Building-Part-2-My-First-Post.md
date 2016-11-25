@@ -19,17 +19,21 @@ Once you have the themes git url:
 
 Once the repository is cloned, we need to tell hugo how to use our new theme. To do this we need to open the `config.toml` file inside of the root directory and create an entry called theme. When this is done, your config file should look something along the lines of the following:
 
-	baseurl = "http://example.org/"
-	title = "My New Hugo Site"
-	languageCode = "en-us"
-	theme = "hugo-bones"
+``` c#
+baseurl = "http://example.org/"
+title = "My New Hugo Site"
+languageCode = "en-us"
+theme = "hugo-bones"
+```
 
 Whilst I am here, I am going to change the other properties accordingly:
 
-	baseurl = "https://im5tu.io/"
-	title = "Stuart Blackler's Tech Blog"
-	languageCode = "en-us"
-	theme = "hugo-bones"
+``` c#
+baseurl = "https://im5tu.io/"
+title = "Stuart Blackler's Tech Blog"
+languageCode = "en-us"
+theme = "hugo-bones"
+```
 
 Don't forget to save the file. It's also probably a good idea to commit your progress as you go.
 
@@ -53,14 +57,16 @@ Before I finish up this post and write more, I want to change a few of the confi
 
 In order to make these changes, we need to once more open the `config.toml` file and add the properties as follows:
 
-	baseurl = "https://im5tu.io/"
-	title = "Stuart Blackler's Tech Blog"
-	languageCode = "en-us"
-	theme = "hugo-bones"
-	metaDataFormat = "json"
-	enableRobotsTXT = true
-	[permalinks]
-	  article = "article/:year/:month/:title/"
+``` c#
+baseurl = "https://im5tu.io/"
+title = "Stuart Blackler's Tech Blog"
+languageCode = "en-us"
+theme = "hugo-bones"
+metaDataFormat = "json"
+enableRobotsTXT = true
+[permalinks]
+	article = "article/:year/:month/:title/"
+```
 
 ## Next steps
 

@@ -64,13 +64,15 @@ From now on, when we generate our site with `hugo` (the way we will generate our
 
 Out of curiosity, I tested to make sure that they have different git histories:
 
-	E:\im5tu-hugo>git log --oneline
-	f3c2595 Initialized submodules
-	e60426b Initial commit
+``` powershell
+E:\im5tu-hugo>git log --oneline
+f3c2595 Initialized submodules
+e60426b Initial commit
 
-	E:\im5tu-hugo>cd public && git log --oneline
-	ef81fbc Create CNAME
-	3043605 Hello World
+E:\im5tu-hugo>cd public && git log --oneline
+ef81fbc Create CNAME
+3043605 Hello World
+```
 
 This can be verified on both repositories [here](https://github.com/Im5tu/im5tu-hugo/commits/master) and [here](https://github.com/Im5tu/im5tu.github.io/commits/master).
 

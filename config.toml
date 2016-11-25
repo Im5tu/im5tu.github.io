@@ -1,11 +1,12 @@
 baseurl = "https://im5tu.io/"
 
 title = "Stuart Blackler's Tech Blog"
-
 languageCode = "en-us"
-
 theme = "hugo-bones"
 metaDataFormat = "json"
 enableRobotsTXT = true
+pygmentsCodeFences = true
+pygmentsuseclasses = true
+
 [permalinks]
   article = "article/:year/:month/:title/"

@@ -11,22 +11,24 @@ In this article, I will show you how the theme has been constructed and show you
 
 When we installed the theme in the previous post, a series of conventions took over and began the process of rending our pages for us. Because hugo is convention based, we can override the defaults by placing files in the correct place, but first we need to understand the layout. Below you can see the parts of the website that we care about the most:
 
-    /root
-        /archetypes
-        /content
-        /layouts
-        /static
-        /themes
-            /themeA
-                /archetypes
-                /layouts
-                    /_default
-                    /indexes
-                    /partials
-                    /taxonomy
-                index.html
-            /themeB
-                <as above>
+``` powershell
+/root
+    /archetypes
+    /content
+    /layouts
+    /static
+    /themes
+        /themeA
+            /archetypes
+            /layouts
+                /_default
+                /indexes
+                /partials
+                /taxonomy
+            index.html
+        /themeB
+            <as above>
+```
 
 ## Defaults
 
@@ -50,14 +52,18 @@ You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/m
 
 The [.Render](http://gohugo.io/templates/functions/#render) function is a special kind of function that you can call when rendering a list. It's like rendering a partial view but for the current item in an enumeration. 
 
-    {{ range .Data.Pages }}
-        {{ .Render "summary"}}
-    {{ end }}
+``` go
+{{ range .Data.Pages }}
+    {{ .Render "summary"}}
+{{ end }}
+```
 
 The above sample will inspect the page data and enumerate all the available pages associated with the current page before calling render on each item. C#/Java would look something like: 
 
-    foreach(var page in this.Data.Pages)
-        Render("summary", currentItem);
+``` c#
+foreach(var page in this.Data.Pages)
+    Render("summary", currentItem);
+```
 
 You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/master/layouts/article/list.html#L4).
 
@@ -65,10 +71,12 @@ You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/m
 
 [Partial templates](http://gohugo.io/templates/partials/) are often used to separate out sections of a site into reusable components. The main difference between `partial` and `.Render` is that partial can be used to render whole sections of a site with a specific context where is `.Render` is limited to the current item in an enumeration. 
 
-    <body>
-    {{ block "content" . -}} {{- end }}
-    {{- partial "header/scripts" . -}}
-    </body>
+``` go
+<body>
+{{ block "content" . -}} {{- end }}
+{{- partial "header/scripts" . -}}
+</body>
+```
 
 The above [example from the baseOf file from bones](https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html) does the following:
 
