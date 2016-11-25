@@ -3,3 +3,4 @@ data/**/hash.*
 static/css/*.css
 static/js/*.js
 public/
+yarn.lock
