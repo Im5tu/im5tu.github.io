@@ -1,0 +1,28 @@
+@import 'global/defaults';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 100%;
+}
+
+ul, ol {
+    margin: 1em $defaultMargin;
+
+    & li {
+        margin: .25em auto;
+    }
+}
+
+ol {
+    & ul {
+        margin: .25em $defaultMargin;
+    }
+}
+
+hr {
+    margin: ($defaultMargin / 2) auto;
+}

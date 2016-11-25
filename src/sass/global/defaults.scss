@@ -1,0 +1,8 @@
+@import 'breakpoints';
+
+$defaultMargin: 1.5em;
+$defaultHalfMargin: $defaultMargin / 2;
+$defaultPadding: $defaultMargin;
+$defaultHalfPadding: $defaultPadding / 2;
+
+$maxWidth: map-get($breakpoints, "desktop");

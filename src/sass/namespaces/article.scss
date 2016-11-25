@@ -1,11 +1,20 @@
+@import 'global/breakpoints';
 @import 'global/colours';
+@import 'global/defaults';
+@import 'global/mixins';
 
 .article-list {
+    & > footer {
+        margin: 1em auto;
+        @include fontSize(1.25em);
+    }
 
+    & .article footer {
+            margin-bottom: 0;
+    }
 }
 
 article.article{
-
     &-header {
 
     }
@@ -15,7 +24,13 @@ article.article{
     }
 
     &-footer{
+        margin: $defaultMargin auto;
+    }
 
+    & pre {
+        @include fontSize(1em);
+        margin: $defaultMargin;
+        white-space: pre-wrap;
     }
 }
 
@@ -24,9 +39,25 @@ time.article-header-time {
 }
 
 ul.article-tags {
-    
+    margin-left: $defaultHalfMargin;
+    display: inline;
+    list-style: none;
+
+    & li {
+        display: inline;
+
+        &:not(:last-child):after{ 
+            content: ", ";
+        }
+
+        &:last {
+            margin-right: 0;
+        }
+    }
 }
 
 a.article-tag {
-
+    &:link, &:visited {
+        color: $secondaryColour;
+    }
 }

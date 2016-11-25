@@ -1,0 +1,38 @@
+// $current represents the values passed into the breakpoints
+@mixin mapToBreakpoint($values, $currentBreakpoints: $breakpoints) {
+    @each $breakpoint, $value in $values {
+        $current: $value !global;
+
+        @if ($breakpoint == null) {
+            @content;
+        }
+        @else {
+            @include media($breakpoint, $currentBreakpoints) {
+                @content;
+            };
+        }
+        $current: null !global;
+    }
+};
+
+@mixin media($breakpointName, $currentBreakpoints: $breakpoints, $mediaType: "min-width") {
+    @if(map-has-key($currentBreakpoints, $breakpointName))
+    {
+        $breakpoint: map-get($currentBreakpoints, $breakpointName);
+        @media screen and ($mediaType: $breakpoint)
+        {
+            @content;
+        };
+    }
+}
+
+@mixin font($mainFont)
+{
+    font-family: $mainFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@mixin fontSize($size)
+{
+    font-size: $size;
+    line-height: $size + .5em;
+}

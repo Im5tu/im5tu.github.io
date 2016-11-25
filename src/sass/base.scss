@@ -1,0 +1,54 @@
+@import 'global/colours';
+@import 'global/mixins';
+
+html, body {
+    min-height: 100%;
+    background: $bodyBackgroundColour;
+    color: $bodyCopyColour;
+    text-align: justify;
+    @include font("source-sans-pro");
+}
+
+h1, h2, h3, h4, h5
+{
+    @include font("Open Sans");
+    margin: 1.25em 0 0.25em 0;
+    font-weight: 800;
+    color: $headingsDefaultColour;
+}
+
+h1 {
+    @include fontSize(2.3em);
+}
+
+h2 {
+    @include fontSize(1.8em);
+}
+
+h3 {
+    @include fontSize(1.3em);
+}
+
+h4 {
+    @include fontSize(1.2em);
+}
+
+h5 {
+    @include fontSize(1.1em);
+}
+
+p {
+    @include fontSize(1em);
+    margin-bottom: 1em;
+}
+
+a {
+    &:link, &:visited {
+        color: $defaultLinkColour;
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: $defaultLinkHoverColour;
+    }
+}

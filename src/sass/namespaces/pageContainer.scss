@@ -1,9 +1,15 @@
-
+@import 'global/breakpoints';
+@import 'global/defaults';
 
 .pageContainer{
-
-
     &-content{
+        max-width: $maxWidth;
+        margin: 0 auto;
+        height: 100%;
+        padding-bottom: ($defaultMargin * 6);
         
+        @include mapToBreakpoint($widths) {
+            width: $current;
+        }
     }
 }
