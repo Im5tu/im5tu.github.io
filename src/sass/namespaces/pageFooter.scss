@@ -11,7 +11,7 @@
     justify-content: center;
     background: $footerBackgroundColour;
     color: $footerTextColour;
-    position: fixed;
+    position: absolute;
     bottom: 0;
 
     @include fontSize(.9em);
