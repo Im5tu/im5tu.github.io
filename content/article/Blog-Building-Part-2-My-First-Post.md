@@ -43,7 +43,7 @@ Now that we have our theme all setup, we should probably create a hello world po
 
 We can preview this site by running the command: `hugo server -D` and navigating to `http://localhost:1313/`. All being well you should see the following:
 
-![Alt Text](/img/blog-building-part-2/first-post.JPG)
+![First Post Image](/img/blog-building-part-2/first-post.JPG)
 
 One of the great things about hugo is that it has live reload capabilities built in. This means that we can navigate to the page that we want to edit in the browser and everytime we make a change to the file, it will be synced to the screen. Try it! This magic happens because we called `hugo server` which, in a way, breaks down to mean:
 	- `hugo`: build my site please
