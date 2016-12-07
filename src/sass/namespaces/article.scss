@@ -33,6 +33,10 @@ article.article{
         padding: $defaultMargin / 2;
         white-space: pre-wrap;
     }
+
+    & img {
+        max-width: 100%;
+    }
 }
 
 time.article-header-time {
