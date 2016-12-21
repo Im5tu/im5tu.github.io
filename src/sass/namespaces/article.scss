@@ -27,6 +27,19 @@ article.article{
         margin: $defaultMargin auto;
     }
 
+    & blockquote {
+        border-left: 5px solid lighten($defaultPreFontColour, 25%);
+        padding: 25px;
+        margin-left: -10px;
+        font-style: italic;
+        color: lighten($bodyCopyColour, 45%);
+        margin-bottom: 1em;
+
+        & p {
+            margin: 0;
+        }
+    }
+
     & pre {
         @include fontSize(1em);
         margin: $defaultMargin / 2;
