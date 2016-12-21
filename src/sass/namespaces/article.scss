@@ -14,13 +14,19 @@
     }
 }
 
-article.article{
+.article{
     &-header {
 
     }
 
     &-content {
+        & a:link, & a:visited {
+            color: $defaultLinkHoverColour;
+        }
 
+        & a:hover {
+            color: $secondaryColour;
+        }
     }
 
     &-footer{
@@ -34,6 +40,7 @@ article.article{
         font-style: italic;
         color: lighten($bodyCopyColour, 45%);
         margin-bottom: 1em;
+        background: $defaultColour;
 
         & p {
             margin: 0;
