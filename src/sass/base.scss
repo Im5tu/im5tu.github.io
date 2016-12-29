@@ -1,6 +1,10 @@
 @import 'global/colours';
 @import 'global/mixins';
 
+@include fontFamily("Droid Sans", "/fonts/Droid_Sans/DroidSans.woff2");
+@include fontFamily("Exo", "/fonts/Exo/Exo.woff2");
+@include fontFamily("Raleway", "/fonts/Raleway/Raleway.woff2");
+
 html, body {
     height: 100%;
     background: $bodyBackgroundColour;
