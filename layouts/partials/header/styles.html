@@ -1,2 +1,3 @@
-<link rel="stylesheet" href="/css/{{ index .Site.Data.hash "site.css" }}" />
-<link href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono|Exo:900|Raleway" rel="stylesheet">
+{{ $siteCssHash := (index .Site.Data.hash "site.css")}}
+{{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
+<style>{{- readFile $siteCssPath | safeCSS -}}</style>
