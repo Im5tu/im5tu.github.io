@@ -31,6 +31,16 @@
     font-family: $mainFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+@mixin fontFamily($name, $url, $weight: 400)
+{
+    @font-face {
+        font-family: $name;
+        font-style: normal;
+        font-weight: $weight;
+        src: local($name), url($url) format('woff2');
+    }
+}
+
 @mixin fontSize($size)
 {
     font-size: $size;
