@@ -83,7 +83,7 @@ ul.article-tags {
 
 a.article-tag {
     &:link, &:visited {
-        color: $defaultLinkHoverColour;
+        color: $inlineCodeColour;
     }
 
     &:hover {

@@ -1,32 +1,32 @@
 $defaultColour: #fff;
 
-$primaryColour: #000; //5f5f5f
+$primaryColour: #111; //5f5f5f
 $secondaryColour: lighten($primaryColour, 25%);
 
 // Body
-$bodyCopyColour: #000; // 222
-$bodyBackgroundColour: #ecf0ef;// $defaultColour; 
+$bodyCopyColour: #222; // 222
+$bodyBackgroundColour: #f0f0f0;// $defaultColour; 
 $headingsDefaultColour: #161616; // 111
 
 // Header
-$headerBackgroundColour: #111;
+$headerBackgroundColour: #fff;
 $headerBackgroundHoverColour: $headerBackgroundColour;
 $headerBorderColour: lighten($secondaryColour, 50%);
-$headerFontColour: #fff;
+$headerFontColour: #000;
 
 // Logo
-$logoFillColour: #fff;
-$logoFillHoverColour: #fff;
+$logoFillColour: #000;
+$logoFillHoverColour: #333;
 
 // Links
 $defaultLinkColour: $primaryColour;
-$defaultLinkHoverColour: #A83840; //darken($defaultLinkColour, 25%);
+$defaultLinkHoverColour: #2B4D5E; //darken($defaultLinkColour, 25%);
 
 // footer 
 $footerBackgroundColour: #dedede;
-$footerTextColour: darken($footerBackgroundColour, 25%);
+$footerTextColour: darken($footerBackgroundColour, 50%);
 
 // misc
 $defaultPreBorderColour: #cdcdcd;
 $defaultPreFontColour: #222;
-$inlineCodeColour: #973255;
+$inlineCodeColour: #4DA3CE;
