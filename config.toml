@@ -1,6 +1,6 @@
 baseurl = "https://im5tu.io/"
 
-title = "Stuart Blackler's Tech Blog"
+title = "Stuart Blackler's Blog"
 languageCode = "en-us"
 theme = "hugo-bones"
 metaDataFormat = "json"

@@ -1,8 +1,8 @@
 {
-   "categories": ["Building a blog", "Quick Tips"],
+   "categories": [ "Development", "Building a blog" ],
    "date": "2016-12-29T20:25:58Z",
    "description": "A very quick look at how to inline a css file using Hugo static site generator.",
-   "tags": ["hugo", "blog"],
+   "tags": ["hugo", "blog", "Quick Tips"],
    "title": "Hugo Quick Tip: Inlining Css Files"
 }
 

@@ -1,5 +1,5 @@
 {
-   "categories": ["Building a blog"],
+   "categories": [ "Development", "Building a blog" ],
    "date": "2016-11-17T23:01:38Z",
    "description": "Setting up a theme and creating our first article using hugo and bones",
    "tags": ["hugo", "blogging"],

@@ -1,5 +1,5 @@
 {
-   "categories": ["Building a blog"],
+   "categories": [ "Development", "Life", "Building a blog"],
    "date": "2016-11-17T19:34:17Z",
    "description": "This is my introductionary blog post saying hello to the world.",
    "tags": ["blogging"],

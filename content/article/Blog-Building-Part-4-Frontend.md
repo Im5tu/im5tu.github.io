@@ -1,5 +1,5 @@
 {
-   "categories": ["Building a blog"],
+   "categories": [ "Development", "Building a blog" ],
    "date": "2016-11-19T08:01:38Z",
    "description": "Setting up a frontend pipeline powered by yarn & gulp.",
    "tags": ["hugo", "blog", "js", "yarn", "node"],

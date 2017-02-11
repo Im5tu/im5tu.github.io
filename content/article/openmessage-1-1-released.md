@@ -3,7 +3,7 @@
    "date": "2017-02-05T15:31:54Z",
    "description": "OpenMessage 1.1 released",
    "tags": [ "OpenMessage" ],
-   "title": "Open Message 1.1 Released"
+   "title": "OpenMessage 1.1 Released"
 }
 
 Just a quick update to say that the Azure provider for [OpenMessage](https://github.com/Im5tu/OpenMessage) has been released. This update fixes an issue with scheduling messages on topics.

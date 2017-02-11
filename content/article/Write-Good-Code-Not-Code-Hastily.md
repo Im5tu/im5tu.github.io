@@ -1,8 +1,8 @@
 {
-   "categories": ["Coding"],
+   "categories": [ "Development" ],
    "date": "2016-12-21T23:25:27Z",
    "description": "Here I talk about why it's important to write good code, not code that you can write fast.",
-   "tags": ["Development", "Clean Code"],
+   "tags": [ "Clean Code" ],
    "title": "Write Good Code, Not Code Hastily"
 }
 

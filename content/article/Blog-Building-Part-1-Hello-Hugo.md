@@ -1,5 +1,5 @@
 {
-   "categories": ["Building a blog"],
+   "categories": [ "Development", "Building a blog" ],
    "date": "2016-11-17T20:23:00Z",
    "description": "Beginning to setup our workflow on the way to our very first hugo powered blog.",
    "tags": ["hugo", "go", "git", "blogging"],
