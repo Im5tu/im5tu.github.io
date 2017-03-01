@@ -21,7 +21,7 @@
 
     &-content {
         & a:link, & a:visited {
-            color: $defaultLinkHoverColour;
+            color: darken($inlineCodeColour, 10%);
         }
 
         & a:hover {
