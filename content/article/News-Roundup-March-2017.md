@@ -8,6 +8,8 @@
 
 In this the first of many [news roundups](/categories/news), I am going to look back through the news that you may have missed and the stories/blogs that have interested me over the previous month(s). In this round up I will be taking a look at content from arround mid January, through to the 1st March 2017.
 
+<!--more-->
+
 ### Announcing Open Source Guides
 
 *Via [Nadia Eghbal](https://github.com/nayafia) on the Github Blog - [Link](https://github.com/blog/2318-announcing-open-source-guides)*
