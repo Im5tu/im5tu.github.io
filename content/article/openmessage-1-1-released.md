@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-02-05T15:31:54Z",
    "description": "OpenMessage 1.1 released",
-   "tags": [ "OpenMessage" ],
+   "tags": [ "OpenMessage", "csharp", "vb", "dotnet", "messaging" ],
    "title": "OpenMessage 1.1 Released"
 }
 

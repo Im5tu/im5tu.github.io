@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-02-11T12:15:27Z",
    "description": "OpenMessage originally started out as a replacement for an internal library that was used across teams. Now i'm looking at the future of the project and what is next.",
-   "tags": [ "OpenMessage" ],
+   "tags": [ "OpenMessage", "csharp", "vb", "dotnet", "messaging" ],
    "title": "OpenMessage 2017 Roadmap"
 }
 
