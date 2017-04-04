@@ -6,12 +6,7 @@
     position: relative;
 
     &-content{
-        max-width: $maxWidth;
         margin: 0 auto;
         padding-bottom: ($defaultMargin * 6);
-        
-        @include mapToBreakpoint($widths) {
-            width: $current;
-        }
     }
 }

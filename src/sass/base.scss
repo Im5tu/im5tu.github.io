@@ -1,4 +1,5 @@
 @import 'global/colours';
+@import 'global/defaults';
 @import 'global/mixins';
 
 @include fontFamily("Droid Sans", "/fonts/Droid_Sans/DroidSans.woff2");
@@ -78,4 +79,18 @@ pre {
     &, code {
         font-family: 'Droid Sans Mono', monospace;
     } 
+}
+
+.pageWrap{
+    margin: 0 auto;
+    max-width: $maxWidth;
+    @include mapToBreakpoint($widths) {
+        width: $current;
+    }
+
+    &:after{
+        content: "";
+        display: table;
+        clear: both;
+    }
 }

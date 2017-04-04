@@ -15,10 +15,6 @@
 }
 
 .article{
-    &-header {
-
-    }
-
     &-content {
         & a:link, & a:visited {
             color: darken($inlineCodeColour, 10%);
@@ -57,10 +53,10 @@
     & img {
         max-width: 100%;
     }
-}
 
-time.article-header-time {
-    font-style: italic;
+    & .article-header p {
+        font-style: italic;
+    }
 }
 
 ul.article-tags {
