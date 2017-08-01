@@ -57,6 +57,22 @@
     & .article-header p {
         font-style: italic;
     }
+
+    & .warning {
+        margin: 2em;
+        padding: 1em 2em;
+        color: #8A6D3B;
+        background-color: #fcf8e3;
+        border: 1px solid #8A6D3B;
+        text-align: center;
+
+        & h1, & h2, &h3, & h4, & h5 {
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+    }
 }
 
 ul.article-tags {
