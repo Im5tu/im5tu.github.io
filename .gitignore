@@ -5,3 +5,4 @@ static/js/*.js
 public/
 yarn.lock
 .*/
+\.DS_Store
