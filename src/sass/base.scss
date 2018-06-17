@@ -2,21 +2,17 @@
 @import 'global/defaults';
 @import 'global/mixins';
 
-@include fontFamily("Droid Sans", "/fonts/Droid_Sans/DroidSans.woff2");
-@include fontFamily("Exo", "/fonts/Exo/Exo.woff2");
-@include fontFamily("Raleway", "/fonts/Raleway/Raleway.woff2");
-
 html, body {
     height: 100%;
     background: $bodyBackgroundColour;
     color: $bodyCopyColour;
     text-align: justify;
-    @include font("Raleway");
+    @include font("Rajdhani");
 }
 
 h1, h2, h3, h4, h5
 {
-    @include font("Exo");
+    @include font("Michroma");
     margin: 1.25em 0 0.25em 0;
     font-weight: 800;
     color: $headingsDefaultColour;
@@ -44,9 +40,14 @@ h5 {
 }
 
 p {
-    @include fontSize(1em);
-    margin-bottom: 1em;
+    margin: 1.5em 0;
 
+    &, li {
+        @include fontSize(1.1em);
+    }
+}
+
+p, ul li, ol li {
     & code {
         color: $inlineCodeColour;
 
@@ -77,13 +78,13 @@ pre {
     }
 
     &, code {
-        font-family: 'Droid Sans Mono', monospace;
+        font-family: 'Cutive Mono', monospace;
     } 
 }
 
 .pageWrap{
     margin: 0 auto;
-    max-width: $maxWidth;
+    /*max-width: $maxWidth;*/
     @include mapToBreakpoint($widths) {
         width: $current;
     }

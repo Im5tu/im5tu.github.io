@@ -46,3 +46,12 @@
     font-size: $size;
     line-height: $size + .5em;
 }
+
+@mixin transition($property, $duration: 500ms, $func: ease-in-out)
+{
+    -webkit-transition: $property $duration $func;
+    -moz-transition: $property $duration $func;
+    -ms-transition: $property $duration $func;
+    -o-transition: $property $duration $func;
+    transition: $property $duration $func;
+}

@@ -2,7 +2,7 @@ baseurl = "https://im5tu.io/"
 
 title = "Stuart Blackler's Blog"
 languageCode = "en-us"
-theme = "hugo-bones"
+theme = "bones"
 metaDataFormat = "json"
 enableRobotsTXT = true
 pygmentsuseclasses = true
@@ -11,6 +11,6 @@ pygmentsuseclasses = true
   article = "article/:year/:month/:title/"
 
 [params]
-  description = "I am an experienced, highly motivated and hard working software engineer currently developing innovative solutions for a varity of high profile clients. When I am not developing, I inspire others to augment their intrinsic beliefs, realise their dreams & lead a life of abundance. Follow my journey via the channels below:"
+  description = "I am a lead architect at the UK's first clearing bank in 250 years, ClearBank. I specialise in designing and building backend systems, specifically messaging based systems and RESTful API's. I am also one of two UK representives in an ISO working group looking at API's in financial services. Follow my journey via the channels below:"
   name = "Stuart Blackler"
-  jobTitle = "Developer / Co-founder of .Net Bournemouth / Mentor / Health Enthusiast"
+  jobTitle = "Lead Architect / Software Consultant / Crossfitter"

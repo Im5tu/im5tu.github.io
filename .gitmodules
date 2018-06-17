@@ -1,3 +1,6 @@
 [submodule "public"]
 	path = public
 	url = git@github.com:im5tu/im5tu.github.io.git
+[submodule "themes/bones"]
+	path = themes/bones
+	url = https://github.com/Im5tu/hugo-bones.git

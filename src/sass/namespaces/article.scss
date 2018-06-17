@@ -15,6 +15,12 @@
 }
 
 .article{
+
+    background: $defaultColour;
+    padding: 0 2em 1em 2em;
+    border: 1px solid $headerBorderColour;
+    margin: 2em 0;
+
     &-content {
         & a:link, & a:visited {
             color: darken($inlineCodeColour, 10%);
@@ -34,9 +40,11 @@
         padding: 25px;
         margin-left: -10px;
         font-style: italic;
-        color: lighten($bodyCopyColour, 45%);
+        font-weight: bold;
+        //color: lighten($bodyCopyColour, 45%);
         margin-bottom: 1em;
         background: $defaultColour;
+        @include fontSize(1.5em);
 
         & p {
             margin: 0;
@@ -48,6 +56,15 @@
         margin: $defaultMargin / 2;
         padding: $defaultMargin / 2;
         white-space: pre-wrap;
+        @include transition(background, 2s);
+        @include transition(border-color);
+        @include transition(color, 75ms);
+
+        &:hover{
+            color: #fff;
+            background: #333;
+            border-color: #777;
+        }
     }
 
     & img {

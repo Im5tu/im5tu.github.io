@@ -1,3 +1,4 @@
 {{ $siteCssHash := (index .Site.Data.hash "site.css")}}
 {{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
 <style>{{- readFile $siteCssPath | safeCSS -}}</style>
+<link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Michroma|Rajdhani" rel="stylesheet">
