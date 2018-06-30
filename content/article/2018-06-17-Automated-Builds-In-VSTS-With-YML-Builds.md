@@ -1,6 +1,6 @@
 {
     "title": "Automated Builds in VSTS with YML Build Definitions",
-    "description": "",
+    "description": "Publish an ASPNET Core website using a VSTS YML build definition.",
     "tags": ["vsts", "dotnetcore", "aspnetcore", "devops"],
     "date": "2018-06-17T21:35:00+01:00",
     "categories": ["development"]
