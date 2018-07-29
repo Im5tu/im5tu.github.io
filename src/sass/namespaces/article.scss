@@ -55,7 +55,8 @@
         @include fontSize(1em);
         margin: $defaultMargin / 2;
         padding: $defaultMargin / 2;
-        white-space: pre-wrap;
+        white-space: pre;
+        overflow-x: scroll;
         @include transition(background, 2s);
         @include transition(border-color);
         @include transition(color, 75ms);
