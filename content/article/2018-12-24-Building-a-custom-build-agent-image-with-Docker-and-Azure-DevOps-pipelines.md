@@ -97,3 +97,9 @@ That's it, you should now have a functioning customised Azure DevOps build agent
 To view the Dockerfile that I am currently using as a custom agent, [go here](https://github.com/Im5tu/octodns-docker/blob/master/Dockerfile).
 
 To view the full usage of the docker file that I am using, [go here](https://github.com/Im5tu/dns/blob/master/azure-pipelines.yml).
+
+### Further Reading
+
+- [Container Jobs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=vsts&tabs=yaml)
+- [Docker Automated Builds](https://docs.docker.com/docker-hub/builds/)
+- [Docker Multi-Stage Builds](https://docs.docker.com/develop/develop-images/multistage-build/)
