@@ -11,6 +11,6 @@ pygmentsuseclasses = true
   article = "article/:year/:month/:title/"
 
 [params]
-  description = "I am a lead architect at the UK's first clearing bank in 250 years, ClearBank. I specialise in designing and building backend systems, specifically messaging based systems and RESTful API's. I am also one of two UK representives in an ISO working group looking at API's in financial services. Follow my journey via the channels below:"
+  description = "I am a highly experienced lead software engineer, architect & proponent of clean coding. Currently, I am helping to disrupt the banking sector by building high quality micro-services & APIs. This includes looking at some of the latest technologies and architectural patterns & evaluating them for use in various business scenarios. I am also contributing to the future of the finance sector by working with the International Standards Organisation & its corresponding mirror groups in the British Standards Institute, on financial services APIs. Follow my journey via the channels below:"
   name = "Stuart Blackler"
   jobTitle = "Lead Architect / Software Consultant / Crossfitter"
