@@ -64,12 +64,11 @@ Once that is complete, if you navigate to the page [https://cloud.docker.com/rep
 
 From here we can create a link to our hosted repository and setup a build that is associated with the repository.
 
-![Docker - Builds Screen](/img/custom-docker-agent/Build-Page.png)
-
-
 ### Existing repositories
 
 If you need to edit an existing repository or build, you can do that from the following page: `https://cloud.docker.com/repository/docker/<user id>/<repo name>/builds`
+
+![Docker - Builds Screen](/img/custom-docker-agent/Build-Page.png)
 
 ## Using the Dockerfile in a Azure DevOps pipeline
 
