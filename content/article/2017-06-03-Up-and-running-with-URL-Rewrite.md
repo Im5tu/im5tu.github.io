@@ -24,11 +24,13 @@ In this series, I am going to take you through a few `web.config` snippets that 
 
 Inside of the `web.config` you can define a `<rewrite>` section beneath the `<system.web>` section:
 
-    <system.web>
-        <rewrite>
-            <!-- Your rules here -->
-        </rewrite>
-    </system.web>
+```xml
+<system.web>
+    <rewrite>
+        <!-- Your rules here -->
+    </rewrite>
+</system.web>
+```
 
 Within the `<rewrite>` section you can define either a `<rules>` section or an `<outbound>` section. The former is for inbound request rewriting and the latter is for response rewriting. I'll expand on each section as we go through the series.
 
@@ -48,19 +50,21 @@ However, there are a few lesser known benefits including:
 
 Assuming you would like all of the above benefit, here is the rule snippet that you will need:
 
-    <system.web>
-      <rewrite>
-          <rules>
-              <rule name="Redirect to http" patternSyntax="Wildcard" stopProcessing="true">
-                <match url="*" negate="false" />
-                <conditions logicalGrouping="MatchAny" trackAllCaptures="false">
-                      <add input="{HTTPS}" pattern="off" />
-                  </conditions>
-                <action type="Redirect" url="https://{HTTP_HOST}/{R:1}" redirectType="Temporary" />
-            </rule>
-          </rules>
-        </rewrite>
-    </system.web>
+```xml
+<system.web>
+    <rewrite>
+        <rules>
+            <rule name="Redirect to http" patternSyntax="Wildcard" stopProcessing="true">
+            <match url="*" negate="false" />
+            <conditions logicalGrouping="MatchAny" trackAllCaptures="false">
+                    <add input="{HTTPS}" pattern="off" />
+                </conditions>
+            <action type="Redirect" url="https://{HTTP_HOST}/{R:1}" redirectType="Temporary" />
+        </rule>
+        </rules>
+    </rewrite>
+</system.web>
+```
 
 So what's going on in the snippet above?
 

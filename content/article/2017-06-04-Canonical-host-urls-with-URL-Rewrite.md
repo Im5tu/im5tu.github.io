@@ -22,13 +22,15 @@ We can set this through metadata on our webpages, but this doesn't guarentee tha
 
 As per the snippet in our previous post, we are going to create an inbound rule (which lives under `system.web > rewrite > rules` in our `web.config`):
 
-    <rule name="Canonical Hostname" stopProcessing="true">
-        <match url="(.*)" />
-        <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
-            <add input="{HTTP_HOST}" pattern="^www\.([.a-zA-Z0-9]+)$"/>
-        </conditions>
-        <action type="Redirect" url="https://{C:1}/{R:1}" redirectType="Temporary" />
-    </rule>
+```xml
+<rule name="Canonical Hostname" stopProcessing="true">
+    <match url="(.*)" />
+    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+        <add input="{HTTP_HOST}" pattern="^www\.([.a-zA-Z0-9]+)$"/>
+    </conditions>
+    <action type="Redirect" url="https://{C:1}/{R:1}" redirectType="Temporary" />
+</rule>
+```
 
 In the first line, we are defining the name of the rule which can be viewed inside of `inetmgr (IIS Manager)` saying that we want to stop at this rule and return the response to the client. Next up, we give our matching criteria which we have wildcarded to match all requests. Then we have added a condition which takes a server variable (`{HTTP_HOST}` which tells us the DNS name or IP address that has been used to reach this server eg: site.com or www.site.com), and we've matched it against any request starting with `www.`.
 

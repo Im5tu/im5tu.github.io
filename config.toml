@@ -11,6 +11,9 @@ pygmentsuseclasses = true
   article = "article/:year/:month/:title/"
 
 [params]
-  description = "I am a highly experienced lead software engineer, architect & proponent of clean coding. Currently, I am helping to disrupt the banking sector by building high quality micro-services & APIs. This includes looking at some of the latest technologies and architectural patterns & evaluating them for use in various business scenarios. I am also contributing to the future of the finance sector by working with the International Standards Organisation & its corresponding mirror groups in the British Standards Institute, on financial services APIs. Follow my journey via the channels below:"
-  name = "Stuart Blackler"
-  jobTitle = "Lead Architect / Software Consultant / Crossfitter"
+  name = "@im5tu"
+  jobTitle = "Stuart Blackler"
+
+[markup]
+  [markup.highlight]
+    codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.

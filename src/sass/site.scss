@@ -1,9 +1,114 @@
-@import 'reset.scss';
-@import 'base.scss';
+@import 'mixins.scss';
+@import 'breakpoints.scss';
 
-@import 'namespaces/article.scss';
-@import 'namespaces/category.scss';
-@import 'namespaces/pageContainer.scss';
-@import 'namespaces/pageHeader.scss';
-@import 'namespaces/pageFooter.scss';
-@import 'namespaces/tagPage.scss';
+$baseColour: #2db9eb;
+$textColor: #232323;
+
+html, body {
+    height: 100%;
+    color: lighten($textColor, 5%);
+    @include font("Noto Sans");
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @include font("Comfortaa");
+}
+
+p {
+    margin: 1.5em 0;
+}
+
+blockquote {
+    border-left: 5px solid #454545;
+    background-color: #fafafa;
+    padding: .5em 1.5em;
+
+    &, & p {
+        color: lighten($textColor, 15%);
+    }
+
+    & ~ & {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.pageContainer {
+    text-align: justify;
+}
+
+.pageWrap{
+    margin: 0 auto;
+    max-width: 1400px;
+    @include mapToBreakpoint($widths) {
+        width: $current;
+    }
+
+    &:after{
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+a {
+    @include font("Comfortaa");
+
+    &:link, &:visited {
+        color: darken($baseColour, 10%);
+    }
+
+    &:link {
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: #2db9eb;
+        text-decoration: underline;
+    }
+}
+
+#pageHeader-about {
+    border-bottom: 1px solid #eaeaea;
+}
+
+#pageHeader-about-title a {
+    font-size: 1.2em;
+
+    &:link, &:visited {
+        color: $textColor;
+    }
+
+    &:first-child {
+        font-size: 1.1em;
+        color: darken($baseColour, 10%);
+        text-transform: none;
+    }
+}
+
+.article-list a{
+    color: darken($textColor, 10%);
+
+    &:hover {
+        color: #2db9eb;
+        text-decoration: underline;
+    }
+}
+
+.article-content {
+    & p code, & li code {
+        color: darken($baseColour, 10%);
+        background-color: rgba(27,31,35,.05);
+
+        &:hover {
+            opacity: .5;
+        }
+    }
+}
+
+.article img {
+    max-width: 100%;
+}
+
+// must be last
+@import 'code-copy.scss';    

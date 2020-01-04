@@ -60,7 +60,7 @@
             _every.registeredIntervals.push({
                 id: intervalId,
                 duration: duration,
-                callback
+                callback: callback
             });
             return intervalId;
         }

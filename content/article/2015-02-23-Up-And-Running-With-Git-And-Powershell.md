@@ -72,8 +72,10 @@ Before you being, verify execution of scripts is allowed with `Get-ExecutionPoli
 
 After you have verified the execution policy above, you will be able to run the following script:
 
-    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
-    Install-Module posh-git
+```powershell
+(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+Install-Module posh-git
+```
 
 This will do two different things:
 
@@ -90,9 +92,11 @@ If you don't see that, refer to the installation guides of the various modules a
 
 *A repository will now show something along the lines of the following if you feel the need to verify:*
 
-    C:\Dev\sblackler.github.io [master +1 ~2 -0 !]>
+```powershell
+C:\Dev\sblackler.github.io [master +1 ~2 -0 !]>
+```
 
-## Creating better diffs with `Out-Diff`
+## Creating better diffs with Out-Diff
 
 Some of the output that we get using the built in `git diff` command is a little horrid:
 
@@ -102,15 +106,21 @@ What [Out-Diff](http://psget.net/directory/out-diff/) does is create a unifed di
 
 To install the `Out-Diff`, use the same powershell console as earlier and type/copy:
 
-    Install-Module Out-Diff
+```powershell
+Install-Module Out-Diff
+```
 
 After that you should see the following confirmation:
 
-    Module out-diff was successfully installed.
+```powershell
+Module out-diff was successfully installed.
+```
 
 Now, when we run out `git diff` command, we add a slight twist pointing it to the `Out-Diff` function like:
 
-    git diff | Out-Diff
+```powershell
+git diff | Out-Diff
+```
 
 This results in brighter colours in the console and slightly cleaner output. If the output of git diff consists of many lines of text, PowerShell will redirect them to the Out-Diff function one line at a time. This is called a streaming pipeline and it allows PowerShell to be responsive and consume less memory even when processing large amounts of data.
 
@@ -118,39 +128,53 @@ This results in brighter colours in the console and slightly cleaner output. If 
 
 The current powershell profile we are in comes in a variable called `$PROFILE` and we can hack this to do what we want. First of all, you need to expand that variable in the powershell window eg:
 
-    $PROFILE
-    C:\Users\stuar_000\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+```powershell
+$PROFILE
+C:\Users\stuar_000\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+```
 
 Now we can access the profile in one of two ways, through powershell or through our editor of choice. I choose powershell, naturally. To edit this through powershell, type:
 
-    ise $PROFILE
+```powershell
+ise $PROFILE
+```
 
 Which launches the powershell scripting environment. Currently, my profile is blank and only loads the `Posh-git` sample profile:
 
-    # Load posh-git example profile
-    'C:\Users\stuar_000\Documents\WindowsPowerShell\Modules\posh-git\profile.example.ps1'
+```powershell
+# Load posh-git example profile
+'C:\Users\stuar_000\Documents\WindowsPowerShell\Modules\posh-git\profile.example.ps1'
+```
 
 When you reload the powershell console you may have seen that it couldn't find the ssh-agent. This is something that we can fix here. To do that, add the following line to the top of the file:
 
-    $env:path += ";" + (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
+```powershell
+$env:path += ";" + (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
+```
 
 Unfortunately we have to do this because msysgit doesn't automatically add that folder to the path variable. Then we can do really cool things after the `Posh-git` profile has been loaded like setting our base directory:
 
-     Set-Location C:\Dev
+```powershell
+Set-Location C:\Dev
+```
 
 Creating a better diff function so that we don't have to type it out everytime:
 
-    function gdiff(){
-        git diff -U5 | Out-Diff
-    }
+```powershell
+function gdiff(){
+    git diff -U5 | Out-Diff
+}
+```
 
 Or ever start our preffered IDE when we hit a solution file (vs only):
 
-    function ide(){
-        $files = Get-ChildItem *.sln -Recurse
-        foreach($file in $files){
-            Start-Process $file.Name
-        }
+```powershell
+function ide(){
+    $files = Get-ChildItem *.sln -Recurse
+    foreach($file in $files){
+        Start-Process $file.Name
     }
+}
+```
 
 Here is only a small number of things that you can do now. So go git the power(shell). When you're done save the profile and reload the powershell console for the changes to take effect.

@@ -18,14 +18,16 @@ In essence, it matters for the same reasons as I described in [my previous post]
 
 As per the snippet in our previous posts, we are going to create an inbound rule (which lives under `system.web > rewrite > rules` in our `web.config`):
 
-    <rule name="Remove trailing slash" stopProcessing="true">
-        <match url="(.*)/$" />
-        <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
-            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
-            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
-        </conditions>
-        <action type="Redirect" url="{R:1}" redirectType="Temporary" />
-    </rule>
+```xml
+<rule name="Remove trailing slash" stopProcessing="true">
+    <match url="(.*)/$" />
+    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+    </conditions>
+    <action type="Redirect" url="{R:1}" redirectType="Temporary" />
+</rule>
+```
 
 In the first line, we are defining the name of the rule which can be viewed inside of `inetmgr (IIS Manager)` saying that we want to stop at this rule and return the response to the client. Next up, we give our matching criteria which we have wildcarded to match all requests that end with a `/`. Then we have added a condition set which is definted to match all criteria inside. We use the server variable `{REQUEST_FILENAME}` to determine whether or not the path requested is a physical file or directory on disk. The last attribute in each condition is a negation, which is equivilent of saying don't match a physical directory or file (we don't want to screw the routing for those!).
 

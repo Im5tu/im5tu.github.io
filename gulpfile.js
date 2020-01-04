@@ -1,56 +1,82 @@
-var gulp         = require("gulp"),
-    sass         = require("gulp-sass"),
+const { series, parallel, src, dest, watch } = require('gulp');
+const del = require("del");
+
+var sass = require("gulp-dart-sass"),
     autoprefixer = require("gulp-autoprefixer"),
-    hash         = require("gulp-hash"),
-    del          = require("del"),
-    concat       = require("gulp-concat"),
-    uglify       = require("gulp-uglify"),
-    srcRootDir   = "src/",
-    destRootDir  = "static/",
-    srcCssDir    = srcRootDir + "sass/",
-    srcJsDir     = srcRootDir + "js/",
-    srcCss       = srcCssDir + "**/site.scss",
-    srcJs        = srcJsDir + "**/*.js",
-    destCssDir   = destRootDir + "css",
-    destJsDir    = destRootDir + "js";
+    hash = require("gulp-hash"),
+    concat = require("gulp-concat"),
+    uglify = require("gulp-uglify"),
+    pipeline = require('readable-stream').pipeline;
 
-gulp.task("js", function() {
-    del.sync([destJsDir]);
+var srcRootDir = "src/",
+    destRootDir = "static/",
+    srcCssDir = srcRootDir + "sass/",
+    srcJsDir = srcRootDir + "js/",
+    srcCss = srcCssDir + "**/site.scss",
+    highlightJs = srcJsDir + "highlight.pack.js",
+    srcJs = [srcJsDir + "**/*.js", "!" + highlightJs],
+    destCss = destRootDir + "css",
+    destJs = destRootDir + "js";
 
-    gulp
-        .src(srcJs)
-        .pipe(concat("site.js"))
-        //.pipe(uglify())
-        .pipe(hash())
-        .pipe(gulp.dest(destJsDir))
-        .pipe(hash.manifest("hash.json"))
-        .pipe(gulp.dest("data/"));
-});
+function errorHandler(err) {
+    if (err) {
+        console.error("Pipeline failed", err);
+    }
+}
 
-gulp.task("css", function() {
-    del.sync([destCssDir]);
+function clean(cb) {
+    del.sync(destJs);
+    del.sync(destCss);
 
-    gulp
-        .src([srcCss])
-        .pipe(sass({
-            outputStyle: "compressed"
-        }))
-        .pipe(autoprefixer({
-            browsers: ["last 20 versions"]
-        }))
-        .pipe(hash())
-        .pipe(gulp.dest(destCssDir))
-        .pipe(hash.manifest("hash.json"))
-        .pipe(gulp.dest("data/"));
-});
+    cb();
+}
+exports.clean = clean;
 
-gulp.task("clean", function(){
-    del([destCssDir, destJsDir, "data"]);
-})
+function js(cb) {
+    del.sync(destJs);
 
-gulp.task("watch", ["css", "js"], function() {
-    gulp.watch([srcCssDir + "**/*.scss"], ["css"]);
-    gulp.watch([srcJs], ["js"]);
-});
+    pipeline(
+        src(srcJs),
+        concat("site.js"),
+        uglify(),
+        hash(),
+        dest(destJs),
+        hash.manifest("hash.json"),
+        dest("data/"),
+        errorHandler
+    );
 
-gulp.task("default", ["watch"]);
+    pipeline(
+        src(srcJsDir + "highlight.pack.js"),
+        dest(destJs),
+        errorHandler
+    );
+
+    cb();
+}
+exports.js = js;
+
+function css(cb) {
+    del.sync(destCss);
+
+    pipeline(
+        src(srcCss),
+        sass(),
+        autoprefixer(),
+        hash(),
+        dest(destCss),
+        hash.manifest("hash.json"),
+        dest("data/"),
+        errorHandler
+    );
+
+    cb();
+}
+exports.css = css;
+
+exports.default = exports.watch = function () {
+    options = { events: 'all', ignoreInitial: false };
+
+    watch(srcCssDir, options, series(css));
+    watch(srcJs, options, series(js));
+}

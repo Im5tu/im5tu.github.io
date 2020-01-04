@@ -19,24 +19,30 @@ In the blog posts that I've seen to date, they've mentioned about using the `##v
 
 In order to pull in a value from a variable group, you must link the variables by using the following snippet:
 
-    variables:
-    - group: MY_VARIABLE_GROUP_NAME
+```yml
+variables:
+- group: MY_VARIABLE_GROUP_NAME
+```
 
 _Replace `MY_VARIABLE_GROUP_NAME` with your variable group name._
 
 Multiple groups can be added like so:
 
-    variables:
-    - group: MY_VARIABLE_GROUP_NAME
-    - group: MY_VARIABLE_GROUP_NAME_2
+```yml
+variables:
+- group: MY_VARIABLE_GROUP_NAME
+- group: MY_VARIABLE_GROUP_NAME_2
+```
 
 And then in the steps, and the `env:` section linking the `SECRET_TOKEN` variable as follows:
 
-    steps:
-    - script: 'echo Your script here'
-    displayName: 'My Test Script'
-    env:
-        SECRET_TOKEN: $(SECRET_TOKEN)
+```yml
+steps:
+- script: 'echo Your script here'
+displayName: 'My Test Script'
+env:
+    SECRET_TOKEN: $(SECRET_TOKEN)
+```
 
 _Replace `SECRET_TOKEN` with the name of your variable that you wish to access._
 

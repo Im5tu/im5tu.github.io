@@ -10,47 +10,57 @@ I have recently begun studying the theory and implementations of algorithms. Dur
 
 I'll begin with the example given in the post, which is taken from `java.util.Arrays`.
 
-    public static int BinarySearch(int[] a, int key) {
-        int low = 0;
-        int high = a.length - 1;
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            int midVal = a[mid];
-            if (midVal < key)
-            {
-                low = mid + 1;
-            }
-            else if (midVal > key)
-            {
-                high = mid - 1;
-            }
-            else
-            {
-                return mid; // key found
-            }
+```csharp
+public static int BinarySearch(int[] a, int key) {
+    int low = 0;
+    int high = a.length - 1;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        int midVal = a[mid];
+        if (midVal < key)
+        {
+            low = mid + 1;
         }
-        return -(low + 1);  // key not found.
+        else if (midVal > key)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            return mid; // key found
+        }
     }
+    return -(low + 1);  // key not found.
+}
+```
 
 For all intensive purposes this implementation is correct. Except for a bug which can raise an Overflow Exception. The problematic line is this:
 
-    int mid = (low + high) / 2;
+```csharp
+int mid = (low + high) / 2;
+```
 
 If the result of `low + high` is greater than maximum value of an 32-bit integer, the exception is raised. Luckily, there are ways that we can fix this:
 
-    int mid = low + (high - low) / 2;
+```csharp
+int mid = low + (high - low) / 2;
+```
 
 Or if you're in Java:
 
-    int mid = (low + high) >>> 1;
+```csharp
+int mid = (low + high) >>> 1;
+```
 
 If you are working in .Net languages you will need to work with the `unchecked` keyword in order to use the bit shift method:
 
-    int mid;
-    unchecked
-    {
-        mid = (low + high) >> 1;
-    }
+```csharp
+int mid;
+unchecked
+{
+    mid = (low + high) >> 1;
+}
+```
 
 >The `unchecked` keyword is used to suppress overflow-checking for integral-type arithmetic operations and conversions.
 >
@@ -60,54 +70,58 @@ If you are working in .Net languages you will need to work with the `unchecked` 
 
 So here is the differential method in C#:
 
-    public static int BinarySearch(int[] a, int key) {
-        int low = 0;
-        int high = a.length - 1;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            int midVal = a[mid];
-            if (midVal < key)
-            {
-                low = mid + 1;
-            }
-            else if (midVal > key)
-            {
-                high = mid - 1;
-            }
-            else
-            {
-                return mid; // key found
-            }
+```csharp
+public static int BinarySearch(int[] a, int key) {
+    int low = 0;
+    int high = a.length - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        int midVal = a[mid];
+        if (midVal < key)
+        {
+            low = mid + 1;
         }
-        return -1;  // key not found.
+        else if (midVal > key)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            return mid; // key found
+        }
     }
+    return -1;  // key not found.
+}
+```
 
 And using the bit shift method:
 
-    public static int BinarySearch(int[] a, int key) {
-        int low = 0;
-        int high = a.length - 1;
-        while (low <= high) {
-            int mid;
-            unchecked
-            {
-            	mid = (low + high) >> 1;
-            }
-            int midVal = a[mid];
-            if (midVal < key)
-            {
-                low = mid + 1;
-            }
-            else if (midVal > key)
-            {
-                high = mid - 1;
-            }
-            else
-            {
-                return mid; // key found
-            }
+```csharp
+public static int BinarySearch(int[] a, int key) {
+    int low = 0;
+    int high = a.length - 1;
+    while (low <= high) {
+        int mid;
+        unchecked
+        {
+            mid = (low + high) >> 1;
         }
-        return -1;  // key not found.
+        int midVal = a[mid];
+        if (midVal < key)
+        {
+            low = mid + 1;
+        }
+        else if (midVal > key)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            return mid; // key found
+        }
     }
+    return -1;  // key not found.
+}
+```
 
 Personally, I prefer the differential version over the bit shift version but I have provided both for completeness. Even though this bug only manifests itself with well over a billion elements in an array, I still thought it was worth pointing out. I encourage you to read the other articles for more complete context.  

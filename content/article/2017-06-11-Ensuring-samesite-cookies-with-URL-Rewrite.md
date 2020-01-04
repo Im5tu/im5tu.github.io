@@ -31,21 +31,23 @@ There are two possible modes for the attribute: Strict & lax. The difference is 
 
 As per the snippet in our previous post, we are going to create an outbound rule (which lives under `system.web > rewrite > outboundRules` in our `web.config`). This rewrite snippet requires two portions: the rule and a set of preconditions:
 
-    <rewrite>
-        <outboundRules> 
-            <rule name="Ensure samesite Cookies" preCondition="Missing samesite cookie">
-            <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
-            <action type="Rewrite" value="{R:0}; SameSite=strict" />
-            </rule>
-            <preConditions>
-                <preCondition name="Missing samesite cookie">
-                    <!-- Don't remove the first line here, it does do stuff! -->
-                    <add input="{RESPONSE_Set_Cookie}" pattern="." />
-                    <add input="{RESPONSE_Set_Cookie}" pattern="; SameSite=strict" negate="true" />
-                </preCondition>
-            </preconditions>
-        </outboundRules>
-    </rewrite>
+```xml
+<rewrite>
+    <outboundRules> 
+        <rule name="Ensure samesite Cookies" preCondition="Missing samesite cookie">
+        <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
+        <action type="Rewrite" value="{R:0}; SameSite=strict" />
+        </rule>
+        <preConditions>
+            <preCondition name="Missing samesite cookie">
+                <!-- Don't remove the first line here, it does do stuff! -->
+                <add input="{RESPONSE_Set_Cookie}" pattern="." />
+                <add input="{RESPONSE_Set_Cookie}" pattern="; SameSite=strict" negate="true" />
+            </preCondition>
+        </preconditions>
+    </outboundRules>
+</rewrite>
+```
 
 Within our rule, we are defining the name of the rule which can be viewed inside of `inetmgr (IIS Manager)`. Next, we match the server varible for a `Set-Cookie` HTTP header (`RESPONSE_Set_Cookie`) and ensure that it's present for us to continue. For our action, we rewrite the `Set-Cookie` header to be the original value, with the `SameSite` modifier appended with the mode set to strict as detailed above. Alternatively, you can use `SameSite=lax` for the lax mode of operation.
 

@@ -72,7 +72,7 @@ _**Note**_: _Sorry about the formatting, see the full file at the end of the art
 
 In this step, we package directly to the artifact staging directory to make publishing to the build artifacts a lot easier later in the process. All of the output is placed inside of the `drop` folder as a way of differentiating between this artifact and others. Under the `drop` folder, we split based on the configuration type: Debug/Release. Both the debug and the release folder mirror the same folder structure which is an `applicationpackage` folder, containing the packaged code and the `projectartifacts` folder which will contain the publish profiles. So the full folder structure appears like:
 
-```
+```yml
 /drop
     /debug
         /applicationpackage

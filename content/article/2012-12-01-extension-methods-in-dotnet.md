@@ -39,89 +39,95 @@ The basic outline of a creating extension methods goes something like this:
 
 Following through a complete example, I will now demonstrate how to create an extension method that returns the first 3 characters of a string. Using the list above, I must first create a `static class` or
 `module`:
+```csharp
+// C#
+public static class Extensions
+{
 
-        // C#
-        public static class Extensions
-        {
+}
 
-        }
+' VB
+Module Extenstions
 
-        ' VB
-        Module Extenstions
-
-        End Module
-
+End Module
+```
 The next phase would be to write the function that we are going need, which in this case is the following:
-
-        // C#
-        public static class Extensions
+```csharp
+// C#
+public static class Extensions
+{
+    public string GetFirstThreeCharacters(String str)
+    {
+        if(str.Length < 3)
         {
-            public string GetFirstThreeCharacters(String str)
-            {
-                if(str.Length < 3)
-                {
-                    return str;
-                }
-                else
-                {
-                    return str.Substring(0,3);
-                }
-            }
+            return str;
         }
+        else
+        {
+            return str.Substring(0,3);
+        }
+    }
+}
 
-        ' VB
-        Module Extenstions
+' VB
+Module Extenstions
 
-        Public Function GetFirstThreeCharacters(Byval str As String) As String
-            If (str.Length < 3) Then
-                return str
-            Else
-                return str.SubString(0,3)
-            End If
-        End Function
+Public Function GetFirstThreeCharacters(Byval str As String) As String
+    If (str.Length < 3) Then
+        return str
+    Else
+        return str.SubString(0,3)
+    End If
+End Function
 
-        End Module
-
+End Module
+```
 So far, we have done nothing special. In the last phase is to make the functions extension methods. It is slightly more complicated in VB but not by much. I will deal with C\# first.
 
 To make our C\# version of our function an extension method we need to mark the function as static (so that it can be accessed at any time with out the need for declaring anything) and secondly, marking the first
 paramter with the `this` keyword. This keyword basically tells the CLR that when this extension method is called, to use "this" parameter as the source. See the following:
 
-        public static class Extensions
+```csharp
+public static class Extensions
+{
+    public static string GetFirstThreeCharacters(this String str)
+    {
+        if(str.Length < 3)
         {
-            public static string GetFirstThreeCharacters(this String str)
-            {
-                if(str.Length < 3)
-                {
-                    return str;
-                }
-                else
-                {
-                    return str.Substring(0,3);
-                }
-            }
+            return str;
         }
+        else
+        {
+            return str.Substring(0,3);
+        }
+    }
+}
+```
 
 Now for the VB version. Instead of using the `this` keyword, we need to do something slightly different. We need to mark the function with the `System.Runtime.CompilerServices.Extension` attribute like so:
 
-        <System.Runtime.CompilerServices.Extension> _
-        Public Function GetFirstThreeCharacters(Byval str As String) As String
-            If str.Length < 3 Then
-                    Return str
-            Else
-                    Return str.Substring(0, 3)
-            End If
-        End Function
+```vb
+<System.Runtime.CompilerServices.Extension> _
+Public Function GetFirstThreeCharacters(Byval str As String) As String
+    If str.Length < 3 Then
+            Return str
+    Else
+            Return str.Substring(0, 3)
+    End If
+End Function
+```
 
 If you copy this code into any project, you should be able to call it like so:
 
-        // C#
-        String str = "my new String";
-        str = str.GetFirstThreeCharacters();
-        
-        ' VB
-        Dim str as String = "my new String"
-        str = str.GetFirstThreeCharacters()
+```csharp
+// C#
+String str = "my new String";
+str = str.GetFirstThreeCharacters();
+
+' VB
+Dim str as String = "my new String"
+str = str.GetFirstThreeCharacters()
+```
 
 As I explained for both languages above, the effective use of the `this` keyword, makes the CLR take what ever we are calling the extension method from as the first parameter to our function.
 
@@ -137,22 +143,26 @@ Something that I often do is check a collection for a value. This method is desi
 
 *Definition:*
 
-        /// <summary>
-       /// Determines whether the specified collection has any elements in the sequence. This method also checks for a null collection.
-        /// </summary>
-        /// <param name="items">The ICollection of items to check.</param>
-        public static bool HasElements(this ICollection items)
-        {
-            return items != null && items.Count > 0;
-        }
+```csharp
+/// <summary>
+/// Determines whether the specified collection has any elements in the sequence. This method also checks for a null collection.
+/// </summary>
+/// <param name="items">The ICollection of items to check.</param>
+public static bool HasElements(this ICollection items)
+{
+    return items != null && items.Count > 0;
+}
+```
 
 *Example usage:*
 
-        List<String> myList = new List<String>();
-        if (myList.HasElements())
-        {
-            // do some code
-        }
+```csharp
+List<String> myList = new List<String>();
+if (myList.HasElements())
+{
+    // do some code
+}
+```
 
 #### IsBetween
 
@@ -160,23 +170,27 @@ The `IsBetween` method returns a boolean and determins whether or not a value is
 
 *Definition:*
 
-        /// <summary>
-        /// Determins whether a value is between a minimum and maximum value.
-        /// </summary>
-        /// <typeparam name="T">The type of the value parameter.</typeparam>
-        /// <param name="value">The value that needs to be checked.</param>
-        /// <param name="low">The inclusive lower boundry.</param>
-        /// <param name="high">The inclusive upper boundry.</param>
-        public static bool IsBetween<T>(this T value, T low, T high) where T : IComparable<T>
-        {
-            return value.CompareTo(low) >= 0 && value.CompareTo(high) <= 0;
-        }
+```csharp
+/// <summary>
+/// Determins whether a value is between a minimum and maximum value.
+/// </summary>
+/// <typeparam name="T">The type of the value parameter.</typeparam>
+/// <param name="value">The value that needs to be checked.</param>
+/// <param name="low">The inclusive lower boundry.</param>
+/// <param name="high">The inclusive upper boundry.</param>
+public static bool IsBetween<T>(this T value, T low, T high) where T : IComparable<T>
+{
+    return value.CompareTo(low) >= 0 && value.CompareTo(high) <= 0;
+}
+```
 
 *Example usage:*
 
-        Int32 myInt = 0;
-        myInt.IsBetween(0, 5); // returns true
-        myInt.IsBetween(1, 5); // returns false
+```csharp
+Int32 myInt = 0;
+myInt.IsBetween(0, 5); // returns true
+myInt.IsBetween(1, 5); // returns false
+```
 
 #### Each
 
@@ -185,29 +199,33 @@ the `ICollection` interface. The action that is parsed in can be a lambda expres
 
 *Definition:*
 
-        /// <summary>
-        /// Executes the given action against the given ICollection instance.
-        /// </summary>
-        /// <typeparam name="T">The type of the ICollection parameter.</typeparam>
-        /// <param name="items">The collection the action is performed against.</param>
-        /// <param name="action">The action that is performed on each item.</param>
-        public static void Each<T>(this ICollection<T> items, Action<T> action)
-        {
-            foreach (T item in items)
-            {
-                action(item);
-            }
-        }
+```csharp
+/// <summary>
+/// Executes the given action against the given ICollection instance.
+/// </summary>
+/// <typeparam name="T">The type of the ICollection parameter.</typeparam>
+/// <param name="items">The collection the action is performed against.</param>
+/// <param name="action">The action that is performed on each item.</param>
+public static void Each<T>(this ICollection<T> items, Action<T> action)
+{
+    foreach (T item in items)
+    {
+        action(item);
+    }
+}
+```
 
 *Example usage:*
 
-        List<String> myList = new List<String>();
-        myList.Each(el => 
-        {
-            // perform an action(s) on the item
-            el.Substring(0,1);
-            el = el;
-        });
+```csharp
+List<String> myList = new List<String>();
+myList.Each(el => 
+{
+    // perform an action(s) on the item
+    el.Substring(0,1);
+    el = el;
+});
+```
 
 #### In
 
@@ -216,23 +234,27 @@ array of values of the same type.
 
 *Definition:*
 
-        /// <summary>
-        /// Determines whether a parameter is in a given list of parameters. Eg. 11.In(1,2,3) will return false.
-        /// </summary>
-        /// <typeparam name="T">The type of the source parameter.</typeparam>
-        /// <param name="source">The item that needs to be checked.</param>
-        /// <param name="list">The list that will be checked for the given source.</param>
-        public static bool In<T>(this T source, params T[] list)
-        {
-            if (null == source) throw new ArgumentNullException("source");
-            return list.Contains(source);
-        }
+```csharp
+/// <summary>
+/// Determines whether a parameter is in a given list of parameters. Eg. 11.In(1,2,3) will return false.
+/// </summary>
+/// <typeparam name="T">The type of the source parameter.</typeparam>
+/// <param name="source">The item that needs to be checked.</param>
+/// <param name="list">The list that will be checked for the given source.</param>
+public static bool In<T>(this T source, params T[] list)
+{
+    if (null == source) throw new ArgumentNullException("source");
+    return list.Contains(source);
+}
+```
 
 *Example usage:*
 
-        Int32 myInt = 0;
-        myInt.In(0, 0, 1, 2, 3); // returns true
-        myInt.In(1, 5, 6, 7, 8); // returns false
+```csharp
+Int32 myInt = 0;
+myInt.In(0, 0, 1, 2, 3); // returns true
+myInt.In(1, 5, 6, 7, 8); // returns false
+```
 
 Hopefully, you now have an understanding of how to implement extension methods in both C\# and VB.Net. 
 

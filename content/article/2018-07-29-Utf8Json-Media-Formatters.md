@@ -20,7 +20,7 @@ Whilst not massive improvements, they may still help others. The formatters can 
 
 ## Utf8Json Input Media Formatter
 
-```c#
+```csharp
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Threading.Tasks;
 using Utf8Json;
@@ -53,7 +53,7 @@ internal sealed class Utf8JsonInputFormatter : IInputFormatter
 ## Utf8Json Output Media Formatter
 
 
-```c#
+```csharp
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Threading.Tasks;
 using Utf8Json;

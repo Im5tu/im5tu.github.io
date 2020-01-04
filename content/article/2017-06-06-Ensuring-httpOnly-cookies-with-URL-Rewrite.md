@@ -28,21 +28,23 @@ When a server indicates that it wants to set a cookie, it does so by sending the
 
 This rewrite snippet requires two portions: the rule and a set of precondtions.
 
-    <rewrite>
-        <outboundRules>
-            <rule name="Ensure httpOnly Cookies" preCondition="Missing httpOnly cookie">
-                <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
-                <action type="Rewrite" value="{R:0}; HttpOnly" />
-            </rule>
-            <preConditions>
-                <preCondition name="Missing httpOnly cookie">
-                    <!-- Don't remove the first line! -->
-                    <add input="{RESPONSE_Set_Cookie}" pattern="." />
-                    <add input="{RESPONSE_Set_Cookie}" pattern="; HttpOnly" negate="true" />
-                </preCondition>
-            </preconditions>
-        </outboundRules>
-    </rewrite>
+```xml
+<rewrite>
+    <outboundRules>
+        <rule name="Ensure httpOnly Cookies" preCondition="Missing httpOnly cookie">
+            <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
+            <action type="Rewrite" value="{R:0}; HttpOnly" />
+        </rule>
+        <preConditions>
+            <preCondition name="Missing httpOnly cookie">
+                <!-- Don't remove the first line! -->
+                <add input="{RESPONSE_Set_Cookie}" pattern="." />
+                <add input="{RESPONSE_Set_Cookie}" pattern="; HttpOnly" negate="true" />
+            </preCondition>
+        </preconditions>
+    </outboundRules>
+</rewrite>
+```
 
 Within our rule, we are defining the name of the rule which can be viewed inside of `inetmgr (IIS Manager)`. In previous posts we have added the attribute to stop processing, but here we want to continue processing rewrite rules because we may want to do additional work to the response. Next, we match the server varible for a `Set-Cookie` HTTP header (`RESPONSE_Set_Cookie`) and ensure that it's present for us to continue. For our action, we rewrite the `Set-Cookie` header to be the original value, with the `HttpOnly` modifier appended.
 

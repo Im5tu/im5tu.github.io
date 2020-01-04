@@ -122,151 +122,176 @@ After you have installed MSMQ, you  can access the control panel for MSMQ by ope
 
 In order to access a message queue, you need to add a reference `System.Messaging`. This will provide you access to the `MessageQueue` class. If you know the path, format name or label you can use [the following constructor overload](http://msdn.microsoft.com/en-us/library/ch1d814t(v=vs.110).aspx):
 
-    var mq = new MessageQueue(pathOrFormatOrLabel);
+```csharp
+var mq = new MessageQueue(pathOrFormatOrLabel);
+```
     
 The path name can be in the following [syntax](http://msdn.microsoft.com/en-us/library/ms706083(v=vs.85).aspx):
 
-    var mq = new MessageQueue(@"ComputerName\QueueName");
-    var mq = new MessageQueue(@"ComputerName\PRIVATE$\QueueName");
-    var mq = new MessageQueue(@".\QueueName");
+```csharp
+var mq = new MessageQueue(@"ComputerName\QueueName");
+var mq = new MessageQueue(@"ComputerName\PRIVATE$\QueueName");
+var mq = new MessageQueue(@".\QueueName");
+```
     
 The period shown in the last example is a common computer representation of the local computer.
 
 In order to reference a queue by its label, the string must start with `Label:` followed by the name of the queue. For example:
 
-    var mq = new MessageQueue("Label:TestQueue");
+```csharp
+var mq = new MessageQueue("Label:TestQueue");
+```
     
 Lastly, accessing a queue via its GUID requires the following format `FormatName:Modifier=GUID", for example:
 
-    var mq = new MessageQueue("FormatName:Public=5A5F7535-AE9A-41d4-935C-845C2AFF7112");
+```csharp
+var mq = new MessageQueue("FormatName:Public=5A5F7535-AE9A-41d4-935C-845C2AFF7112");
+```
     
 Dead letter queues, computer journals and queue journals can all be monitored by using the following paths:
 
-    var mq = new MessageQueue(@".\DeadLetter$"); // Non-transactional Dead Letter Queue
-    var mq = new MessageQueue(@".\XactDeadLetter$"); // Transactional Dead Letter Queue 
-    var mq = new MessageQueue(@".\Journal$"); // Computer Journal
-    var mq = new MessageQueue(@".\TestQueue\Journal$"); // Queue Journal                
+```csharp
+var mq = new MessageQueue(@".\DeadLetter$"); // Non-transactional Dead Letter Queue
+var mq = new MessageQueue(@".\XactDeadLetter$"); // Transactional Dead Letter Queue 
+var mq = new MessageQueue(@".\Journal$"); // Computer Journal
+var mq = new MessageQueue(@".\TestQueue\Journal$"); // Queue Journal                
+```
 
 ## Sending a message to an MSMQ Message Queue
 
 In order to send a message to a message queue, you need to know how to access the queue as described above. Next you need to create an instance of the `MessageQueue` class using one of the following [MessageQueue constructors](http://msdn.microsoft.com/en-us/library/System.Messaging.MessageQueue.MessageQueue(v=vs.110).aspx). The `MessageQueue` class inherits from Component, which implements `IDisposable`, allowing us to cleanly free the resources of the queue by using a `using` statement:
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+}
+```
 
 Once the queue has been created, we should check that we can write to the queue by using the `CanWrite` property:
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanWrite)
-    	{
-    	}
-    	else
-    	{
-    		// we cannot write to the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanWrite)
+	{
+	}
+	else
+	{
+		// we cannot write to the queue
+	}
+}
+```
     
 Then we can create an instance of the `Message` class and call the `Send` method on the message queue to send our message: 
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanWrite)
-    	{
-    		var msg = new Message("Hello world");
-            mq.Send(msg);    		
-    	}
-    	else
-    	{
-    		// we cannot write to the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanWrite)
+	{
+		var msg = new Message("Hello world");
+		mq.Send(msg);    		
+	}
+	else
+	{
+		// we cannot write to the queue
+	}
+}
+```
 
 ### Sending a message to an MSMQ Message Queue using transactions
 
 Sometimes we will be required to send messages to a transactional queue. We can extend our previous example to include a check on the `Transactional` property:
     
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanWrite)
-    	{
-    		var msg = new Message("Hello world");
-    		if(mq.Transactional)
-    		{
-    		}
-    		else
-    		{	
-	            mq.Send(msg);
-    		}    		    		
-    	}
-    	else
-    	{
-    		// we cannot write to the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanWrite)
+	{
+		var msg = new Message("Hello world");
+		if(mq.Transactional)
+		{
+		}
+		else
+		{	
+			mq.Send(msg);
+		}    		    		
+	}
+	else
+	{
+		// we cannot write to the queue
+	}
+}
+```
 
 Here I have branched out the original code into the else branch to compare. Next, we should construct a `MessageQueueTransaction` object which in turn can be passed to the `Send` method. Before we call the `Send` method, we need to ensure that we have called the `Begin` method on the transaction object, and `Commit` when we have completed. This will ensure that MSMQ will use the correct transactional semantics:
     
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanWrite)
-    	{
-    		var msg = new Message("Hello world");
-    		if(mq.Transactional)
-    		{
-    			var transaction = new MessageQueueTransaction();
-                transaction.Begin();
-                mq.Send(msg, transaction);
-                transaction.Commit();
-    		}
-    		else
-    		{	
-	            mq.Send(msg);
-    		}    		    		
-    	}
-    	else
-    	{
-    		// we cannot write to the queue
-    	}
-    }
-    
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanWrite)
+	{
+		var msg = new Message("Hello world");
+		if(mq.Transactional)
+		{
+			var transaction = new MessageQueueTransaction();
+			transaction.Begin();
+			mq.Send(msg, transaction);
+			transaction.Commit();
+		}
+		else
+		{	
+			mq.Send(msg);
+		}    		    		
+	}
+	else
+	{
+		// we cannot write to the queue
+	}
+}
+```
 
 ## Retrieving a message from an MSMQ Message Queue
 
 In order to retrieve a message from a message queue, you need to know how to access the queue as described above. Next you need to create an instance of the `MessageQueue` class using one of the following [MessageQueue constructors](http://msdn.microsoft.com/en-us/library/System.Messaging.MessageQueue.MessageQueue(v=vs.110).aspx).
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {    
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{    
+}
+```
     
 Once the queue has been created, we should check that we can read from the queue by using the `CanRead` property:
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanRead)
-    	{
-    	}
-    	else
-    	{
-    		// we can not receive from the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanRead)
+	{
+	}
+	else
+	{
+		// we can not receive from the queue
+	}
+}
+```
     
 From here, it is a case of calling the `Receive` method and processing the result:
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanRead)
-    	{
-    		var msg = mq.Receive();
-    		// do something with the received message
-    	}
-    	else
-    	{
-    		// we can not receive from the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanRead)
+	{
+		var msg = mq.Receive();
+		// do something with the received message
+	}
+	else
+	{
+		// we can not receive from the queue
+	}
+}
+```
 
 *You may have to set the `Formatter` property as shown [here](http://msdn.microsoft.com/en-us/library/y918yfy2(v=vs.110).aspx).*
 
@@ -274,25 +299,27 @@ From here, it is a case of calling the `Receive` method and processing the resul
 
 Similarly to the transactional code we used when sending a message, we can inspect the `Transactional` property on the `MessageQueue` before creating a `MessageQueueTransaction` object, passing it to the `Receive` method:
 
-    using(var mq = new MessageQueue(".\TestQueue"))
-    {
-    	if(mq.CanRead)
-    	{
-    		if(mq.Transactional)
-    		{
-			    var transaction = new MessageQueueTransaction();
-                transaction.Begin();
-                mq.Receive(transaction);
-                transaction.Commit();	    		
-    		}
-    		else
-    		{
-    			var msg = mq.Receive();
-    			// do something with the received message
-    		}
-    	}
-    	else
-    	{
-    		// we can not receive from the queue
-    	}
-    }
+```csharp
+using(var mq = new MessageQueue(".\TestQueue"))
+{
+	if(mq.CanRead)
+	{
+		if(mq.Transactional)
+		{
+			var transaction = new MessageQueueTransaction();
+			transaction.Begin();
+			mq.Receive(transaction);
+			transaction.Commit();	    		
+		}
+		else
+		{
+			var msg = mq.Receive();
+			// do something with the received message
+		}
+	}
+	else
+	{
+		// we can not receive from the queue
+	}
+}
+```

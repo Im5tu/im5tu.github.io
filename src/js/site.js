@@ -1,5 +1,4 @@
 (function (_site) {
-
     _site.log = function (text) {
         if (!text || text.length === 0)
             return;

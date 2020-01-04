@@ -14,23 +14,27 @@ In this article, we will learn how to use a custom dockerfile as the bases for a
 
 You need to this `Dockerfile` snippet:
 
-    FROM microsoft/vsts-agent:ubuntu-16.04
+```dockerfile
+FROM microsoft/vsts-agent:ubuntu-16.04
 
-    # Install your stuff here
+# Install your stuff here
 
-    CMD /bin/sh
+CMD /bin/sh
+```
 
 And this `azure-pipelines.yml` snippet:
 
-    resources:
-        containers:
-        - container: octodns
-            image: im5tu/octodns:latest
+```yml
+resources:
+    containers:
+    - container: octodns
+        image: im5tu/octodns:latest
 
-    container: octodns
+container: octodns
 
-    steps:
-    # Your steps go here
+steps:
+# Your steps go here
+```
 
 ## Starting with a Dockerfile
 
@@ -40,13 +44,17 @@ In the repository of your choice, create a file called `Dockerfile`. Note that t
 
 At the top of the Dockerfile, start off with the following:
 
-    FROM microsoft/vsts-agent:ubuntu-16.04
+```dockerfile
+FROM microsoft/vsts-agent:ubuntu-16.04
+```
 
 During the build, this will instruct docker to pull the image called `vsts-agent` tagged with `ubuntu-16.04` from the user `microsoft`.
 
 Then at the bottom of the Dockerfile, place the following line:
 
-    CMD /bin/sh
+```dockerfile
+CMD /bin/sh
+```
 
 This instructs the built image to leave a command prompt as the entrypoint so that we can run the rest of our scripts.
 
@@ -74,21 +82,25 @@ If you need to edit an existing repository or build, you can do that from the fo
 
 Once the build agent has successfully built, we can start to create our `azure-pipelines.yml` file around the new custom container. Above the `steps` section of the file, add the following snippet:
 
-    resources:
-        containers:
-        - container: <name>
-            image: <user id>/<repo name>:<tag>
+```yml
+resources:
+    containers:
+    - container: <name>
+        image: <user id>/<repo name>:<tag>
 
-    container: <name>
+container: <name>
+```
 
 Which, when populated looks like the following:
 
-    resources:
-        containers:
-        - container: octodns
-            image: im5tu/octodns:latest
+```yml
+resources:
+    containers:
+    - container: octodns
+        image: im5tu/octodns:latest
 
-    container: octodns
+container: octodns
+```
 
 That's it, you should now have a functioning customised Azure DevOps build agent. After that you can play with any additional steps, triggers, variables or what ever your heart desires. Here's what it looks like when it's running instead of Azure DevOps (with the container initialization step highlighted):
 

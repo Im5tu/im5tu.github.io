@@ -40,7 +40,7 @@ I've covered the scenario of allowing you to specific the id for the scenarios t
 
 Now we have our requirements, here is the API surface that we will implement:
 
-```c#
+```csharp
 public static class CorrelationContext
 {
     public static Stack<Guid> GetCorrelationStack() {}
@@ -58,14 +58,14 @@ What this means for our correlation context is that we can declare a static and 
 The eagle-eyed among you will have noticed that I put in a stack earlier in the article for storing our correlation id. The use case for having a stack is as follows: you have a long running connection (eg: TCP to a third party) in which you wish to track every message that comes from that connection whilst uniquely tracking each message with a different id.
 In this scenario, we must first push the correlation id of the session, followed by each correlation of the unique message as we send each message for processing. With this in mind, to start off the implementation, we must first store the stack in the `AsyncLocal<T>` and be able to retrieve it:
 
-```c#
+```csharp
 private static readonly AsyncLocal<Stack<Guid>> _correlationStack = new AsyncLocal<Stack<Guid>>();
 public static Stack<Guid> GetCorrelationStack() => _correlationStack.Value ?? new Stack<Guid>();
 ```
 
 Not really too much is going on here. We definitely want to make our lives easier when trying to get the most recent correlation id and avoid the repetitive checks in our code, so we can integrate all of this into our GetCorrelationById method:
 
-```c#
+```csharp
 public static Guid? GetCorrelationId() 
 {
     var stack = GetCorrelationStack();
@@ -80,7 +80,7 @@ You can see that I'm making use of the GetCorrelationStack method that we just i
 
 So far we have been retrieving the correlation information from the stack we have stored. Pushing a value onto the stack is equally trivial:
 
-```c#
+```csharp
 public static IDisposable CreateCorrelation(Guid? correlationId = null)
 {
     lock(_correlationStack)
@@ -97,7 +97,7 @@ public static IDisposable CreateCorrelation(Guid? correlationId = null)
 
 When we are ready to remove the correlation from the stack, we can dispose of the returned class which manages removing the value. This allows us to use the correlation context within a using statement as you'll see in the example later on. To cover off the scenarios in which we want to check to see whether or not the correlation stack already has a correlation id (eg: it's already been populated by other middleware), we simply need to combine two methods that we have already created:
 
-```c#
+```csharp
 public static IDisposable CreateCorrelationIfNotExists(Guid? correlationId = null)
 {
     if(GetCorrelationStack().Count > 0)
@@ -109,7 +109,7 @@ public static IDisposable CreateCorrelationIfNotExists(Guid? correlationId = nul
 
 So far we can retrieve and set correlation id's. Removing them is just as easy. As you saw earlier in the article, I created a class DisposeCorrelation which implements IDisposable:
 
-```c#
+```csharp
 private class DisposeCorrelation : IDisposable
 {
     private readonly AsyncLocal<Stack<Guid>> _localStack;
@@ -133,7 +133,7 @@ As an exercise for you dear reader, there is another IDisposable that I've refer
 
 Once we put all the pieces of the puzzle together, we can test that our implementation works with a simple example:
 
-```c#
+```csharp
 class Program
 {
     static void Main(string[] args)
@@ -155,7 +155,7 @@ All being well, you should see a console with two id's that are the exact same. 
 
 For reference, here is the entire implementation:
 
-```c#
+```csharp
 public static class CorrelationContext
 {
     private static readonly AsyncLocal<Stack<Guid>> _correlationStack = new AsyncLocal<Stack<Guid>>();

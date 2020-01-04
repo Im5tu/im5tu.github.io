@@ -11,14 +11,15 @@ On a project I have been working on recently, I came across a problem where unde
 
 Next up, the code. Following this I shall explain, to the best of my ability, what the code does:
 
-    '  VB
-        Protected Overrides ReadOnly Property CreateParams() As System.Windows.Forms.CreateParams
-            Get
-                Dim cp As CreateParams = MyBase.CreateParams
-                cp.ExStyle = cp.ExStyle Or &H2000000
-                Return cp
-            End Get
-        End Property
+```vb
+Protected Overrides ReadOnly Property CreateParams() As System.Windows.Forms.CreateParams
+    Get
+        Dim cp As CreateParams = MyBase.CreateParams
+        cp.ExStyle = cp.ExStyle Or &H2000000
+        Return cp
+    End Get
+End Property
+```
 
 Apparently there are two causes for the flicker that happens to a Windows form. Until writing this post I did not know of the reasons why. *[Source MSDN
 Forums](http://social.msdn.microsoft.com/Forums/en-US/winforms/thread/aaed00ce-4bc9-424e-8c05-c30213171c2c/)*
@@ -42,24 +43,25 @@ time, I bit the bullet and decided to uncomment every section of my code until I
 Eventually I found the code above to be the problem, which worked fine under Windows 7. So the solution was quiet easy, detect what version of the operating system we are on and only apply the style if we are on
 Vista or higher.
 
-    '  VB
-        Protected Overrides ReadOnly Property CreateParams() As System.Windows.Forms.CreateParams
-            Get
-                Dim cp As CreateParams = MyBase.CreateParams
-                Dim OSVer As Version = System.Environment.OSVersion.Version()
-                Select Case OSVer.Major
-                    Case Is <= 5
-                    Case 5
-                        If OSVer.Minor > 0 Then
-                            cp.ExStyle = cp.ExStyle Or &H2000000
-                        End If
-                    Case Is > 5
-                        cp.ExStyle = cp.ExStyle Or &H2000000
-                    Case Else
-                End Select
-                Return cp
-            End Get
-        End Property
+```vb
+Protected Overrides ReadOnly Property CreateParams() As System.Windows.Forms.CreateParams
+    Get
+        Dim cp As CreateParams = MyBase.CreateParams
+        Dim OSVer As Version = System.Environment.OSVersion.Version()
+        Select Case OSVer.Major
+            Case Is <= 5
+            Case 5
+                If OSVer.Minor > 0 Then
+                    cp.ExStyle = cp.ExStyle Or &H2000000
+                End If
+            Case Is > 5
+                cp.ExStyle = cp.ExStyle Or &H2000000
+            Case Else
+        End Select
+        Return cp
+    End Get
+End Property
+```
 
 So I had finally fixed the problem with the CPU usage. Deployed the version for the client to test and everything was ok. By this time, I had a massive headache and it wasn't quiet the end of the day. What a
 better way to end the day but by ending off with another rending issue. Although I had fixed the issue with the CPU, I had noticed that when you moved the form, and loading the form in some cases, a list view in
@@ -68,28 +70,30 @@ details mode would not render correctly.
 After reading around about the issue, I have merged from a number of source's to create a flicker free list view. To use the code, place the class into your project, open up the target form's designer code (*You
 will need to show all files in VS*) and replace the instances of `ListView` with `FlickerFreeListView`. Here is the code:
 
-    Public Class FlickerFreeListView
-        Inherits System.Windows.Forms.ListView
-     
-        Public Sub New()
-     
-            MyBase.New()
-     
-            Me.SetStyle(ControlStyles.Opaque, True)
-            Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
-            Me.SetStyle(ControlStyles.ResizeRedraw, True)
-            Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
-            Me.SetStyle(ControlStyles.EnableNotifyMessage, True)
-     
-        End Sub
-     
-        Protected Overrides Sub OnNotifyMessage(ByVal m As Message)
-            If (m.Msg <> &H14) Then
-                MyBase.OnNotifyMessage(m)
-            End If
-        End Sub
-     
-    End Class
+```vb
+Public Class FlickerFreeListView
+    Inherits System.Windows.Forms.ListView
+    
+    Public Sub New()
+    
+        MyBase.New()
+    
+        Me.SetStyle(ControlStyles.Opaque, True)
+        Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
+        Me.SetStyle(ControlStyles.ResizeRedraw, True)
+        Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+        Me.SetStyle(ControlStyles.EnableNotifyMessage, True)
+    
+    End Sub
+    
+    Protected Overrides Sub OnNotifyMessage(ByVal m As Message)
+        If (m.Msg <> &H14) Then
+            MyBase.OnNotifyMessage(m)
+        End If
+    End Sub
+    
+End Class
+```
 
 The code basically blocks the background from being re-drawn every time an item is added into the `ListView` control. It also sets the `OptimizedDoubleBuffer` to help prevent any issues, amongst other things.
 
