@@ -1,4 +1,4 @@
-{{ if (isset .Params "tags") and ge (len .Tags) 1 }}
+{{ if ge (len .Tags) 1 }}
 Tags: <ul class="article-tags">
     {{ range .tags -}}<li><a class="article-tag" href="/tags/{{ . | urlize }}/">{{- . -}}</a></li>{{- end }}
 </ul>

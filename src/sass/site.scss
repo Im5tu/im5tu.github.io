@@ -8,6 +8,7 @@ html, body {
     height: 100%;
     color: lighten($textColor, 5%);
     @include font("Noto Sans");
+    line-height: 1.8em;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -108,6 +109,74 @@ a {
 
 .article img {
     max-width: 100%;
+}
+
+ul.article-tags {
+    display: inline;
+    padding: 0;
+    
+    & li {
+        display: inline;
+        padding: 0 1em;
+
+        & a:link {
+            text-decoration: underline;
+        }
+    }
+}
+
+$base-spacing-unit: 24px;
+$half-spacing-unit: $base-spacing-unit / 2;
+
+$color-alpha: #1772FF;
+$color-form-highlight: #EEEEEE;
+
+table {
+	width:100%;
+        
+    & * {
+        padding: 0;
+        margin: 0;
+    }
+
+    & th {
+        display:flex;
+        width:100%;
+        background:#000;
+        color: #fff;
+        padding: 1em;
+    }
+
+    & tr {
+        display:flex;
+        width:100%;
+
+        &:hover {
+            opacity: .7;
+        }
+
+        &:first-child {
+            padding: 0;
+        }
+
+        &:nth-of-type(odd) {
+            background:$color-form-highlight;
+        }
+    }
+
+    & td {
+        flex: 1 1 20%;
+        text-align: left;
+        padding: 1em;
+    }
+}
+
+pre {
+    line-height: 1.4em;
+}
+
+code {
+    font-size: 1.2em;
 }
 
 // must be last

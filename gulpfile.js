@@ -6,7 +6,8 @@ var sass = require("gulp-dart-sass"),
     hash = require("gulp-hash"),
     concat = require("gulp-concat"),
     uglify = require("gulp-uglify"),
-    pipeline = require('readable-stream').pipeline;
+    pipeline = require('readable-stream').pipeline,
+    cleanCSS = require('gulp-clean-css');
 
 var srcRootDir = "src/",
     destRootDir = "static/",
@@ -63,6 +64,7 @@ function css(cb) {
         src(srcCss),
         sass(),
         autoprefixer(),
+        cleanCSS(),
         hash(),
         dest(destCss),
         hash.manifest("hash.json"),
