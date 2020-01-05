@@ -6,10 +6,10 @@
     "categories": ["dotnet", "diagnostics"]
 }
 
-Recently, I've been playing with the new [diagnostic improvements in .Net Core 3](https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/). Traditionally, I've always used the great [AppMetrics](https://github.com/AppMetrics/AppMetrics) package to capture the metrics from our applications and send scrape them with a [Prometheus](https://github.com/prometheus/prometheus) &amp; [Grafana](https://github.com/grafana/grafana) setup. When reading about the improvements, I wondered whether or not it would be possible to push metrics to [Prometheus](https://github.com/prometheus/prometheus).
+Recently, I've been playing with the new [diagnostic improvements in .Net Core 3](https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/). Traditionally, I've always used the great [AppMetrics](https://github.com/AppMetrics/AppMetrics) package to capture the metrics from our applications and send scrape them with a [Prometheus](https://github.com/prometheus/prometheus) &amp; [Grafana](https://github.com/grafana/grafana) setup. Whilst reading about the improvements, I wondered whether or not it would be possible to push metrics to [Prometheus](https://github.com/prometheus/prometheus).
 <!--more-->
 
-Ultimately, I decided that pushing to [Prometheus](https://github.com/prometheus/prometheus) wasn't ideal for my use case. However, I have successfully used the approach described in the rest of the article to push the metrics to another platform.
+Ultimately, I decided that pushing to [Prometheus](https://github.com/prometheus/prometheus) wasn't ideal for my use case. However, I have successfully used the approach described in the rest of the article to push the metrics to another platform, using a new .Net API - EventCounters.
 
 EventCounters are the .NET Core replacement for Windows performance counters, which are now cross platform. EventCounters are based on the EventPipe that was originally introduced in .Net Core 2.2, but .Net Core 3.0+ adds a lot of additional functionality that we can use going forward to create cross platform monitoring tools for our applications including:
 
@@ -17,7 +17,7 @@ EventCounters are the .NET Core replacement for Windows performance counters, wh
 - `dotnet-trace` collects events emitted by the Core CLR and generate trace file to be analyzed with PerfView;
 - `dotnet-counters` collects the metrics corresponding to some performance counters that used to be exposed by the .NET Framework.
 
-Please note that this article is correct at the time of writing based on the [sources](https://source.dot.net) available. I do describe some of the internal workings of the API, which may change overtime.
+_Please note that this article is correct at the time of writing based on the [sources](https://source.dot.net) available. I do describe some of the internal workings of the API, which may change overtime._
 
 ## Application Flow
 
@@ -42,7 +42,7 @@ public class MyApplicationEventSource : EventSource
 }
 ```
 
-In order to initialize a new EventCounter instance, we need to give a name and the EventSource that it should be associated with. Whilst this is okay for simple EventCounters, we often need to do more with our applications, such as tracking the start/stopping of certain events. To do this, we can leverage more of the EventSource's infrastructure by using the events mechanism.
+In order to initialize a new EventCounter instance, we need to give a name and the EventSource that it should be associated with. Whilst this is okay for simple EventCounters, we often need to do more with our applications, such as tracking the start/stopping of certain events, or tracking activities using PerfView. To do this, we can leverage more of the EventSource's infrastructure.
 
 ### Using EventCounters And EventSource Events
 
@@ -120,7 +120,7 @@ internal class OpenMessageEventSource : EventSource
 }
 ```
 
-The example above is designed to track the number of messages processed by our system, and how long on average they took to process. The event source is also designed to be lazily initialized, so we only track information when the EventSource is enabled. Let's break some of the import parts down, starting off with `OnEventCommand`:
+The example above is designed to track the number of messages processed by our system, and how long on average they took to process. The event source is also designed to be lazily initialized, so we only track information when the EventSource is enabled. Let's take a look at how we've accomplished this by looking at `OnEventCommand`:
 
 ```csharp
 protected override void OnEventCommand(EventCommandEventArgs command)
@@ -146,14 +146,16 @@ protected override void OnEventCommand(EventCommandEventArgs command)
 }
 ```
 
-This section is where we register the event counters that we are interested in tracking. EventSource's can receive commands from external sources, namely the ability to enable events. We can receive this message from applications multiple times, so it's important to to make sure that we guard against nulls etc. In the sample above, I use the new null-assignment expression to ensure that only when the field is null, do we perform the expression on the right hand side - which in our case is creating the counters. There are four available types of counters available:
+This is where we register the event counters that we are interested in tracking. EventSource's can receive commands from external sources, so that they can enable the EventCounter API etc. We can receive this message from applications multiple times, so it's important to to make sure that we defensively programme. In the sample above, I use the new null-assignment expression to ensure that only when the field is null, do we perform the expression on the right hand side - which in our case is creating the counters. 
+
+There are four available types of counters available for us to use, which I will cover later on:
 
 - EventCounter
 - IncrementingEventCounter
 - PollingCounter
 - IncrementingPollingCounter
 
-Next, we need to look how we can actually record the metrics. In order to do this, I decided to use .Net's EventSource Eventing capabilities so that I can also get the information that I want inside of other tools like PerfView should I want to. So let's take a look how I've done this:
+Next, we need to look how we can actually record the metrics. In order to do this, I've combined it with using EventSource Event's so that I can also get the information that I want inside of other tools like PerfView should I want to:
 
 ```csharp
 [NonEvent]
@@ -189,13 +191,15 @@ private void MessageStop(double duration)
 }
 ```
 
-In essence, we have two operations that we are really interested in Start &amp; Stop. In the example above, each of the operations is split out into a `[NonEvent]` and a corresponding `[Event]`. The `[Event]` is what the EventSource system uses to write the events to the underlying stream so that it can be picked up by tools such as PerfView. The entry point is always the `[NonEvent]` so that we can check to see if anyone is listening to the EventSource before we do anything, plus it does not emit the Event unnecessarily. This is the same pattern that is used throughout the .Net Code base from what I can tell.
+We have two operations that we are really interested in Start &amp; Stop. In the example above, each of the operations is split out into a `[NonEvent]` and a corresponding `[Event]`. The `[Event]` is what the EventSource system uses to write the events to the underlying stream so that it can be picked up by tools such as PerfView. The entry point is always the `[NonEvent]` so that we can check to see if anyone is listening to the EventSource before we do anything, this helps ensure that it does not emit the Event unnecessarily. This is the same pattern that is used throughout the .Net Code base from what I can tell.
 
 For the `[Event]`'s, you will notice that the Start/Stop is EventId 1/2 respectively and the also end with Start/Stop. This allows some magic to happen such as automatically figuring out the duration inside of PerfView. For more information on some of the magic that occurs, I strongly recommend reading [Vance Morrison's Excellent Blog Post](https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/) instead of me duplicating the knowledge here. 
 
-Once you have your EventSource configured, then you can record your metrics at will (eg: `OpenMessageEventSource.ProcessMessageStart()`) and the runtime will take care of the rest.
+Once you have your EventSource configured, and you know which metrics you wish to track, then all that's left is to start recording your metrics (eg: `OpenMessageEventSource.ProcessMessageStart()`) and the runtime will take care of the rest.
 
 ### Other EventSource Examples
+
+For some inspiration of how to configure your EventSource's, here are a few examples from Microsoft:
 
 - [HostingEventSource](https://github.com/aspnet/AspNetCore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs): Used to track the current number of requests including: failed/total/requests per second.
 - [KestrelEventSource](https://github.com/aspnet/AspNetCore/blob/master/src/Servers/Kestrel/Core/src/Internal/Infrastructure/KestrelEventSource.cs): Used to track details of connections to the Kestrel WebServer - including when connections and requests Start/Stop.
@@ -242,7 +246,7 @@ An IncrementingEventCounter is typically used to track ever increasing numbers s
 |CounterType|string|Always "Sum"|
 |DisplayUnits|string||
 
-In order to write data, you need to call `<counter>.Increment(value)`.
+In order to write data, you need to call `<counter>.Increment(value)`. The `Increment` that you receive is always `currentValue - previousValue`.
 
 ### PollingCounter
 
@@ -263,9 +267,9 @@ A PollingCounter is very much like a standard EventCounter, but instead of the m
 |DisplayUnits|string||
 |Series|string|Format is: $"IntervalSec={IntervalSec}"|
 
-### IncrementingEventCounter
+### IncrementingPollingCounter
 
-A IncrementingPollingCounter is very much like a standard IncrementingPollingCounter, but instead of the metric being written to it, a function is invoked which retrieves the value from your source of choice. An IncrementingPollingCounter instance tracks the following about the metrics that it's recorded:
+A IncrementingPollingCounter is very much like a standard IncrementingEventCounter, but instead of the metric being written to it, a function is invoked which retrieves the value from your source of choice. An IncrementingPollingCounter instance tracks the following about the metrics that it's recorded:
 
 |Name|Type|Notes|
 |---|---|---|
@@ -291,50 +295,50 @@ The whole EventSource system is very lightweight and designed for scalability in
 
 Lastly, in order to complete our circle, we need to be able to listen to the counters that we've created in our applications. There are two common approaches that we can use: the CLI tool `dotnet-counters` or from within our applications using an `EventListener`.
 
-### Using dotnet-counters
+### Consuming EventCounters using dotnet-counters
 
 As part of the diagnostic improvements in .Net Core 3, the .Net team introduced a new diagnostics tool called `dotnet-counters`. This is a stand-alone tool that can be installed using the following command:
 
-```bash
+```plain
 dotnet tool install dotnet-counters --global
 ```
 
 Or updated to the latest version if you already have it installed:
 
-```bash
+```plain
 dotnet tool update dotnet-counters --global
 ```
 
-After the tool has been installed, you can see the processes that are eligible for attaching using:
+After the tool has been installed, you can see the processes that are eligible for attaching to, using:
 
-```bash
->dotnet-counters ps
+```plain
+dotnet-counters ps
     10416 dotnet     C:\Program Files\dotnet\dotnet.exe
     20660 dotnet     C:\Program Files\dotnet\dotnet.exe
     21172 dotnet     C:\Program Files\dotnet\dotnet.exe
 ```
 
-Once you know the process that you want to attach too, you can start monitoring with the following command:
+Once you know the process that you want to attach to, you can start monitoring with the following command:
 
-```bash
->dotnet-counters monitor -p 21172
+```plain
+dotnet-counters monitor -p 21172
 ```
 
 If you are interested in specific EventSources, then you can supply a space separated list of EventSources like:
 
-```bash
->dotnet-counters monitor -p 21172 System.Runtime MyEventSource
+```plain
+dotnet-counters monitor -p 21172 System.Runtime MyEventSource
 ```
 
-By default, when you ask to monitor an EventSource, it will capture and display all the counters for you. If you only wish to track a few counters from each EventSource, then you specify them in square brackets directly after the EventSource name:
+By default, when you ask to monitor an EventSource, it will capture and display all the counters for you. If no EventSources are specified then a default list is used, including: `System.Runtime`. If you only wish to track a few counters from each EventSource, then you specify them in square brackets directly after the EventSource name:
 
-```bash
->dotnet-counters monitor -p 21172 System.Runtime[cpu-usage] MyEventSource[test]
+```plain
+dotnet-counters monitor -p 21172 System.Runtime[cpu-usage] MyEventSource[test]
 ```
 
 All of the monitor commands will output something similar to the following:
 
-```bash
+```plain
 Press p to pause, r to resume, q to quit.
     Status: Running
 
@@ -346,11 +350,11 @@ Press p to pause, r to resume, q to quit.
 
 Lastly, should you wish to control the rate that the counters are refreshed, supply the `--refresh-interval` parameter:
 
-```bash
->dotnet-counters monitor -p 21172 --refresh-interval 5 System.Runtime[cpu-usage] MyEventSource[test]
+```plain
+dotnet-counters monitor -p 21172 --refresh-interval 5 System.Runtime[cpu-usage] MyEventSource[test]
 ```
 
-### Within our applications
+### Consuming EventCounters within our applications
 
 In order to enable tracing from within a .Net application you need three core parts:
 
@@ -374,11 +378,11 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
 }
 ```
 
-This will live for the lifetime of the application and host the task that will detect lazy-ily initiated EventSources, such as the OpenMessage one I showed earlier in this article.
+This will live for the lifetime of the application and host the task that will detect lazily initiated EventSources, such as the OpenMessage one I showed earlier in this article.
 
 #### Detecting EventSources
 
-In order to detect the lazy-ily initiated EventSources, we need to periodically call the method `EventSource.GetSources()` which lists all of the currently available sources. we can do this from a simple task that lives against the service:
+In order to detect the lazily initiated EventSources, we need to periodically call the method `EventSource.GetSources()` which lists all of the currently available sources. we can do this from a simple task that lives against the service:
 
 ```csharp
 internal sealed class MetricsCollectionService : EventListener, IHostedService
