@@ -189,6 +189,20 @@ code {
         color: #fefefe;
     }
 
+    a {
+        &:link, &:visited {
+            color: darken($baseColour, 10%);
+        }
+    }
+
+    .article-list {
+        & h1, & h2, & h3, & h4, & h5, & h6 {
+            & a:link, & a:visited {
+                color: #fefefe;
+            }
+        }
+    }
+
     #pageHeader-about-title a {
         &:link, &:visited {
             color: #dedede;
