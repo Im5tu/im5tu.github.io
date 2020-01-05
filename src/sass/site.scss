@@ -179,5 +179,39 @@ code {
     font-size: 1.2em;
 }
 
+@media (prefers-color-scheme: dark) {
+    html, body {
+        color: #eaeaea;
+        background: #323232;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #fefefe;
+    }
+
+    #pageHeader-about-title a {
+        &:link, &:visited {
+            color: #dedede;
+        }
+
+        &:first-child {
+            color: darken($baseColour, 10%);
+        }
+    }
+
+    table {
+        tr:nth-of-type(odd) {
+            background: #767676;
+        }
+    }
+
+    pre {
+        &, & code {
+            background: #dcdcdc !important;
+            color: #323232;
+        }
+    }
+}
+
 // must be last
-@import 'code-copy.scss';    
+@import 'code-copy.scss';

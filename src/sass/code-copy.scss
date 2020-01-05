@@ -3,8 +3,8 @@ $buttonColour: #e2e2e2;
 .copy-code-button {
     float: right;
     display: block;
-    padding: 3px 8px;
-    font-size: 0.8em;
+    padding: 8px 12px;
+    font-size: 0.9em;
     background-color: $buttonColour;
     border: 1px solid $buttonColour;
     border-radius: 0 0 10px 10px;
@@ -41,5 +41,12 @@ pre:hover .copy-code-button {
 @media print {
     .copy-code-button { 
         display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .copy-code-button {
+        background-color: darken($buttonColour, 30%);
+        color: #323232;
     }
 }
