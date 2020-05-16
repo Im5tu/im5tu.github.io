@@ -34,6 +34,26 @@ blockquote {
     }
 }
 
+.warning {
+    margin: 0 auto;
+    border: 1px solid #ff9500;
+    color: #ff9500;
+    background-color: lighten($color: #ff9500, $amount: 50);
+    text-align: center;
+}
+
+.series {
+    font-style: italic;
+
+    & p {
+        margin-bottom: 0;
+    }
+
+    & ol {
+        margin: 0;
+    }
+}
+
 .pageContainer {
     text-align: justify;
 }
