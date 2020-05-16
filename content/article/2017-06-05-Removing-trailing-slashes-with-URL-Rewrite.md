@@ -3,6 +3,7 @@
    "date": "2017-06-05T15:00:59+01:00",
    "description": "A quick explanition of why consistent urls are important and how to achieve them with url rewriting.",
    "tags": [ "IIS", "Url Rewrite", "SEO" ],
+   "series": "Url Rewriting",
    "title": "Removing trailing slashes with URL Rewrite"
 }
 
@@ -34,12 +35,3 @@ In the first line, we are defining the name of the rule which can be viewed insi
 Finally, we define the action that we wish to take if both the `match` and all the conditions in the `conditions` section have been satisfied. The action that we wish to take is to redirect the user to the page without the slash, so we use the request capture group `{R:1}` (more on this in a future article).
 
 And that's it, you should be redirecting people from say `site.com/post1/` to `site.com/post1`.
-
-## Other Posts In This Series
-
-1. [Up and running with URL Rewrite - going from HTTP to HTTPS](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/)
-2. [Canonical host urls with URL Rewrite](/article/2017/06/canonical-host-urls-with-url-rewrite/)
-3. [Removing trailing slashes with URL Rewrite](/article/2017/06/removing-trailing-slashes-with-url-rewrite/) *(This Post)*
-4. [Ensuring httpOnly cookies with URL Rewrite](/article/2017/06/ensuring-httponly-cookies-with-url-rewrite/)
-5. [Ensuring secure cookies with URL Rewrite](/article/2017/06/ensuring-secure-cookies-with-url-rewrite/)
-6. [Ensuring samesite cookies with URL Rewrite](/article/2017/06/ensuring-samesite-cookies-with-url-rewrite/)

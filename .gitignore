@@ -6,3 +6,4 @@ public/
 yarn.lock
 .*/
 \.DS_Store
+content/draft/

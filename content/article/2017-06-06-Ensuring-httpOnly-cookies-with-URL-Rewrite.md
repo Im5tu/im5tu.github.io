@@ -3,6 +3,7 @@
    "date": "2017-06-06T15:01:04+01:00",
    "description": "A brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite.",
    "tags": [ "IIS", "Url Rewrite", "Cookies" ],
+   "series": "Url Rewriting",
    "title": "Ensuring httpOnly cookies with URL Rewrite"
 }
 
@@ -58,12 +59,3 @@ For an unknown reason, probably due to a knowledge gap, the first line is requir
 *It is worth noting that a precondition is not limited to a single rule, it can be re-used. There is probably scope for making this rule smaller, if there is i'll edit the post to reflect the smaller rule.*
 
 That's it. If you check your debug tool of choice after implementing this, you should see that all cookies are now sent with the `HttpOnly` modifier.
-
-## Other Posts In This Series
-
-1. [Up and running with URL Rewrite - going from HTTP to HTTPS](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/)
-2. [Canonical host urls with URL Rewrite](/article/2017/06/canonical-host-urls-with-url-rewrite/) 
-3. [Removing trailing slashes with URL Rewrite](/article/2017/06/removing-trailing-slashes-with-url-rewrite/) 
-4. [Ensuring httpOnly cookies with URL Rewrite](/article/2017/06/ensuring-httponly-cookies-with-url-rewrite/) *(This Post)*
-5. [Ensuring secure cookies with URL Rewrite](/article/2017/06/ensuring-secure-cookies-with-url-rewrite/)
-6. [Ensuring samesite cookies with URL Rewrite](/article/2017/06/ensuring-samesite-cookies-with-url-rewrite/)

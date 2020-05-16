@@ -3,6 +3,7 @@
    "date": "2016-11-19T08:01:38Z",
    "description": "Setting up a frontend pipeline powered by yarn & gulp.",
    "tags": ["hugo", "blog", "js", "yarn", "node"],
+   "series": "Building A Blog With Hugo",
    "title": "Blog Building - Part 4 - Frontend"
 }
 

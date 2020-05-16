@@ -3,6 +3,7 @@
    "date": "2017-06-03T15:00:51+01:00",
    "description": "A quick introduction to URL Rewrite module for IIS and a snippet from going from HTTP to HTTPS.",
    "tags": [ "IIS", "Url Rewrite" ],
+   "series": "Url Rewriting",
    "title": "Up and running with URL Rewrite - going from HTTP to HTTPS"
 }
 
@@ -79,13 +80,4 @@ Finally, we define the action that we wish to take if both the `match` and `cond
 - SeeOther: [A HTTP 303 Response](https://httpstatuses.com/303)
 - Temporary: [A HTTP 307 Response](https://httpstatuses.com/307)
 
-That's it! Hopefully this article gives you everything that you need to get HTTP to HTTPS redirects working without 
-
-## Other Posts In This Series
-
-1. [Up and running with URL Rewrite - going from HTTP to HTTPS](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/) *(This Post)*
-2. [Canonical host urls with URL Rewrite](/article/2017/06/canonical-host-urls-with-url-rewrite/)
-3. [Removing trailing slashes with URL Rewrite](/article/2017/06/removing-trailing-slashes-with-url-rewrite/)
-4. [Ensuring httpOnly cookies with URL Rewrite](/article/2017/06/ensuring-httponly-cookies-with-url-rewrite/)
-5. [Ensuring secure cookies with URL Rewrite](/article/2017/06/ensuring-secure-cookies-with-url-rewrite/)
-6. [Ensuring samesite cookies with URL Rewrite](/article/2017/06/ensuring-samesite-cookies-with-url-rewrite/)
+That's it! Hopefully this article gives you everything that you need to get HTTP to HTTPS redirects working.

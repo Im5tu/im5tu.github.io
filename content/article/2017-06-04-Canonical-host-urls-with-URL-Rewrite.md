@@ -3,6 +3,7 @@
    "date": "2017-06-04T15:00:55+01:00",
    "description": "A quick explanition of canonical host urls and how to achieve them with url rewriting.",
    "tags": [ "IIS", "Url Rewrite", "SEO" ],
+   "series": "Url Rewriting",
    "title": "Canonical host urls with URL Rewrite"
 }
 
@@ -35,12 +36,3 @@ In the first line, we are defining the name of the rule which can be viewed insi
 Finally, we define the action that we wish to take if both the `match` and `conditions` sections have been satisfied. The action that we wish to take is to redirect the user to a non `www.` version of the page. In order to do this, we use one of the capture groups (which comes from the conditions section regex) to redirect to (in this case it's `{C:1}`) and combine it with the original path and query.
 
 And that's it, you should be redirecting people from say `www.site.com` to `site.com`.
-
-## Other Posts In This Series
-
-1. [Up and running with URL Rewrite - going from HTTP to HTTPS](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/)
-2. [Canonical host urls with URL Rewrite](/article/2017/06/canonical-host-urls-with-url-rewrite/) *(This Post)*
-3. [Removing trailing slashes with URL Rewrite](/article/2017/06/removing-trailing-slashes-with-url-rewrite/) 
-4. [Ensuring httpOnly cookies with URL Rewrite](/article/2017/06/ensuring-httponly-cookies-with-url-rewrite/)
-5. [Ensuring secure cookies with URL Rewrite](/article/2017/06/ensuring-secure-cookies-with-url-rewrite/)
-6. [Ensuring samesite cookies with URL Rewrite](/article/2017/06/ensuring-samesite-cookies-with-url-rewrite/)

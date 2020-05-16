@@ -3,6 +3,7 @@
    "date": "2017-06-11T20:50:11+01:00",
    "description": "A handy URL Rewrite snippet to mark cookies as samesite.",
    "tags": [ "IIS", "Url Rewrite", "Cookies" ],
+   "series": "Url Rewriting",
    "title": "Ensuring samesite cookies with URL Rewrite"
 }
 
@@ -59,12 +60,3 @@ Within the precondition, which is matched by name to the `preCondition` attribut
 As per my previous post, due to a knowledge gap, the first line is required within the pre-condition or funky things happen.
 
 That's it. If you check your debug tool of choice after implementing this, you should see that all cookies are now sent with the `SameSite` modifier.
-
-## Other Posts In This Series
-
-1. [Up and running with URL Rewrite - going from HTTP to HTTPS](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/)
-2. [Canonical host urls with URL Rewrite](/article/2017/06/canonical-host-urls-with-url-rewrite/)
-3. [Removing trailing slashes with URL Rewrite](/article/2017/06/removing-trailing-slashes-with-url-rewrite/)
-4. [Ensuring httpOnly cookies with URL Rewrite](/article/2017/06/ensuring-httponly-cookies-with-url-rewrite/)
-5. [Ensuring secure cookies with URL Rewrite](/article/2017/06/ensuring-secure-cookies-with-url-rewrite/)
-6. [Ensuring samesite cookies with URL Rewrite](/article/2017/06/ensuring-samesite-cookies-with-url-rewrite/) *(This Post)*

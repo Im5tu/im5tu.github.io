@@ -3,6 +3,7 @@
    "date": "2016-11-18T19:01:38Z",
    "description": "Setting up a theme and creating our first article using hugo and bones",
    "tags": ["hugo", "blogging"],
+   "series": "Building A Blog With Hugo",
    "title": "Blog Building - Part 3 - Theming"
 }
 

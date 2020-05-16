@@ -9,7 +9,7 @@
         {{ end }}
     {{ end }}
     <section class="series series-header">
-        <p>This article is part of the <b>{{ .Params.series }}</b> series. You are reading part {{ $.Scratch.Get "cur_page_num" }} of {{ $.Scratch.Get "total_page_num" }}</p>
+        <p>This article is part of the <a href="#series">{{ .Params.series }}</a> series. You are reading part {{ $.Scratch.Get "cur_page_num" }} of {{ $.Scratch.Get "total_page_num" }}.</p>
     </section>
 {{ end }}
     <section class="article-content" itemprop="text">
@@ -18,13 +18,14 @@
     <footer class="article-footer">
         {{ if .Params.series }}
         <section class="series">
-            <p>Other posts in the <b>{{ .Params.series }}</b> series:</p>
+            <a name="series"></a>
+            <h3>Other posts in the <b>{{ .Params.series }}</b> series:</h3>
             <ol>
             {{ $.Scratch.Add "current" .Permalink }}
             {{ range where .Site.RegularPages.ByDate "Params.series" .Params.series }}
                 {{ if eq ($.Scratch.Get "current") .Permalink }}
                 <li>{{ .Title}} (This Article)</li>
-                {{ else if ne .Draft true }}
+                {{ else if eq .Draft true }}
                 <li>{{ .Title}}</i></li>
                 {{ else }}
                 <li><a href="{{.Permalink}}">{{ .Title}}</a></li>
