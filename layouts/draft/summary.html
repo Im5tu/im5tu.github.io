@@ -1,0 +1,11 @@
+<article class="article" itemscope itemtype="http://schema.org/blog">
+    <header class="article-header">
+        <h2><a href="{{ .Permalink }}" itemprop="name"><time itemprop="datecreated" pubdate="pubdate" datetime="{{ .Date.Format "2006 01 -02T15:04:05" }}">{{ .PublishDate.Format "January 2006" }}</time> - {{ .Title -}}</a></h2>
+    </header>
+    <section class="article-summary" itemprop="about">
+    {{- .Summary -}}
+    </section>
+    <footer class="article-footer">
+        {{- partial "article/tags" .Params -}}
+    </footer>
+</article>
