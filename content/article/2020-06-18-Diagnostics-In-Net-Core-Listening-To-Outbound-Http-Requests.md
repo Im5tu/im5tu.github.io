@@ -146,7 +146,7 @@ public abstract class DiagnosticListenerBase : IDiagnosticListener
 This class is intended to make sure that we manage the subscriptions correctly, just like we did with the `DiagnosticsHostedService`. We also abstractly implement the interfaces' `TryObserve` method, which our `OutboundHttpDiagnosticListener` implements:
 
 ```csharp
-internal sealed class OutboundHttpRequestDiagnosticListener : SimpleDiagnosticListener
+internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListenerBase
 {
     private readonly List<IOutboundHttpObserver> _observers;
     private readonly string _name = "HttpHandlerDiagnosticListener";
@@ -160,7 +160,7 @@ internal sealed class OutboundHttpRequestDiagnosticListener : SimpleDiagnosticLi
     {
         if (diagnosticListener is null || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
             return;
-        
+    
         foreach (var observer in _observers)
             Subscribe(diagnosticListener, observer);
     } 
@@ -171,6 +171,14 @@ The intention here is that we only subscribe specific observers when we encounte
 
 - `System.Net.Http.Request` - Contains the following properties: Request, LoggingRequestId, TimeStamp
 - `System.Net.Http.Response` - Contains the following properties: Response, LoggingRequestId, ResponseTaskStatus, TimeStamp
+
+Each of the observers that we create will have a marker interface attached to them called `IOutboundHttpObserver` so that we can plug them into our IoC container. It's simply defined as:
+
+```csharp
+internal interface IOutboundHttpObserver : IObserver<KeyValuePair<string, object>>
+{
+}
+```
 
 ### SimpleDiagnosticListenerObserver
 
