@@ -3,7 +3,8 @@
     "description": "A look into how we can use dotnet-counters with a docker container",
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-01-25T13:00:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"]
+    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "series": "Diagnostics in .Net Core 3"
 }
 
 In my [previous post](/article/2020/01/diagnostics-in-.net-core-3-event-counters/), I described how we can leverage the new EventCounter diagnostics API to add custom event counters and listen for built in counters. In this article, I will walk through how we can leverage the `dotnet-counters` tool with a running docker image.

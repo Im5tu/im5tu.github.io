@@ -3,7 +3,8 @@
     "description": "A look into the EventCounters API in .Net Core 3",
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-01-05T14:00:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"]
+    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "series": "Diagnostics in .Net Core 3"
 }
 
 Recently, I've been playing with the new [diagnostic improvements in .Net Core 3](https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/). Traditionally, I've always used the great [AppMetrics](https://github.com/AppMetrics/AppMetrics) package to capture the metrics from our applications and send scrape them with a [Prometheus](https://github.com/prometheus/prometheus) &amp; [Grafana](https://github.com/grafana/grafana) setup. Whilst reading about the improvements, I wondered whether or not it would be possible to push metrics to [Prometheus](https://github.com/prometheus/prometheus).
