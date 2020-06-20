@@ -103,7 +103,7 @@ Once we've hooked up the above services in DI, all that's left for us to do is i
 
 ### Implementing IDiagnosticListener
 
-In this series of articles, we will implement some of this functionality again when we implement the inbound metrics, so i've moved the common functionality to base classes that can be re-used for other purposes. First of all, we have the `DiagnosticListenerBase`
+In this article, we will implement some of this functionality again when we implement the inbound metrics, so i've moved the common functionality to base classes that can be re-used for other purposes. First of all, we have the `DiagnosticListenerBase`:
 
 ```csharp
 public abstract class DiagnosticListenerBase : IDiagnosticListener
@@ -143,7 +143,16 @@ public abstract class DiagnosticListenerBase : IDiagnosticListener
 }
 ```
 
-This class is intended to make sure that we manage the subscriptions correctly, just like we did with the `DiagnosticsHostedService`. We also abstractly implement the interfaces' `TryObserve` method, which our `OutboundHttpDiagnosticListener` implements:
+This class is intended to make sure that we manage the subscriptions correctly, just like we did with the `DiagnosticsHostedService`. We need to make sure that we have some extensibility so I've added the following interface so that we can re-use it in the next article:
+
+```csharp
+public interface IDiagnosticListener : IDisposable
+{
+    void TryObserve(DiagnosticListener diagnosticListener);
+}
+```
+
+`DiagnosticListenerBase` also abstractly implements the interfaces `TryObserve` method, which our `OutboundHttpDiagnosticListener` can override and subscribe the observers that we need:
 
 ```csharp
 internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListenerBase
@@ -182,7 +191,7 @@ internal interface IOutboundHttpObserver : IObserver<KeyValuePair<string, object
 
 ### SimpleDiagnosticListenerObserver
 
-When you deal with `DiagnosticListener`s, we are dealing with the Observer pattern in C#, which means that we always need to implement the following methods: `OnCompleted`, `OnError`, `OnNext`. For our use case, we don't need the `OnCompleted` or `OnError` methods in any of our observers, so we can move this functionality into a base class with some additional helper methods: `GetDuration` and `GetValueAs`
+When you deal with `DiagnosticListener`s, we are dealing with the Observer pattern in C#, which means that we always need to implement the following methods: `OnCompleted`, `OnError`, `OnNext`. For our use case, we don't need the `OnCompleted` or `OnError` methods in any of our observers, so we can move this functionality into a base class with some additional helper methods: `GetDuration` and `GetValueAs`.
 
 ```csharp
 public abstract class SimpleDiagnosticListenerObserver : IObserver<KeyValuePair<string, object>>
@@ -216,7 +225,7 @@ Each event that we receive in the is typed to be a `KeyValuePair<string, object>
 
 The `GetDuration` method is inspired by the [ValueStopwatch](https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs) code that AspNetCore has internally. This allows us to calculate the wall-clock time duration of two ticks. Incidentally, this is the same calculation method that appears to be used in the logging of inbound HTTP requests from what I can tell so far.
 
-The `GetValueAs<T>` method use some [CLR magic](https://mattwarren.org/2016/09/14/Subverting-.NET-Type-Safety-with-System.Runtime.CompilerServices.Unsafe/) to forcefully convert the type for us, ie: it does not perform type checking. We need this because the objects that come along with the events that we listen to are internal to the .Net code base, so we have to mimic the same type/properties and then cast to it so that we can access the information. A "safer" approach would be to use cached reflection calls, but to me, I understand that this might break in the future no matter what I do so I've opted for a more performant* approach.
+The `GetValueAs<T>` method use some [CLR magic](https://mattwarren.org/2016/09/14/Subverting-.NET-Type-Safety-with-System.Runtime.CompilerServices.Unsafe/) to forcefully convert the type for us, ie: it does not perform type checking. We need this because the objects that come along with the events that we listen to are internal to the .Net code base, so we have to mimic the same type/properties and then cast to it so that we can access the information. A "safer" approach would be to use cached reflection calls, but to me, I understand that this might break in the future no matter what I do so I've opted for a more performant approach.
 
 ### Creating the OutboundHttpRequestObserver
 
@@ -458,4 +467,4 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
 }
 ```
 
-Naturally, if you use another method like the response body to figure out whether the request was successful or not then you will need to do additional work with the contents of the request. This will be outside the context of this post. Hopefully, you now have all the bits that you would need to build this out in your own applications. In the next article, we will be taking a look at how we mimic the same technique for accurately tracking inbound requests using a lot of the same components that we have built out in this article.
+Naturally, if you use another method like the response body to figure out whether the request was successful or not then you will need to do additional work with the contents of the request. This will be outside the context of this post. Hopefully, you now have all the bits that you would need to build this out in your own applications. In the next article, we will be taking a look at how we mimic the same technique for accurately tracking inbound requests using a lot of the same components that we have built out in this article. Happy request tracking!
