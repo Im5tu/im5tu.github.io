@@ -1,251 +1,66 @@
-@import 'mixins.scss';
-@import 'breakpoints.scss';
-
-$baseColour: #2db9eb;
-$textColor: #232323;
-
-html, body {
-    height: 100%;
-    color: lighten($textColor, 5%);
-    @include font("Noto Sans");
-    line-height: 1.8em;
+// Override for max-width
+.post {
+    max-width: 1200px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    @include font("Comfortaa");
+.header__inner {
+    width: 100%;
+    max-width: 1160px;
 }
 
-p {
-    margin: 1.5em 0;
-}
+// Code copy
+$buttonColour: #e2e2e2;
 
-blockquote {
-    border-left: 5px solid #454545;
-    background-color: #fafafa;
-    padding: .5em 1.5em;
-
-    &, & p {
-        color: lighten($textColor, 15%);
-    }
-
-    & ~ & {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-}
-
-.warning {
-    margin: 0 auto;
-    border: 1px solid #ff9500;
-    color: #ff9500;
-    background-color: lighten($color: #ff9500, $amount: 50);
-    text-align: center;
-}
-
-.series {
-    font-style: italic;
-
-    & p {
-        margin-bottom: 0;
-    }
-
-    & ol {
-        margin: 0;
-    }
-}
-
-.pageContainer {
-    text-align: justify;
-}
-
-.pageWrap{
-    margin: 0 auto;
-    max-width: 1400px;
-    @include mapToBreakpoint($widths) {
-        width: $current;
-    }
-
-    &:after{
-        content: "";
-        display: table;
-        clear: both;
-    }
-}
-
-a {
-    @include font("Comfortaa");
-
-    &:link, &:visited {
-        color: darken($baseColour, 10%);
-    }
-
-    &:link {
-        text-decoration: none;
-    }
-
-    &:hover {
-        color: #2db9eb;
-        text-decoration: underline;
-    }
-}
-
-#pageHeader-about {
-    border-bottom: 1px solid #eaeaea;
-}
-
-#pageHeader-about-title a {
-    font-size: 1.2em;
-
-    &:link, &:visited {
-        color: $textColor;
-    }
-
-    &:first-child {
-        font-size: 1.1em;
-        color: darken($baseColour, 10%);
-        text-transform: none;
-    }
-}
-
-.article-list a{
-    color: darken($textColor, 10%);
-
-    &:hover {
-        color: #2db9eb;
-        text-decoration: underline;
-    }
-}
-
-.article-content {
-    & p code, & li code {
-        color: darken($baseColour, 10%);
-        background-color: rgba(27,31,35,.05);
-
-        &:hover {
-            opacity: .5;
-        }
-    }
-}
-
-.article img {
-    max-width: 100%;
-}
-
-ul.article-tags {
-    display: inline;
-    padding: 0;
+.copy-code-button {
+    float: right;
+    display: block;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    background-color: $buttonColour;
+    border-left: 1px solid $buttonColour;
+    border-bottom: 1px solid $buttonColour;
+    border-radius: 0;
+    border-bottom-left-radius: 10px;
+    transition: all 250ms ease;
+    margin: -18px;
     
-    & li {
-        display: inline;
-        padding: 0 1em;
-
-        & a:link {
-            text-decoration: underline;
-        }
+    &:hover {
+        cursor: pointer;
+        opacity: .7;
+        border-style: solid;
     }
+    &:focus {
+        background-color: $buttonColour;
+        outline: 0;
+        border-style: solid;
+    }
+    &:active {
+        background-color: $buttonColour;
+        opacity: .5;
+        border-style: solid;
+    }
+
+    opacity: 0;
 }
 
-$base-spacing-unit: 24px;
-$half-spacing-unit: $base-spacing-unit / 2;
-
-$color-alpha: #1772FF;
-$color-form-highlight: #EEEEEE;
-
-table {
-	width:100%;
-        
-    & * {
-        padding: 0;
-        margin: 0;
-    }
-
-    & th {
-        display:flex;
-        width:100%;
-        background:#000;
-        color: #fff;
-        padding: 1em;
-    }
-
-    & tr {
-        display:flex;
-        width:100%;
-
-        &:hover {
-            opacity: .7;
-        }
-
-        &:first-child {
-            padding: 0;
-        }
-
-        &:nth-of-type(odd) {
-            background:$color-form-highlight;
-        }
-    }
-
-    & td {
-        flex: 1 1 20%;
-        text-align: left;
-        padding: 1em;
-    }
+pre:hover .copy-code-button {
+    opacity: 1;
 }
 
-pre {
-    line-height: 1.4em;
+.copy-code-button ~ pre
+{
+    position: relative;
 }
 
-code {
-    font-size: 1.2em;
+@media print {
+    .copy-code-button { 
+        display: none;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
-    html, body {
-        color: #eaeaea;
-        background: #323232;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        color: #fefefe;
-    }
-
-    a {
-        &:link, &:visited {
-            color: darken($baseColour, 10%);
-        }
-    }
-
-    .article-list {
-        & h1, & h2, & h3, & h4, & h5, & h6 {
-            & a:link, & a:visited {
-                color: #fefefe;
-            }
-        }
-    }
-
-    #pageHeader-about-title a {
-        &:link, &:visited {
-            color: #dedede;
-        }
-
-        &:first-child {
-            color: darken($baseColour, 10%);
-        }
-    }
-
-    table {
-        tr:nth-of-type(odd) {
-            background: #767676;
-        }
-    }
-
-    pre {
-        &, & code {
-            background: #dcdcdc !important;
-            color: #323232;
-        }
+    .copy-code-button {
+        background-color: darken($buttonColour, 30%);
+        color: #323232;
     }
 }
-
-// must be last
-@import 'code-copy.scss';

@@ -47,32 +47,4 @@
         _site.debug = true;
 })(window.site || (window.site = {}));
 
-window.site.init(function () {
-    window.site.listenFor("click", function(e) {
-        window.site.log("click");
-        window.site.onNextAnimation(function () {
-            window.scroll(0, 0);
-        });
-        e.preventDefault();
-    }, document.getElementById("pageFooter-scroll-link"));
-
-    var renderableTimeElements = [], timePortions = document.getElementsByClassName("article-header-time");
-    for (var i = 0; i < timePortions.length; i++) {
-        var timeElement = timePortions[i];
-        if (timeElement.attributes && timeElement.attributes.datetime)
-            renderableTimeElements.push(timeElement);
-    }
-
-    function updateRenderableTimes() {
-        for (var i = 0; i < renderableTimeElements.length; i++) {
-            var time = renderableTimeElements[i],
-                newTime = window.site.time.humanize(time.attributes.datetime.value);
-            if (time.innerHtml !== newTime)
-                time.innerHTML = newTime;
-        }
-    }
-    var timeUpdateFunction = (window.site.debug ? window.site.every.second : window.site.every.minute),
-        timeUpdater = timeUpdateFunction(updateRenderableTimes);
-
-    updateRenderableTimes();
-});
+window.site.init();
