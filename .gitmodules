@@ -1,9 +1,6 @@
 [submodule "public"]
 	path = public
 	url = git@github.com:im5tu/im5tu.github.io.git
-[submodule "themes/bones"]
-	path = themes/bones
-	url = https://github.com/Im5tu/hugo-bones.git
 [submodule "themes/hello-friend-ng"]
 	path = themes/hello-friend-ng
 	url = https://github.com/rhazdon/hugo-theme-hello-friend-ng.git
