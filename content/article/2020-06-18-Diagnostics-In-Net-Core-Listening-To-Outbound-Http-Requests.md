@@ -4,7 +4,7 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-06-18T01:34:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": "Diagnostics in .Net Core 3"
+    "series": ["Diagnostics in .Net Core 3"]
 }
 
 Throughout the course of my Diagnostics in .Net Core series, we've taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.

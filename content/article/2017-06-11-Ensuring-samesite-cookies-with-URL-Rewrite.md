@@ -3,7 +3,7 @@
    "date": "2017-06-11T20:50:11+01:00",
    "description": "A handy URL Rewrite snippet to mark cookies as samesite.",
    "tags": [ "IIS", "Url Rewrite", "Cookies" ],
-   "series": "Url Rewriting",
+   "series": ["Url Rewriting"],
    "title": "Ensuring samesite cookies with URL Rewrite"
 }
 

@@ -3,7 +3,7 @@
    "date": "2016-11-17T20:23:00Z",
    "description": "Beginning to setup our workflow on the way to our very first hugo powered blog.",
    "tags": ["hugo", "go", "git", "blogging"],
-   "series": "Building A Blog With Hugo",
+   "series": ["Building A Blog With Hugo"],
    "title": "Blog Building - Part 1 - Hello Hugo"
 }
 

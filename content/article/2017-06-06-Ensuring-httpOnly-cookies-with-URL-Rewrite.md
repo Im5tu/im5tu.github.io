@@ -3,7 +3,7 @@
    "date": "2017-06-06T15:01:04+01:00",
    "description": "A brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite.",
    "tags": [ "IIS", "Url Rewrite", "Cookies" ],
-   "series": "Url Rewriting",
+   "series": ["Url Rewriting"],
    "title": "Ensuring httpOnly cookies with URL Rewrite"
 }
 

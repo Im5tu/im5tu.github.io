@@ -3,7 +3,7 @@
    "date": "2017-06-04T15:00:55+01:00",
    "description": "A quick explanition of canonical host urls and how to achieve them with url rewriting.",
    "tags": [ "IIS", "Url Rewrite", "SEO" ],
-   "series": "Url Rewriting",
+   "series": ["Url Rewriting"],
    "title": "Canonical host urls with URL Rewrite"
 }
 

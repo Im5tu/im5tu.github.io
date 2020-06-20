@@ -3,7 +3,7 @@
    "date": "2017-06-11T20:38:07+01:00",
    "description": "A handy URL Rewrite snippet to mark cookies as secure.",
    "tags": [ "IIS", "Url Rewrite", "Cookies" ],
-   "series": "Url Rewriting",
+   "series": ["Url Rewriting"],
    "title": "Ensuring secure cookies with URL Rewrite"
 }
 
