@@ -1,3 +1,9 @@
+{{ $main := resources.Get "js/main.js" }}
+{{ $menu := resources.Get "js/menu.js" }}
+{{ $prism := resources.Get "js/prism.js" }}
+{{ $theme := resources.Get "js/theme.js" }}
+{{ $secureJS := slice $main $menu $prism $theme | resources.Concat "bundle.js" | resources.Minify | resources.Fingerprint "sha512" }}
+<script type="text/javascript" src="{{ $secureJS.RelPermalink }}" integrity="{{ $secureJS.Data.Integrity }}"></script>
 <script src="/js/{{ index .Site.Data.hash "site.js"}}" defer></script>
 {{ if not .Site.IsServer }}
 <script>
@@ -10,7 +16,3 @@
 </script>
 <script data-ad-client="ca-pub-8597760177900459" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 {{ end }}
-{{ if (findRE "<pre" .Content 1) }}
-<script src="/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-{{end}}

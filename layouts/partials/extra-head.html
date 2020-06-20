@@ -1,0 +1,6 @@
+<meta property="og:image" content="https://im5tu.io/img/profile.jpg" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+<link rel="alternate" type="application/rss+xml" href="/index.xml" title="Stuart Blackler's Blog">
+{{ $siteCssHash := (index .Site.Data.hash "site.css")}}
+{{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
+<style>{{- readFile $siteCssPath | safeCSS -}}</style>

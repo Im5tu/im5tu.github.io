@@ -1,5 +1,0 @@
-{{ $siteCssHash := (index .Site.Data.hash "site.css")}}
-{{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
-<style>{{- readFile $siteCssPath | safeCSS -}}</style>
-<link href="https://fonts.googleapis.com/css?family=Comfortaa|Noto+Sans&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/tomorrow.min.css" rel="stylesheet">
