@@ -1,19 +1,65 @@
 baseurl = "https://im5tu.io/"
-
 title = "Stuart Blackler's Blog"
 languageCode = "en-us"
-theme = "bones"
+theme = "hello-friend-ng"
 metaDataFormat = "json"
 enableRobotsTXT = true
 pygmentsuseclasses = true
+
+[Author]
+  name = "Stuart Blackler"
 
 [permalinks]
   article = "article/:year/:month/:title/"
 
 [params]
-  name = "@im5tu"
-  jobTitle = "Stuart Blackler"
+  dateform        = "Jan 2, 2006"
+  dateformShort   = "Jan 2"
+  dateformNum     = "2006-01-02"
+  dateformNumTime = "2006-01-02 15:04 -0700"
+  
+  # Subtitle for home
+  homeSubtitle = "I'm Stu, welcome to my online home :)"
+
+  # Logo
+  [params.Logo]
+    logoText = "im5tu.io"
+
+  # Social icons
+  [params.portrait]
+    path = "/img/profile.jpg"
+    alt = "Portrait"
+
+  [[params.social]]
+    name = "twitter"
+    url  = "https://twitter.com/im5tu"
+
+  [[params.social]]
+    name = "github"
+    url  = "https://github.com/im5tu"
+
+  [[params.social]]
+    name = "linkedin"
+    url  = "https://www.linkedin.com/in/im5tu/"
 
 [markup]
   [markup.highlight]
     codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.
+
+[minify]
+  minifyOutput = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[menu]
+  [[menu.main]]
+    identifier = "articles"
+    name       = "articles"
+    url        = "article/"
+
+[outputs]
+  home = ["HTML"]
+  page = ["HTML"]

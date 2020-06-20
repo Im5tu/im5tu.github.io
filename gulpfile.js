@@ -47,11 +47,11 @@ function js(cb) {
         errorHandler
     );
 
-    pipeline(
-        src(srcJsDir + "highlight.pack.js"),
-        dest(destJs),
-        errorHandler
-    );
+    // pipeline(
+    //     src(srcJsDir + "highlight.pack.js"),
+    //     dest(destJs),
+    //     errorHandler
+    // );
 
     cb();
 }
