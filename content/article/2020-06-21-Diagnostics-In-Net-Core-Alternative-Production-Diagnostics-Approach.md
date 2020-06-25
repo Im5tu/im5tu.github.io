@@ -49,7 +49,7 @@ RUN dotnet tool install dotnet-trace --tool-path /tools
 # END OF NEW CODE
 ```
 
-Here we leverage the `dotnet tool`s ability to restore tooling to a specific directory, in this case `/tools`. Once the tools have been installed, we can copy them into the runtime image:
+Here we leverage the dotnet tools ability to restore tooling to a specific directory, in this case `/tools`. Once the tools have been installed, we can copy them into the runtime image:
 
 ```dockerfile
 # Build the smaller runtime image
