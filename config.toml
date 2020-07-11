@@ -57,9 +57,14 @@ pygmentsuseclasses = true
 [menu]
   [[menu.main]]
     identifier = "articles"
-    name       = "articles"
+    name       = "Articles"
     url        = "article/"
 
+  [[menu.main]]
+    identifier = "rss"
+    name       = "RSS Feed"
+    url        = "/index.xml"
+
 [outputs]
-  home = ["HTML"]
-  page = ["HTML"]
+  home = ["HTML", "RSS"]
+  page = ["HTML", "RSS"]
