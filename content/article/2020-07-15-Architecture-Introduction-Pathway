@@ -1,0 +1,75 @@
+
+
+
+<!--more-->
+
+The 10 Cloud Architecture Principals
+- Design for self healing - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/self-healing
+- Make all things redundant - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/redundancy
+- Mimimize coordination - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/minimize-coordination
+- Design to scale out - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/scale-out
+- Partition around limits - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/partition
+- Design for operations - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-operations
+- Use managed services - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/managed-services 
+- Use the best data store for the job - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/use-the-best-data-store
+- Design for evolution - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-evolution
+- Build for the needs of the business - https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/build-for-business
+
+Different Architecture Styles
+- Big Compute - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-compute
+- Big Data - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-data
+- Event Driven - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven
+- Microservices - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices
+- N-Tier Application - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/n-tier
+- Web-queue-worker - https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/web-queue-worker
+
+Common Design Patterns
+- Anti-corruption layer - https://docs.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer
+- Bulkhead - https://docs.microsoft.com/en-us/azure/architecture/patterns/bulkhead
+- Cache-aside - https://docs.microsoft.com/en-us/azure/architecture/patterns/cache-aside
+- Circuit Breaker - https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker
+- Command & Query Responsibility Segregation - https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs
+- Compensating Transaction - https://docs.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction
+- Competing Consumers - https://docs.microsoft.com/en-us/azure/architecture/patterns/competing-consumers
+- Event Sourcing - https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing
+- Gatekeeper - https://docs.microsoft.com/en-us/azure/architecture/patterns/gatekeeper
+- Leader Election - https://docs.microsoft.com/en-us/azure/architecture/patterns/leader-election
+- Queue-Based Load Leveling - https://docs.microsoft.com/en-us/azure/architecture/patterns/queue-based-load-leveling
+- Retry - https://docs.microsoft.com/en-us/azure/architecture/patterns/retry
+- Sharding - https://docs.microsoft.com/en-us/azure/architecture/patterns/sharding
+- Sidecar - https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar
+- Strangler - https://docs.microsoft.com/en-us/azure/architecture/patterns/strangler
+- Throttling - https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling
+
+Patterns & Practises - Stability
+- Fault Tolerance in a High Volume, Distributed System - https://netflixtechblog.com/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a
+- Tips for High Availability - https://medium.com/@NetflixTechBlog/tips-for-high-availability-be0472f2599c
+- Globalizing Player Accounts while Maintaining Availability - https://technology.riotgames.com/news/globalizing-player-accounts 
+
+
+
+
+
+
+
+
+
+Distributed Systems Theory
+- Understanding the 8 fallacies of Distributed Systems - https://www.simpleorientedarchitecture.com/8-fallacies-of-distributed-systems/
+- CAP Theorem - https://robertgreiner.com/cap-theorem-revisited/
+- How Sharding Works - https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6
+- Consistent Hashing - http://www.tom-e-white.com/2007/11/consistent-hashing.html
+
+
+Learning From Others
+- Microservice Architecture at Medium - https://medium.engineering/microservice-architecture-at-medium-9c33805eb74f
+- Automate and abstract: Lessons from Facebook on engineering for scale - https://architecht.io/lessons-from-facebook-on-engineering-for-scale-f5716f0afc7a
+
+
+
+
+OTHER
+- Workload Isolation Using Shuffle-Sharding - https://aws.amazon.com/builders-library/workload-isolation-using-shuffle-sharding/
+- Avoiding Insurmountable Queue Backlogs - https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/
+- Implementing Health Checks - https://aws.amazon.com/builders-library/implementing-health-checks/
+- Monoliths and Microservices - https://medium.com/@SkyscannerEng/monoliths-and-microservices-8c65708c3dbf
