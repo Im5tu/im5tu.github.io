@@ -13,7 +13,7 @@ In my [previous article](/article/2020/10/setting-up-a-repository-template-in-gi
 
 For our performance tests, I generally use [K6](https://k6.io) which if you're unfamiliar with it, is a simple and easy to use Javascript library for writing simple performance tests such as load tests, spike tests and soak tests. To give you an idea of what you can do with this, I've used this setup to automate load tests in an Octopus Deploy pipeline by running an ECS task post-deployment. You could also trigger nightly performance tests and have the results posted to Slack if you wanted as well.
 
-Here is an overview of what the template looks like at the time of writing:
+Here is an overview of what the [repository template](https://github.com/Im5tu/template-k6) looks like at the time of writing:
 
 ![Overview](/img/template-k6/overview.png)
 
