@@ -52,6 +52,41 @@ pre:hover .copy-code-button {
     position: relative;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    & th {
+        background-color: #cecece;
+        color: #222;
+    }
+
+    & tr {
+        margin: 0;
+        padding: 0;
+
+        &:first-child {
+            border-left: 1px solid #acacac;
+            border-top: 1px solid #acacac;
+            border-right: 1px solid #acacac;
+        }
+
+        & td:first-child {
+            border-left: 1px solid #acacac;
+        }
+
+        & td:last-child {
+            border-right: 1px solid #acacac;
+        }
+    }
+
+    & td, & th {
+        padding: 0.5em;
+        border-bottom: 1px solid #acacac;
+        margin: 0;
+    }
+}
+
 @media print {
     .copy-code-button { 
         display: none;
