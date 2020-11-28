@@ -43,6 +43,10 @@ ignorefiles = [ "content/draft/.*" ]
     name = "linkedin"
     url  = "https://www.linkedin.com/in/im5tu/"
 
+  [[params.social]]
+    name = "youtube"
+    url  = "https://www.youtube.com/channel/UCF5dh7bm49bpsZjWHYDG4Lg"
+
 [markup]
   [markup.highlight]
     codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.
@@ -65,6 +69,16 @@ ignorefiles = [ "content/draft/.*" ]
     identifier = "rss"
     name       = "RSS Feed"
     url        = "/index.xml"
+
+  [[menu.main]]
+    identifier = "twitter"
+    name       = "Twitter"
+    url        = "https://twitter.com/im5tu"
+    
+  [[menu.main]]
+    identifier = "youtube"
+    name       = "YouTube"
+    url        = "https://www.youtube.com/channel/UCF5dh7bm49bpsZjWHYDG4Lg"
 
 [outputs]
   home = ["HTML", "RSS"]
