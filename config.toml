@@ -5,6 +5,7 @@ theme = "hello-friend-ng"
 metaDataFormat = "json"
 enableRobotsTXT = true
 pygmentsuseclasses = true
+ignorefiles = [ "content/draft/.*" ]
 
 [Author]
   name = "Stuart Blackler"
