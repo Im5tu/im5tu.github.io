@@ -2,7 +2,7 @@
     "title": "Building a Zero Trust Architecture In AWS",
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
     "tags": ["architecture", "devops", "AWS"],
-    "date": "2020-12-05T16:38:58Z",
+    "date": "2020-12-05T15:38:58Z",
     "categories": ["architecture", "development"]
 }
 
