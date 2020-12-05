@@ -45,6 +45,7 @@
 
     if(window.location.hash && window.location.hash.indexOf("#debug") === 0)
         _site.debug = true;
+
 })(window.site || (window.site = {}));
 
 window.site.init();

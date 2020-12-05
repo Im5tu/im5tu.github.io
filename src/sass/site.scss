@@ -87,6 +87,16 @@ table {
     }
 }
 
+h2, h3, h4, h5 {
+    & a:link, & a:visited {
+        text-decoration: none
+    }
+
+    & a:hover {
+        text-decoration: underline;
+    }
+}
+
 @media print {
     .copy-code-button { 
         display: none;

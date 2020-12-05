@@ -1,6 +1,14 @@
 <meta property="og:image" content="https://im5tu.io/img/profile.jpg" />
 <meta property="og:site_name" content="{{ .Site.Title }}" />
 <link rel="alternate" type="application/rss+xml" href="/index.xml" title="Stuart Blackler's Blog">
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://partner.googleadservices.com">
+<link rel="preconnect" href="https://tpc.googlesyndication.com">
+<link rel="preconnect" href="https://www.googletagservices.com">
+<link rel="preconnect" href="https://googleads.g.doubleclick.net">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="preload" href="/fonts/Inter-UI-Bold.woff2">
+<link rel="preload" href="/fonts/Inter-UI-Regular.woff2">
 {{ $siteCssHash := (index .Site.Data.hash "site.css")}}
 {{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
 <style>{{- readFile $siteCssPath | safeCSS -}}</style>
