@@ -33,19 +33,19 @@ ignorefiles = [ "content/draft/.*" ]
 
   [[params.social]]
     name = "twitter"
-    url  = "https://twitter.com/im5tu"
+    url  = "https://bit.ly/im5tu-tw"
 
   [[params.social]]
     name = "github"
-    url  = "https://github.com/im5tu"
+    url  = "https://bit.ly/im5tu-gh"
 
   [[params.social]]
     name = "linkedin"
-    url  = "https://www.linkedin.com/in/im5tu/"
+    url  = "https://bit.ly/im5tu-li"
 
   [[params.social]]
     name = "youtube"
-    url  = "https://www.youtube.com/channel/UCF5dh7bm49bpsZjWHYDG4Lg"
+    url  = "https://bit.ly/im5tu-yt"
 
 [markup]
   [markup.highlight]
@@ -73,12 +73,12 @@ ignorefiles = [ "content/draft/.*" ]
   [[menu.main]]
     identifier = "twitter"
     name       = "Twitter"
-    url        = "https://twitter.com/im5tu"
+    url        = "https://bit.ly/im5tu-tw"
     
   [[menu.main]]
     identifier = "youtube"
     name       = "YouTube"
-    url        = "https://www.youtube.com/channel/UCF5dh7bm49bpsZjWHYDG4Lg"
+    url        = "https://bit.ly/im5tu-yt"
 
 [outputs]
   home = ["HTML", "RSS"]
