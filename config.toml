@@ -68,7 +68,7 @@ ignorefiles = [ "content/draft/.*" ]
   [[menu.main]]
     identifier = "rss"
     name       = "RSS Feed"
-    url        = "/index.xml"
+    url        = "/article/index.xml"
 
   [[menu.main]]
     identifier = "twitter"
