@@ -11,6 +11,10 @@
 // Code copy
 $buttonColour: #e2e2e2;
 
+.toolbar {
+    display: none !important;
+}
+
 .copy-code-button {
     float: right;
     display: block;
