@@ -71,7 +71,7 @@ jobs:
         shell: bash
         working-directory: docs
         run: |
-          git status --porcelain
+          git add $(git ls-files -o --exclude-standard)
           if [[ $(git status --porcelain | wc -l) -gt 0 ]]; then
             git config user.name "Github Actions"
             git config user.email "im5tu@users.noreply.github.com"
