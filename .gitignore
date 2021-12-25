@@ -1,5 +1,8 @@
 node_modules/
 data/**/hash.*
+static/css/*.css
+static/js/*.js
+public/
 yarn.lock
 .*/
 \.DS_Store
