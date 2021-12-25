@@ -53,7 +53,8 @@ function js(cb) {
     //     errorHandler
     // );
 
-    cb();
+    if (cb == {})
+        cb();
 }
 exports.js = js;
 
@@ -72,7 +73,8 @@ function css(cb) {
         errorHandler
     );
 
-    cb();
+    if (cb == {})
+        cb();
 }
 exports.css = css;
 
@@ -81,4 +83,12 @@ exports.default = exports.watch = function () {
 
     watch(srcCssDir, options, series(css));
     watch(srcJs, options, series(js));
+}
+
+exports.deploy = function() {
+    return new Promise(function(resolve, reject) {
+        css();
+        js();
+        resolve();
+    });
 }
