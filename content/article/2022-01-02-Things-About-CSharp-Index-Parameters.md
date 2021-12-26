@@ -85,4 +85,6 @@ public class TestClass
 }
 ```
 
+[Play with this example on sharplab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQAwAIpwCwG5lqZwB0AMgJYB2AjvkgQMyYzoCSlwApgB6cBOAUW4BDALYAHADad0Ab2TpF6BUvF9yAN2EAXGQBFyAY23kA9pWF8AngB4AytvWUA5gBp0Dp84B86APrAOsLoALzolJwA7gAUAJR0SspIiVBMnlTO6NoAFuQAzgDaWBjkwAC6KoryyYmJzpzaob4BQQWlZQlKAL6VSSlMWAz2jhm+OfkF4pZieUSoBWXopXkVNVW9tfWNIb7LxHac0sbR3E3+gdrCBdxl8b09SA+MzOgAKpx52gDCksJ5echqok1JodDI+JxhMBzJIrGwODx+EIxFIZH4qJ9hJRDDIwhEYnd6GtMGkRi50AAlBoAVz4lDsGWkcTO6MomOxnAKACJsodJKYuR1kL1UkQhukXL4qdpaZQALJYqzMnb+DGXDnc3mSflc9xcyKmPiSYCCuhdIA===)
+
 And that's it for this article, join me next time where we are going to learn about how we can write `foreach` loops without the target implementing `IEnumerable<T>`. I hope that you've learnt something new and have another tool in your toolbox.
