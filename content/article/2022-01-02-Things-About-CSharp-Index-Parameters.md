@@ -1,10 +1,10 @@
 {
-    "title": "Things you might not know about C# - Using Params with Indexers",
+    "title": "Things you might not know about CSharp - Using Params with Indexers",
     "description": "In the first part of this series, we are going to take a look at a little known feature with index parameters. See how to pass multiple arguments to a custom indexer.",
     "tags": ["c#", "dotnet"],
-    "date": "2022-01-02T08:00Z",
+    "date": "2022-01-02T08:00:00Z",
     "categories": ["dotnet"],
-    "series": ["Things you might not know about C#"]
+    "series": ["Things you might not know about CSharp"]
 }
 
 This is the first part of a new series taking a look at some of the lesser known features of the C# language, including the subject of todays article: using `params` with C# indexers.
@@ -30,7 +30,7 @@ public class IndexerExample {
 
 _[Play with this example on sharplab.io](https://sharplab.io/#v2:CYLg1APgAgTAjAWAFBQAwAIpwCwG5nJQDMmM6AkgHbACmAHjQE4CidAhgLYAOANjegG9k6EemGiujAJYA3NgBd+AESkBjeVID2lNowCeAHgDK86ZQDmAGnQmz5gHzoA+sAVt0AXnSUaAdwAUAJT4SKJioaLENqZSFujyABZSAM4A2lgYUsAAuuIiQhFhouY08p6OLm6pWdkhYQC+yI1IhCSw6AAqNMnyAMI8bMnJyAVhkrIK/Iw0bMDaPHoU1PRMrJy8/E6xPWyUqvxePgHBeeFhURmd3fIAsqUJmsBB5c7b8rv7qQBECTQ8PJovrUmkA===)_
 
-You can read more about indexers [here](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/indexers/using-indexers). 
+You can read more about indexers [here](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/indexers/using-indexers).
 
 ## Passing multiple parameters
 
