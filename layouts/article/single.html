@@ -31,6 +31,14 @@
                 <img src="/{{ . }}" class="post-cover" />
             {{ end }}
 
+            {{ if .Params.Audio }}
+            <div class="post-audio">
+              <audio controls>
+                <source src="{{ .Params.Audio }}">
+              </audio>
+            </div>
+            {{ end }}
+
             <div class="post-content">
                 {{ if isset .Params "series" }}
                     {{ $series := lower (index .Params.series 0) }}
@@ -58,7 +66,7 @@
         <hr />
 
         <div>
-            <p><i>If you haven't already, subscribe to my new <a href="https://bit.ly/im5tu-yt" target="_blank">YouTube Channel</a>, Code With Stu. Here you'll find different tip, tricks and tutorials using some of the latest technologies, in bitesize chunks.</i></p>
+            <p><i>If you haven't already, subscribe to my <a href="https://bit.ly/im5tu-yt" target="_blank">YouTube Channel</a>, Code With Stu. Here you'll find different tip, tricks and tutorials using some of the latest technologies, in bitesize chunks.</i></p>
         </div>
 
         <hr />
