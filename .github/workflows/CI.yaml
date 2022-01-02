@@ -71,7 +71,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
         run: |
-          $(git status --porcelain ./docs | wc -l)
+          git status --porcelain ./docs | wc -l
           if [[ $(git status --porcelain ./docs | wc -l) -gt 0 ]]; then
             git config user.name "Github Actions"
             git config user.email "im5tu@users.noreply.github.com"
