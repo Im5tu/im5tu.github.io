@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -69,12 +70,12 @@ jobs:
       - name: Push New Files
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
-        working-directory: docs
         run: |
-          if [[ $(git status --porcelain docs | wc -l) -gt 0 ]]; then
+          git status --porcelain ./docs | wc -l
+          if [[ $(git status --porcelain ./docs | wc -l) -gt 0 ]]; then
             git config user.name "Github Actions"
             git config user.email "im5tu@users.noreply.github.com"
-            git add $(git ls-files -o --exclude-standard)
+            git add ./docs
             git commit -m "Updated from ref: $GITHUB_SHA [skip ci]"
             git push
           fi
