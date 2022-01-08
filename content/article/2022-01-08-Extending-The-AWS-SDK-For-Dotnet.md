@@ -1,12 +1,12 @@
 {
     "title": "Extending the AWS SDK for .Net",
-    "description": "",
+    "description": "In this article we're taking a look at how to extend the AWS SDK for .NET, which can be useful for various tasks like adding in some custom observability components into the request pipeline.",
     "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
-    "date": "2022-01-05T08:00:00Z",
+    "date": "2022-01-08T08:00:00Z",
     "categories": ["aspnetcore", "dotnet", "diagnostics"]
 }
 
-<!--{{< youtube id="4xocB0-bKQM" >}}-->
+{{< youtube id="oHXFG7G5bCo" >}}
 
 In this article we're taking a look at how to extend the AWS SDK for .NET, which can be useful for various tasks like adding in some custom observability components into the request pipeline. This article is a companion resource for the video linked above in case you prefer a written version. I'm actively using the approach described here to implement distributed tracing with OpenTelemetry for all AWS calls at work.
 
@@ -96,7 +96,7 @@ Generally speaking you want to add your handler after the `EndpointResolver` so 
 
 ### Creating our IPipelineHandler
 
-When are implementing the `IPipelineHandler` we have two choices: implement the interface directly for maximum control or inherit from the class `PipelineHandler` _(recommended)_ and override just the methods that we need. We're not going to do anything fancy in our implementation here, except record the AWS SDK call to the console window:
+When are implementing the `IPipelineHandler`, we have two choices: implement the interface directly for maximum control or inherit from the class `PipelineHandler` _(recommended)_ and override just the methods that we need. We're not going to do anything fancy in our implementation here, except record the AWS SDK call to the console window:
 
 ```csharp
 internal sealed class AWSPipelineHandler : PipelineHandler
