@@ -2,7 +2,7 @@
     "title": "3 Ways To Increase App Reliability With Polly",
     "description": "Learn how to use retries with decorrelated jitter, bulkhead and circuit breaker patterns to increase reliability in your applications with Polly",
     "tags": ["k8s", "helm", "Github"],
-    "date": "2022-02-04T08:30:00Z",
+    "date": "2022-02-03T08:30:00Z",
     "categories": ["k8s", "helm", "Github"],
     "toc": true
 }
