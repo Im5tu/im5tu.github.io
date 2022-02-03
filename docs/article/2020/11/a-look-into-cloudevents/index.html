@@ -86,6 +86,25 @@ A Look Into CloudEvents :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/11/a-look-into-cloudevents/>A Look Into CloudEvents</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#what-are-cloudevents>What are CloudEvents?</a></li>
+<li><a href=#what-does-a-cloudevent-look-like>What does a CloudEvent look like?</a>
+<ul>
+<li><a href=#duplicationidempotency>Duplication/Idempotency</a></li>
+</ul>
+</li>
+<li><a href=#transports>Transports</a></li>
+<li><a href=#formats>Formats</a></li>
+<li><a href=#specification-extensions>Specification extensions</a></li>
+<li><a href=#sdk-support>SDK Support</a></li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>Over the past few months, I&rsquo;ve been looking into the internal architecture setup for <a href=https://checkout.com>Checkout.com</a> and seeing how we can scale it for the next few years. As part of that research, I&rsquo;ve been looking into the CloudEvents specification as a potential option as the basis for a common event schema across teams.</p>
 <h2 id=what-are-cloudevents>What are CloudEvents?</h2>

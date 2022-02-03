@@ -87,6 +87,68 @@ Architecture Pathway Introduction :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/07/architecture-pathway-introduction/>Architecture Pathway Introduction</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#the-10-cloud-architecture-principals>The 10 Cloud Architecture Principals</a>
+<ul>
+<li><a href=#design-for-self-healinghttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesself-healing><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/self-healing>Design for self healing</a></a></li>
+<li><a href=#make-all-things-redundanthttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesredundancy><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/redundancy>Make all things redundant</a></a></li>
+<li><a href=#mimimize-coordinationhttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesminimize-coordination><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/minimize-coordination>Mimimize coordination</a></a></li>
+<li><a href=#design-to-scale-outhttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesscale-out><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/scale-out>Design to scale out</a></a></li>
+<li><a href=#partition-around-limitshttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlespartition><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/partition>Partition around limits</a></a></li>
+<li><a href=#design-for-operationshttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesdesign-for-operations><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-operations>Design for operations</a></a></li>
+<li><a href=#use-managed-serviceshttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesmanaged-services-><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/managed-services>Use managed services</a></a></li>
+<li><a href=#use-the-best-data-store-for-the-jobhttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesuse-the-best-data-store><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/use-the-best-data-store>Use the best data store for the job</a></a></li>
+<li><a href=#design-for-evolutionhttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesdesign-for-evolution><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/design-for-evolution>Design for evolution</a></a></li>
+<li><a href=#build-for-the-needs-of-the-businesshttpsdocsmicrosoftcomen-usazurearchitectureguidedesign-principlesbuild-for-business><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/build-for-business>Build for the needs of the business</a></a></li>
+</ul>
+</li>
+<li><a href=#different-architecture-styles>Different Architecture Styles</a>
+<ul>
+<li><a href=#big-computehttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesbig-compute><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-compute>Big Compute</a></a></li>
+<li><a href=#big-datahttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesbig-data><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-data>Big Data</a></a></li>
+<li><a href=#event-drivenhttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesevent-driven><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven>Event Driven</a></a></li>
+<li><a href=#microserviceshttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesmicroservices><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices>Microservices</a></a></li>
+<li><a href=#n-tier-applicationhttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesn-tier><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/n-tier>N-Tier Application</a></a></li>
+<li><a href=#web-queue-workerhttpsdocsmicrosoftcomen-usazurearchitectureguidearchitecture-stylesweb-queue-worker><a href=https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/web-queue-worker>Web-queue-worker</a></a></li>
+</ul>
+</li>
+<li><a href=#common-design-patterns>Common Design Patterns</a>
+<ul>
+<li><a href=#anti-corruption-layerhttpsdocsmicrosoftcomen-usazurearchitecturepatternsanti-corruption-layer><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer>Anti-corruption layer</a></a></li>
+<li><a href=#bulkheadhttpsdocsmicrosoftcomen-usazurearchitecturepatternsbulkhead><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/bulkhead>Bulkhead</a></a></li>
+<li><a href=#cache-asidehttpsdocsmicrosoftcomen-usazurearchitecturepatternscache-aside><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/cache-aside>Cache-aside</a></a></li>
+<li><a href=#circuit-breakerhttpsdocsmicrosoftcomen-usazurearchitecturepatternscircuit-breaker><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker>Circuit Breaker</a></a></li>
+<li><a href=#command--query-responsibility-segregationhttpsdocsmicrosoftcomen-usazurearchitecturepatternscqrs><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs>Command & Query Responsibility Segregation</a></a></li>
+<li><a href=#compensating-transactionhttpsdocsmicrosoftcomen-usazurearchitecturepatternscompensating-transaction><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction>Compensating Transaction</a></a></li>
+<li><a href=#competing-consumershttpsdocsmicrosoftcomen-usazurearchitecturepatternscompeting-consumers><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/competing-consumers>Competing Consumers</a></a></li>
+<li><a href=#event-sourcinghttpsdocsmicrosoftcomen-usazurearchitecturepatternsevent-sourcing><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing>Event Sourcing</a></a></li>
+<li><a href=#gatekeeperhttpsdocsmicrosoftcomen-usazurearchitecturepatternsgatekeeper><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/gatekeeper>Gatekeeper</a></a></li>
+<li><a href=#leader-electionhttpsdocsmicrosoftcomen-usazurearchitecturepatternsleader-election><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/leader-election>Leader Election</a></a></li>
+<li><a href=#queue-based-load-levelinghttpsdocsmicrosoftcomen-usazurearchitecturepatternsqueue-based-load-leveling><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/queue-based-load-leveling>Queue-Based Load Leveling</a></a></li>
+<li><a href=#retryhttpsdocsmicrosoftcomen-usazurearchitecturepatternsretry><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/retry>Retry</a></a></li>
+<li><a href=#shardinghttpsdocsmicrosoftcomen-usazurearchitecturepatternssharding><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/sharding>Sharding</a></a></li>
+<li><a href=#sidecarhttpsdocsmicrosoftcomen-usazurearchitecturepatternssidecar><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar>Sidecar</a></a></li>
+<li><a href=#stranglerhttpsdocsmicrosoftcomen-usazurearchitecturepatternsstrangler><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/strangler>Strangler</a></a></li>
+<li><a href=#throttlinghttpsdocsmicrosoftcomen-usazurearchitecturepatternsthrottling><a href=https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling>Throttling</a></a></li>
+</ul>
+</li>
+<li><a href=#distributed-systems-theory>Distributed Systems Theory</a>
+<ul>
+<li><a href=#understanding-the-8-fallacies-of-distributed-systemshttpswwwsimpleorientedarchitecturecom8-fallacies-of-distributed-systems><a href=https://www.simpleorientedarchitecture.com/8-fallacies-of-distributed-systems/>Understanding the 8 fallacies of Distributed Systems</a></a></li>
+<li><a href=#cap-theoremhttpsrobertgreinercomcap-theorem-revisited><a href=https://robertgreiner.com/cap-theorem-revisited/>CAP Theorem</a></a></li>
+<li><a href=#how-sharding-workshttpsmediumcomjeeyoungkhow-sharding-works-b4dec46b3f6><a href=https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6>How Sharding Works</a></a></li>
+<li><a href=#consistent-hashinghttpwwwtom-e-whitecom200711consistent-hashinghtml><a href=http://www.tom-e-white.com/2007/11/consistent-hashing.html>Consistent Hashing</a></a></li>
+</ul>
+</li>
+<li><a href=#other-interesting-reads>Other Interesting Reads</a></li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>Over the past year or so, I&rsquo;ve had the pleasure of mentoring people on their software development journeys. Some of those personnel have expressed a desire to pursue the software architect route. As it&rsquo;s something that I often refer to, I&rsquo;ve decided to post a mini-pathway to help guide on some of the basics.</p>
 <p>The majority of my learnings have come from a mixture of talented people, mistakes and good old fashion practise. The more that you practise designing systems, the better you will become, just like any other skill. I&rsquo;ve included a brief summary from the pages linked so that you can glance at the content as you read along - all credits to their original authors.</p>

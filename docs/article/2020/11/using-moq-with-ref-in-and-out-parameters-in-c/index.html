@@ -88,6 +88,12 @@ Using Moq with ref, in and out parameters in C# :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/11/using-moq-with-ref-in-and-out-parameters-in-c/>Using Moq with ref, in and out parameters in C#</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents></nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>In this article, I want to take a look at a scenario that I came across this week which I&rsquo;ve come across a few times. Occasionally, you will have an interface that you wish to mock out with Moq and find you have troubles because the method signature takes a <code>ref</code> or an <code>out</code> parameter. This week, I&rsquo;ve found a way that we can successfully mock the method without too much of a change to the test code.</p>
 <p>Lets assume that we have the following implementation that we want to mock out using Moq, which is a simplification of the problem I had earlier in the week:</p>

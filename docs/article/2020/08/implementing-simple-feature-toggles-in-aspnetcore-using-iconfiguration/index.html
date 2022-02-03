@@ -86,6 +86,18 @@ Implementing Simple Feature Toggles In AspNetCore Using IConfiguration :: Stuart
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/08/implementing-simple-feature-toggles-in-aspnetcore-using-iconfiguration/>Implementing Simple Feature Toggles In AspNetCore Using IConfiguration</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#what-are-feature-toggles>What are feature toggles?</a></li>
+<li><a href=#configuration-system-in-net-core>Configuration System in .NET Core</a></li>
+<li><a href=#building-out-simple-feature-toggles-using-iconfiguration>Building out simple feature toggles using IConfiguration</a></li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>Recently, we&rsquo;ve had the need to build a few feature toggles in our applications that can be changed at runtime. This article walks through a simple approach that you can use in your applications, including a description of a route to dynamic feature toggles.</p>
 <p>We&rsquo;ve built out our feature toggle system on top of the <code>IConfiguration</code> in ASP.NET Core as we do not need anything particularly fancyand we already have the packages referenced in our applications. If we needed something more advanced, we would take a look into one of the many available packages. If you just need something simple, you&rsquo;re in the right place.</p>

@@ -89,6 +89,36 @@ Diagnostics in .Net Core 3: Event Counters :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/>Diagnostics in .Net Core 3: Event Counters</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#application-flow>Application Flow</a>
+<ul>
+<li><a href=#using-eventcounters-and-eventsource-events>Using EventCounters And EventSource Events</a></li>
+<li><a href=#other-eventsource-examples>Other EventSource Examples</a></li>
+</ul>
+</li>
+<li><a href=#types-of-diagnosticcounters>Types of DiagnosticCounters</a>
+<ul>
+<li><a href=#eventcounter>EventCounter</a></li>
+<li><a href=#incrementingeventcounter>IncrementingEventCounter</a></li>
+<li><a href=#pollingcounter>PollingCounter</a></li>
+<li><a href=#incrementingpollingcounter>IncrementingPollingCounter</a></li>
+</ul>
+</li>
+<li><a href=#under-the-hood>Under the hood</a></li>
+<li><a href=#listening-for-event-counters>Listening for event counters</a>
+<ul>
+<li><a href=#consuming-eventcounters-using-dotnet-counters>Consuming EventCounters using dotnet-counters</a></li>
+<li><a href=#consuming-eventcounters-within-our-applications>Consuming EventCounters within our applications</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <section class="series series-header">
 <p><i>This article is part of the <a href=#series>Diagnostics in .Net Core 3</a> series. You are reading part 1 of 5.</i></p>

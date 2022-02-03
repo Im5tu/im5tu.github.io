@@ -87,6 +87,34 @@ Building a Zero Trust Architecture In AWS :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/12/building-a-zero-trust-architecture-in-aws/>Building a Zero Trust Architecture In AWS</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#what-is-a-zero-trust-architecture>What is a Zero Trust Architecture</a></li>
+<li><a href=#zero-trust-architecture-principals>Zero Trust Architecture Principals</a>
+<ul>
+<li><a href=#authentication--authorization-everywhere>Authentication & Authorization Everywhere</a></li>
+<li><a href=#limit-the-scope-of-permissions>Limit the scope of permissions</a></li>
+<li><a href=#encryption-at-rest--in-transit>Encryption At-Rest & In-Transit</a></li>
+<li><a href=#prefer-managed-services>Prefer Managed Services</a></li>
+<li><a href=#vpc-subnet-isolation--endpoints>VPC Subnet Isolation & Endpoints</a></li>
+<li><a href=#use-transit-gateway-to-connect-vpcs>Use Transit Gateway to connect VPCs</a></li>
+<li><a href=#choose-standards-where-possible>Choose Standards Where Possible</a></li>
+<li><a href=#store-secrets-securely>Store secrets securely</a></li>
+</ul>
+</li>
+<li><a href=#enforcing-compliance-in-zero-trust-architectures>Enforcing Compliance In Zero Trust Architectures</a>
+<ul>
+<li><a href=#observability>Observability</a></li>
+<li><a href=#compliance>Compliance</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>In the vast majority of companies that I&rsquo;ve been in, software engineering & infrastructure best practises have often been left as something that needs to be updated later because building the product comes first. This is completely understandable as if you don&rsquo;t have a product, you don&rsquo;t have employment. This presents problems later when companies are beginning to scale rapidly and become popular. Not only does the company becomes a target for malicious actors, but security-related incidents can easily occur by leaving storage devices open accidentally. Once a malicious actor is in your system, you usually have pretty big problems unless you design your architectures with Zero Trust in mind.</p>
 <h2 id=what-is-a-zero-trust-architecture>What is a Zero Trust Architecture</h2>

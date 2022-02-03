@@ -88,6 +88,29 @@ Extending the AWS SDK for .Net :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2022/01/extending-the-aws-sdk-for-.net/>Extending the AWS SDK for .Net</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#our-example>Our Example</a></li>
+<li><a href=#customizing-the-request-pipeline>Customizing the request pipeline</a>
+<ul>
+<li><a href=#the-entrypoint-into-the-aws-sdk>The entrypoint into the AWS SDK</a></li>
+<li><a href=#creating-an-instance-of-iruntimepipelinecustomizer>Creating an instance of IRuntimePipelineCustomizer</a></li>
+<li><a href=#creating-our-ipipelinehandler>Creating our IPipelineHandler</a></li>
+</ul>
+</li>
+<li><a href=#appendix>Appendix</a>
+<ul>
+<li><a href=#docker-compose-file>Docker Compose File</a></li>
+<li><a href=#localstack-init-script>Localstack init script</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
 <iframe src=https://www.youtube.com/embed/oHXFG7G5bCo style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>

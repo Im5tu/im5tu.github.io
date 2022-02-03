@@ -88,6 +88,22 @@ Publish Metrics to Cloudwatch in .NET Core :: Stuart Blackler's Blog
 <h1 class=post-title>
 <a href=https://im5tu.io/article/2020/12/publish-metrics-to-cloudwatch-in-.net-core/>Publish Metrics to Cloudwatch in .NET Core</a>
 </h1>
+<hr>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#what-is-cloudwatch>What is CloudWatch?</a></li>
+<li><a href=#writing-a-cloudwatch-metric-publisher>Writing a CloudWatch Metric Publisher</a></li>
+<li><a href=#integrating-our-cloudwatch-publisher-with-net-event-counters>Integrating our CloudWatch publisher with .NET Event Counters</a>
+<ul>
+<li><a href=#creating-the-observable-infrastructure>Creating the observable infrastructure</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<hr>
 <div class=post-content>
 <p>In a <a href=/article/2020/01/diagnostics-in-.net-core-3-event-counters/>previous post</a> I took a look at how we can utilize .NET event counters to record metrics in our applications. However, I never covered the implementation of how I write the metrics to either CloudWatch or DataDog. In this article, I&rsquo;m going to take a look at how to publish metrics to CloudWatch and one way of integrating it with the aforementioned blog series.</p>
 <h2 id=what-is-cloudwatch>What is CloudWatch?</h2>
