@@ -3,7 +3,8 @@
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
     "tags": ["aspnetcore", "dotnet", "AWS"],
     "date": "2021-01-17T11:43:01Z",
-    "categories": ["aspnetcore", "dotnet"]
+    "categories": ["aspnetcore", "dotnet"],
+    "toc": true
 }
 
 As more and more companies get hacked, there is a strong resurgence in the community for the desire to have TLS for everything, everywhere. There are many valuable projects, tools and resources, such as [LetsEncrypt](https://letsencrypt.org/) available to help both individuals & companies secure their resources. One of those tools is AWS Private Certificate Authority.

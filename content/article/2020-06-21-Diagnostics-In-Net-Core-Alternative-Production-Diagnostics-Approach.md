@@ -4,7 +4,8 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-06-25T22:56:00+01:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": ["Diagnostics in .Net Core 3"]
+    "series": ["Diagnostics in .Net Core 3"],
+    "toc": true
 }
 
 In a [previous article](/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/), we took a look at a way to use `dotnet-counters` with an external image. This article takes a look at how we can embed the tooling that we require into the image so that we extract the counter/memory information as required. This approach does not require elevated permissions as before.
@@ -28,7 +29,7 @@ EXPOSE 5000
 ENTRYPOINT ["dotnet", "BlogApp.dll"]
 ```
 
-Here we use a docker multi-stage build to publish our application (which is also created inline for the purposes of this article). Once the code has been published, we can then make the a runtime image which has a lot less dependencies, thus a smaller image size, to host the published version of the application. 
+Here we use a docker multi-stage build to publish our application (which is also created inline for the purposes of this article). Once the code has been published, we can then make the a runtime image which has a lot less dependencies, thus a smaller image size, to host the published version of the application.
 
 **Note:** _If you don't use the same OS, like Alpine, on both steps, then you should specify the `-r` flag with the runtime identifier for the runtime image._
 

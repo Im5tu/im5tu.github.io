@@ -4,7 +4,8 @@
     "tags": ["aspnetcore", "dotnet", "dotnetcore", "csharp", "git", "github"],
     "date": "2020-10-10T17:45:00+01:00",
     "categories": ["development", "git" ],
-    "series": ["Repository Templates"]
+    "series": ["Repository Templates"],
+    "toc": true
 }
 
 Over the past few weeks, I've been updating some of my projects to latest standards, adding in Github Actions where appropriate etc. Most recently I've setup a template repository in Github.
@@ -35,11 +36,11 @@ The [ReadMe](https://github.com/Im5tu/template/blob/main/README.md) file is like
 
 At the top of the readme, I've added in the seemingly standard swag badges showing the following information at a glance:
 
-- The license type
-- The current Github Release
-- CI Pipeline status
-- Release Pipeline status
-- Contributors
+* The license type
+* The current Github Release
+* CI Pipeline status
+* Release Pipeline status
+* Contributors
 
 The Getting Started section is the most important part of the readme, as that is likely the thing that your consumers will do the most. Therefore, it's important to keep the setup instructions as simple and clear as possible. I thoroughly recommend that you spin up a vm/use a different machine to verify that the instructions work as you intend.
 
@@ -53,10 +54,10 @@ Last, but by no means least is the acknowledgements section. This just shows som
 
 If you're lucky enough to have people that want to contribute to your project, it's important to give guidance on how you would like the contribution to happen. This may be always creating an issue first for discussion, for example. The standard approach to communicating this on Github is to use a `CONTRIBUTING.md` file placed in the root of the repository. In this file, you should give details on:
 
-- Where to find things to contribute towards, eg: good first issues
-- What to do when submitting a bug
-- Setting up the project
-- Creating a pull request
+* Where to find things to contribute towards, eg: good first issues
+* What to do when submitting a bug
+* Setting up the project
+* Creating a pull request
 
 ### Code of Conduct
 
@@ -70,9 +71,9 @@ A license simply tells your consumers what they are and are not allowed to do wi
 
 You can also setup other common files to help automate certain actions for yourself or your contributors. A few examples:
 
-- `.github/pull_request_template.md` - A template for all pull requests. This could include things like a checklist to ensure that certain standards are met.
-- `.github/ISSUE_TEMPLATE/*.md` - Files that are included under `ISSUE_TEMPLATE` show up when you create a new issue. You can template the format for various issues like bugs vs feature requests. This can automatically include labels.
-- `SECURITY.md` - An important document that tells contributors and researchers what to do when a security issue is found.
+* `.github/pull_request_template.md` - A template for all pull requests. This could include things like a checklist to ensure that certain standards are met.
+* `.github/ISSUE_TEMPLATE/*.md` - Files that are included under `ISSUE_TEMPLATE` show up when you create a new issue. You can template the format for various issues like bugs vs feature requests. This can automatically include labels.
+* `SECURITY.md` - An important document that tells contributors and researchers what to do when a security issue is found.
 
 ## Initialisation a repository from a template
 
@@ -84,6 +85,6 @@ Once this is done, when you create a new repository, you can select the template
 
 ![New repository](/img/template/new-repository.png)
 
-After you click create, Github clones the current files from the template repository into your new repository, ready for you to build greatness! 
+After you click create, Github clones the current files from the template repository into your new repository, ready for you to build greatness!
 
 That's all there is to it, happy templating!

@@ -3,16 +3,18 @@
     "description": "A glance at some of the resources that helped me learn software architecture.",
     "tags": ["architecture"],
     "date": "2020-07-15T20:56:00+01:00",
-    "categories": ["architecture", "Development"]
+    "categories": ["architecture", "Development"],
+    "toc": true
 }
 
-Over the past year or so, I've had the pleasure of mentoring people on their software development journeys. Some of those personnel have expressed a desire to pursue the software architect route. As it's something that I often refer to, I've decided to post a mini-pathway to help guide on some of the basics. 
+Over the past year or so, I've had the pleasure of mentoring people on their software development journeys. Some of those personnel have expressed a desire to pursue the software architect route. As it's something that I often refer to, I've decided to post a mini-pathway to help guide on some of the basics.
 <!--more-->
 The majority of my learnings have come from a mixture of talented people, mistakes and good old fashion practise. The more that you practise designing systems, the better you will become, just like any other skill. I've included a brief summary from the pages linked so that you can glance at the content as you read along - all credits to their original authors.
 
 Happy Reading!
 
 ## The 10 Cloud Architecture Principals
+
 ### [Design for self healing](https://docs.microsoft.com/en-us/azure/architecture/guide/design-principles/self-healing)
 
 In a distributed system, failures happen. Hardware can fail. The network can have transient failures. Rarely, an entire service or region may experience a disruption, but even those must be planned for. Therefore, design an application to be self healing when failures occur.
@@ -54,13 +56,14 @@ All successful applications change over time, whether to fix bugs, add new featu
 This design principle may seem obvious, but it's crucial to keep in mind when designing a solution. Do you anticipate millions of users, or a few thousand? Is a one-hour application outage acceptable? Do you expect large bursts in traffic or a predictable workload? Ultimately, every design decision must be justified by a business requirement.
 
 ## Different Architecture Styles
+
 ### [Big Compute](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-compute)
 
 The term big compute describes large-scale workloads that require a large number of cores, often numbering in the hundreds or thousands. Scenarios include image rendering, fluid dynamics, financial risk modeling, oil exploration, drug design, and engineering stress analysis, among others.
 
 ### [Big Data](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/big-data)
 
-A big data architecture is designed to handle the ingestion, processing, and analysis of data that is too large or complex for traditional database systems. Big data solutions typically involve one or more of the following types of workload: 
+A big data architecture is designed to handle the ingestion, processing, and analysis of data that is too large or complex for traditional database systems. Big data solutions typically involve one or more of the following types of workload:
 
 - Batch processing of big data sources at rest.
 - Real-time processing of big data in motion.
@@ -84,6 +87,7 @@ An N-tier architecture divides an application into logical layers and physical t
 The core components of this architecture are a web front end that serves client requests, and a worker that performs resource-intensive tasks, long-running workflows, or batch jobs. The web front end communicates with the worker through a message queue.
 
 ## Common Design Patterns
+
 ### [Anti-corruption layer](https://docs.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer)
 
 Implement a façade or adapter layer between different subsystems that don't share the same semantics. This layer translates requests that one subsystem makes to the other subsystem. Use this pattern to ensure that an application's design is not limited by dependencies on outside subsystems.
@@ -147,7 +151,6 @@ Incrementally migrate a legacy system by gradually replacing specific pieces of 
 ### [Throttling](https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling)
 
 Control the consumption of resources used by an instance of an application, an individual tenant, or an entire service. This can allow the system to continue to function and meet service level agreements, even when an increase in demand places an extreme load on resources.
-
 
 ## Distributed Systems Theory
 

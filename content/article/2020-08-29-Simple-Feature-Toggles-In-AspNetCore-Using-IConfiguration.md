@@ -3,7 +3,8 @@
     "description": "A look into how we implement simple feature toggles using IConfiguration",
     "tags": ["aspnetcore", "dotnet", "dotnetcore", "csharp"],
     "date": "2020-08-29T11:45:00+01:00",
-    "categories": ["development"]
+    "categories": ["development"],
+    "toc": true
 }
 
 Recently, we've had the need to build a few feature toggles in our applications that can be changed at runtime. This article walks through a simple approach that you can use in your applications, including a description of a route to dynamic feature toggles.

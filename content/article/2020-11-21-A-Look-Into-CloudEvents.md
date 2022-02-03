@@ -3,7 +3,8 @@
     "description": "A look into what CloudEvents are, and how they can be used as a internal format for messaging",
     "tags": ["cncf", "messaging" ],
     "date": "2020-11-21T11:34:07Z",
-    "categories": ["development" ]
+    "categories": ["development" ],
+    "toc": true
 }
 
 Over the past few months, I've been looking into the internal architecture setup for [Checkout.com](https://checkout.com) and seeing how we can scale it for the next few years. As part of that research, I've been looking into the CloudEvents specification as a potential option as the basis for a common event schema across teams.
@@ -38,7 +39,7 @@ As all CloudEvents implementations must support the JSON format, we can take a l
 }
 ```
 
-All of the fields listed above are required in all formats of CloudEvents. The `id` field identifies the event which producers ensure is unique for a given `source`. The `source` identifies the context in which an event happened. Often this will include information such as the type of the event source, the organization publishing the event or the process that produced the event. The `specversion` describes the version of the CloudEvents specification that the event adheres to. 
+All of the fields listed above are required in all formats of CloudEvents. The `id` field identifies the event which producers ensure is unique for a given `source`. The `source` identifies the context in which an event happened. Often this will include information such as the type of the event source, the organization publishing the event or the process that produced the event. The `specversion` describes the version of the CloudEvents specification that the event adheres to.
 
 The specification also includes some additional optional attributes, which can be seen here:
 
@@ -85,7 +86,7 @@ The format that services decide to use is up to them, so long as the specificati
 
 ## Specification extensions
 
-Like any specification, it's never a case of one size fits all. The CloudEvents specification allows itself to be extended. An extension adds additional attributes to the message so long as they follow the same naming convention and type system as the standard attributes. A number of extensions for some common use cases have already been documented: 
+Like any specification, it's never a case of one size fits all. The CloudEvents specification allows itself to be extended. An extension adds additional attributes to the message so long as they follow the same naming convention and type system as the standard attributes. A number of extensions for some common use cases have already been documented:
 
 - [Dataref (Claim Check Pattern)](https://github.com/cloudevents/spec/blob/master/extensions/dataref.md)
 - [Distributed Tracing](https://github.com/cloudevents/spec/blob/master/extensions/distributed-tracing.md)

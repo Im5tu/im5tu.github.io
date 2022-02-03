@@ -4,7 +4,8 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-06-19T14:00:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": ["Diagnostics in .Net Core 3"]
+    "series": ["Diagnostics in .Net Core 3"],
+    "toc": true
 }
 
 In my [previous article](/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/) we took a look at how to monitor outbound HTTP requests using a `DiagnosticListener`. In this article, we will re-use some of the same components to monitor inbound HTTP requests. We could use middleware to do as most approaches do, but this approach is highly dependent on the middleware that you have and the duration of this, so we will re-use some of the code from last time.
@@ -87,7 +88,7 @@ internal sealed class InboundHttpRequestObserver : SimpleDiagnosticListenerObser
 }
 ```
 
-Like our outbound implementation, I've generated a typed class so that we can access the data within the events payload as these are internal classes. I’ve nested a class inside of the observer to help with this, containing only the properties that I need. 
+Like our outbound implementation, I've generated a typed class so that we can access the data within the events payload as these are internal classes. I’ve nested a class inside of the observer to help with this, containing only the properties that I need.
 
 ### Implementing the response observer
 

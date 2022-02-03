@@ -4,7 +4,8 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-01-25T13:00:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": ["Diagnostics in .Net Core 3"]
+    "series": ["Diagnostics in .Net Core 3"],
+    "toc": true
 }
 
 In my [previous post](/article/2020/01/diagnostics-in-.net-core-3-event-counters/), I described how we can leverage the new EventCounter diagnostics API to add custom event counters and listen for built in counters. In this article, I will walk through how we can leverage the `dotnet-counters` tool with a running docker image.
@@ -58,7 +59,7 @@ Once you have you're application built we are ready to start our docker image wi
 
 ## Connecting from the diagnostics image to the host image
 
-Normally we would start our applications with a command line similar to this: 
+Normally we would start our applications with a command line similar to this:
 
 ```bash
 docker run --rm --name app dotnetapp:latest
@@ -84,7 +85,7 @@ Once the application is running, we are now able to start connecting to our appl
 - Be able to share the same networking as the running application,
 - Elevate execution for the new container
 
-Without completing the steps listed above we will be unable to connect to the running application. For mounting the volume we can use the exact same argument as before (`-v dotnetdiag:/tmp`). 
+Without completing the steps listed above we will be unable to connect to the running application. For mounting the volume we can use the exact same argument as before (`-v dotnetdiag:/tmp`).
 
 In order to get the process id, we need to join the same process namespace through the use of the [--pid](https://docs.docker.com/engine/reference/run/#pid-settings---pid) argument. The `--pid` offers two modes, container or host. For this article, we will connect to a specific container by name, though you can also connect to the container by id as well.
 
@@ -122,10 +123,10 @@ In order to diagnose a running docker image from another docker image, you need 
 - Mount the `/tmp` on the application image prior to starting the application
 - Create a diagnostic image with your diagnostics tools
 - Run your diagnostics image with the following arguments:
-    - `-v` for mounting to the same volume as the application image
-    - `--pid` for joining the same process space
-    - `--net` for joining the same network
-    - `--privileged` for requesting additional permissions to cross container boundaries, and
-    - `--cap-add ALL` for adding the ability to list processes etc.
+  - `-v` for mounting to the same volume as the application image
+  - `--pid` for joining the same process space
+  - `--net` for joining the same network
+  - `--privileged` for requesting additional permissions to cross container boundaries, and
+  - `--cap-add ALL` for adding the ability to list processes etc.
 
 Happy diagnostics!

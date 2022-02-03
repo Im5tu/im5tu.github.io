@@ -3,7 +3,8 @@
     "description": "Learn how to publish a private helm repository using Github Pages Enterprise",
     "tags": ["k8s", "helm", "Github"],
     "date": "2022-01-15T22:15:00Z",
-    "categories": ["k8s", "helm", "Github"]
+    "categories": ["k8s", "helm", "Github"],
+    "toc": true
 }
 
 <!-- {{< youtube id="oHXFG7G5bCo" >}} -->

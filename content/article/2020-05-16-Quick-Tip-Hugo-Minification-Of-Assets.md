@@ -3,7 +3,8 @@
     "description": "This article",
     "tags": ["hugo", "blogging", "Quick Tips"],
     "date": "2020-05-16T13:00:00",
-    "categories": [ "Development", "Building a blog" ]
+    "categories": [ "Development", "Building a blog" ],
+    "toc": true
 }
 
 Today, I have been doing a general tidy up of my blog repository. One of the things that I decided to do, was reduce the overall amount of whitespace in the generated html files.
@@ -23,7 +24,7 @@ This outputs the static site on your behalf. To minify the HTML output, simply c
 hugo --minify
 ```
 
-That's it. The only thing that's left to do is to publish your website. 
+That's it. The only thing that's left to do is to publish your website.
 
 Should you need it, Hugo also allows you to minify any CSS, JS, JSON, SVG or XML resource. To minify a resource, you need to pipe it to `resources.Minify` like this:
 
