@@ -3,7 +3,8 @@
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
     "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
     "date": "2020-12-13T16:21:58Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"]
+    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "toc": true
 }
 
 In a [previous post](/article/2020/01/diagnostics-in-.net-core-3-event-counters/) I took a look at how we can utilize .NET event counters to record metrics in our applications. However, I never covered the implementation of how I write the metrics to either CloudWatch or DataDog. In this article, I'm going to take a look at how to publish metrics to CloudWatch and one way of integrating it with the aforementioned blog series.

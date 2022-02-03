@@ -4,11 +4,12 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-06-18T01:34:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": ["Diagnostics in .Net Core 3"]
+    "series": ["Diagnostics in .Net Core 3"],
+    "toc": true
 }
 
 Throughout the course of my Diagnostics in .Net Core series, we've taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.
-<!--more--> 
+<!--more-->
 Our implementation is going to use a number of technologies combined to get the information that we require about the web request. Here are the steps that we need to complete:
 
 1. Create a service that hooks onto DiagnosticListeners as they get created
@@ -26,7 +27,7 @@ A DiagnosticListener allows us to listen for events that are published in our ap
 
 Read more: [Consuming Data with DiagnosticListeners](https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md#consuming-data-with-diagnosticlistener) / [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.diagnosticlistener?view=netcore-3.1)
 
-### The DiagnosticsHostedService 
+### The DiagnosticsHostedService
 
 Now that we have a basic understanding of a `DiagnosticListener` we can use this in a simple hosted service that uses a special property called `AllListeners`. This property then exposes a `Subscribe` method on which we can add our first type of observer:
 
@@ -58,7 +59,6 @@ internal sealed class DiagnosticsHostedService : IHostedService
 The service above helps us with managing the life-cycle of the observer and keeps hold of the subscription to ensure that it doesn't accidentally get cleaned up. It doesn't matter at which point you call `DiagnosticListener.AllListeners` because when you subscribe, you will always get all previously registered `DiagnosticSource`s and any future sources that will be created.
 
 I'm a fan of being able to easily extend applications by adding a new entry to our DI containers. This can be extremely helpful when doing assembly scanning. To keep with this pattern, I've created a simple wrapper that facilitates this, whilst adding some safety guarantees for graceful shutdown scenarios.
-
 
 ```csharp
 internal class Observer : IObserver<DiagnosticListener>
@@ -176,7 +176,7 @@ internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListener
 }
 ```
 
-The intention here is that we only subscribe specific observers when we encounter a DiagnosticListener that's named `HttpHandlerDiagnosticListener`. This listener has two specific events that we need to listen for: 
+The intention here is that we only subscribe specific observers when we encounter a DiagnosticListener that's named `HttpHandlerDiagnosticListener`. This listener has two specific events that we need to listen for:
 
 - `System.Net.Http.Request` - Contains the following properties: Request, LoggingRequestId, TimeStamp
 - `System.Net.Http.Response` - Contains the following properties: Response, LoggingRequestId, ResponseTaskStatus, TimeStamp

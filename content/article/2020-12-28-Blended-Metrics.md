@@ -3,7 +3,8 @@
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
     "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
     "date": "2020-12-27T12:53:17Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"]
+    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "toc": true
 }
 
 In a world where we use auto-scaling a lot, its often not just one metric that we will take into consideration when deciding whether or not to scale our applications. For example, we might have a combination of CPU usage, memory usage and web request latency. Some services like AWS CloudWatch Metrics only allow scaling based off a single value. Luckily, we can blend metrics together to create new ones, which we can then use in our scaling policies. A blended metric is made up of however one or more existing metrics that you choose, called aspects, and can be published as if it were any other metric, eg: publish to DataDog/Cloudwatch.

@@ -4,7 +4,8 @@
     "tags": ["K6", "git", "github"],
     "date": "2020-10-11T10:45:00+01:00",
     "categories": ["development", "git" ],
-    "series": ["Repository Templates"]
+    "series": ["Repository Templates"],
+    "toc": true
 }
 
 In my [previous article](/article/2020/10/setting-up-a-repository-template-in-github-for-.net/), we took a look at setting up a template repository for our .Net projects. Repository templates can massively help with the consistency and startup speed of a new project. In this article, we will take a look at a different repository template that I've been using for work for running our performance tests.
@@ -25,7 +26,7 @@ The template contains a number of different folders for different purposes:
 - `options`: contains the k6 options such as duration, target virtual users etc
 - `services`: contains the urls and other service specific settings
 
-Logically splitting out the options and services allows us to run the same set of tests against different url's (service settings) and different styles of performance tests (option settings). 
+Logically splitting out the options and services allows us to run the same set of tests against different url's (service settings) and different styles of performance tests (option settings).
 
 ### lib
 

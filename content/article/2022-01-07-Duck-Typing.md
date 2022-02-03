@@ -4,7 +4,8 @@
     "tags": ["c#", "dotnet"],
     "date": "2022-01-07T08:00:00Z",
     "categories": ["dotnet"],
-    "series": ["Things you might not know about CSharp"]
+    "series": ["Things you might not know about CSharp"],
+    "toc": true
 }
 
 This is the next part of my series taking a look at some of the lesser known features of the C# language. Today we will be looking at duck typing and how it is used in C#. Much like the previous article, your millage may vary in terms of actually using these features for day to day programming, so think of this series as raising awareness that these things exist, not that you should use for general purpose programming. Without further adieu...

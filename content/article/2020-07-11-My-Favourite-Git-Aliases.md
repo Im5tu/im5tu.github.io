@@ -3,7 +3,8 @@
     "description": "A look into some of the git aliases that I have configured on my machine which are in constant use.",
     "tags": ["git"],
     "date": "2020-07-11T12:56:00+01:00",
-    "categories": ["git", "Development"]
+    "categories": ["git", "Development"],
+    "toc": true
 }
 
 Git aliases are used to create new git commands that can either invoke a function, or be used to create commands that map to longer commands. For example, we could map `git co` to `git checkout` or have `git undo` undo our previous commit. In this article, I'm going to show you some of my favourite git aliases.
@@ -14,7 +15,7 @@ Git aliases are used to create new git commands that can either invoke a functio
 
 We have two ways of creating git aliases: via the command line or directly in the `.gitconfig` file. You only need to use one of the approaches, so pick which best works for you.
 
-From the command line, the format is: 
+From the command line, the format is:
 
 ```bash
     git config alias.<name> <command>

@@ -4,7 +4,8 @@
     "tags": ["aspnetcore", "dotnet", "diagnostics"],
     "date": "2020-01-05T14:00:00",
     "categories": ["aspnetcore", "dotnet", "diagnostics"],
-    "series": ["Diagnostics in .Net Core 3"]
+    "series": ["Diagnostics in .Net Core 3"],
+    "toc": true
 }
 
 Recently, I've been playing with the new [diagnostic improvements in .Net Core 3](https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/). Traditionally, I've always used the great [AppMetrics](https://github.com/AppMetrics/AppMetrics) package to capture the metrics from our applications and send scrape them with a [Prometheus](https://github.com/prometheus/prometheus) &amp; [Grafana](https://github.com/grafana/grafana) setup. Whilst reading about the improvements, I wondered whether or not it would be possible to push metrics to [Prometheus](https://github.com/prometheus/prometheus).
@@ -147,7 +148,7 @@ protected override void OnEventCommand(EventCommandEventArgs command)
 }
 ```
 
-This is where we register the event counters that we are interested in tracking. EventSource's can receive commands from external sources, so that they can enable the EventCounter API etc. We can receive this message from applications multiple times, so it's important to to make sure that we defensively programme. In the sample above, I use the new null-assignment expression to ensure that only when the field is null, do we perform the expression on the right hand side - which in our case is creating the counters. 
+This is where we register the event counters that we are interested in tracking. EventSource's can receive commands from external sources, so that they can enable the EventCounter API etc. We can receive this message from applications multiple times, so it's important to to make sure that we defensively programme. In the sample above, I use the new null-assignment expression to ensure that only when the field is null, do we perform the expression on the right hand side - which in our case is creating the counters.
 
 There are four available types of counters available for us to use, which I will cover later on:
 
@@ -194,7 +195,7 @@ private void MessageStop(double duration)
 
 We have two operations that we are really interested in Start &amp; Stop. In the example above, each of the operations is split out into a `[NonEvent]` and a corresponding `[Event]`. The `[Event]` is what the EventSource system uses to write the events to the underlying stream so that it can be picked up by tools such as PerfView. The entry point is always the `[NonEvent]` so that we can check to see if anyone is listening to the EventSource before we do anything, this helps ensure that it does not emit the Event unnecessarily. This is the same pattern that is used throughout the .Net Code base from what I can tell.
 
-For the `[Event]`'s, you will notice that the Start/Stop is EventId 1/2 respectively and the also end with Start/Stop. This allows some magic to happen such as automatically figuring out the duration inside of PerfView. For more information on some of the magic that occurs, I strongly recommend reading [Vance Morrison's Excellent Blog Post](https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/) instead of me duplicating the knowledge here. 
+For the `[Event]`'s, you will notice that the Start/Stop is EventId 1/2 respectively and the also end with Start/Stop. This allows some magic to happen such as automatically figuring out the duration inside of PerfView. For more information on some of the magic that occurs, I strongly recommend reading [Vance Morrison's Excellent Blog Post](https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/) instead of me duplicating the knowledge here.
 
 Once you have your EventSource configured, and you know which metrics you wish to track, then all that's left is to start recording your metrics (eg: `OpenMessageEventSource.ProcessMessageStart()`) and the runtime will take care of the rest.
 
@@ -286,13 +287,13 @@ A IncrementingPollingCounter is very much like a standard IncrementingEventCount
 
 ## Under the hood
 
-Now that we've taken a look at how we construct the EvenSource so that we can create our application level metrics, we should also take a look at what happens under the hood so we can begin to complete the circle. Once you start creating any of the listed DiagnosticCounters in your application - the counter calls a method which ensures that the counter gets added to a `CounterGroup` associated with the specified EventSource. When a DiagnosticCounter is disposed, then it is removed from the CounterGroup and no longer tracked. 
+Now that we've taken a look at how we construct the EvenSource so that we can create our application level metrics, we should also take a look at what happens under the hood so we can begin to complete the circle. Once you start creating any of the listed DiagnosticCounters in your application - the counter calls a method which ensures that the counter gets added to a `CounterGroup` associated with the specified EventSource. When a DiagnosticCounter is disposed, then it is removed from the CounterGroup and no longer tracked.
 
 The `CounterGroup` is responsible for maintaining a thread that polls the DiagnosticCounters on the specified interval and updates their values. The thread isn't created until such time as an application calls `EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, new Dictionary<string, string>{{"EventCounterIntervalSec", "1"}});` on an EventSource. Lastly, when the value of each DiagnosticCounter is updated, an event is raised against the EventSource that was passed to the counter which means that we can listen to this in the same way that we listen to other events on EventSource's - eg: PerfView/EventListener.
 
 The whole EventSource system is very lightweight and designed for scalability in systems that generate millions of events - so we should not be too concerned about the performance of this. Naturally, the more that you listen to, the more impact this will have. I think it's safe to say, the code that we write in the listeners will likely be the slowest part of this system.
 
-## Listening for event counters 
+## Listening for event counters
 
 Lastly, in order to complete our circle, we need to be able to listen to the counters that we've created in our applications. There are two common approaches that we can use: the CLI tool `dotnet-counters` or from within our applications using an `EventListener`.
 
@@ -363,7 +364,7 @@ In order to enable tracing from within a .Net application you need three core pa
 1. Detecting of EventSource's
 1. Processing of Events
 
-#### Creating our EventListener 
+#### Creating our EventListener
 
 For our new EventListener, I will create a simple background service as follows:
 
@@ -529,6 +530,6 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
 }
 ```
 
-Hopefully at this point, you have enough information on how to use the built in counters and creating your own metrics. Let me know on [Twitter](https://twitter.com/im5tu) if you have any thoughts or comments on the contents of this post. 
+Hopefully at this point, you have enough information on how to use the built in counters and creating your own metrics. Let me know on [Twitter](https://twitter.com/im5tu) if you have any thoughts or comments on the contents of this post.
 
 Thanks for reading, happy counting! :)

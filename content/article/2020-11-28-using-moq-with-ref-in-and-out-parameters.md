@@ -3,7 +3,8 @@
     "description": "A look into how we can use Moq with ref, in and out parameters in C#",
     "tags": ["aspnetcore", "dotnet", "diagnostics", "testing", "moq"],
     "date": "2020-11-28T12:39:52Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"]
+    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "toc": true
 }
 
 In this article, I want to take a look at a scenario that I came across this week which I've come across a few times. Occasionally, you will have an interface that you wish to mock out with Moq and find you have troubles because the method signature takes a `ref` or an `out` parameter. This week, I've found a way that we can successfully mock the method without too much of a change to the test code.
@@ -42,7 +43,6 @@ public class MyVisitorRunner
 ```
 
 We want to have a simple test that ensures that all the visitors are called. So using XUnit, we could write something along the lines of:
-
 
 ```csharp
 [Fact]
