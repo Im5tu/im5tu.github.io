@@ -71,6 +71,11 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "/article/index.xml"
 
   [[menu.main]]
+    identifier = "sponsor"
+    name       = "Sponsor"
+    url        = "https://github.com/sponsors/Im5tu"
+
+  [[menu.main]]
     identifier = "twitter"
     name       = "Twitter"
     url        = "https://bit.ly/im5tu-tw"
