@@ -45,7 +45,7 @@ ignorefiles = [ "content/draft/.*" ]
 
   [[params.social]]
     name = "youtube"
-    url  = "https://bit.ly/im5tu-yt"
+    url  = "https://bit.ly/im5tu-youtube"
 
 [markup]
   [markup.highlight]
