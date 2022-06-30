@@ -5,7 +5,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
 <meta name=author content="Stuart Blackler ">
 <meta name=description content="Learn how to use retries with decorrelated jitter, bulkhead and circuit breaker patterns to increase reliability in your applications with Polly">
-<meta name=keywords content=",k8s,helm,Github">
+<meta name=keywords content=",aspnetcore,dotnet,diagnostics">
 <meta name=robots content="noodp">
 <meta name=theme-color content>
 <link rel=canonical href=https://im5tu.io/article/2022/02/3-ways-to-increase-app-reliability-with-polly/>
@@ -13,7 +13,7 @@
 3 Ways To Increase App Reliability With Polly :: Stuart Blackler's Blog
 </title>
 <link href=https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css rel=stylesheet type=text/css>
-<link rel=stylesheet href=/main.17863a81d979b637a02cd7632a4d86e9d80563ef460fd6af1a56962efcaa066b.css>
+<link rel=stylesheet href=/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css>
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
@@ -21,12 +21,11 @@
 <link rel=mask-icon href=/safari-pinned-tab.svg color>
 <link rel="shortcut icon" href=/favicon.ico>
 <meta name=msapplication-TileColor content>
-<meta name=theme-color content>
 <meta itemprop=name content="3 Ways To Increase App Reliability With Polly">
 <meta itemprop=description content="Learn how to use retries with decorrelated jitter, bulkhead and circuit breaker patterns to increase reliability in your applications with Polly"><meta itemprop=datePublished content="2022-02-03T08:30:00+00:00">
 <meta itemprop=dateModified content="2022-02-03T08:30:00+00:00">
 <meta itemprop=wordCount content="1536">
-<meta itemprop=keywords content="k8s,helm,Github,">
+<meta itemprop=keywords content="aspnetcore,dotnet,diagnostics,">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="3 Ways To Increase App Reliability With Polly">
 <meta name=twitter:description content="Learn how to use retries with decorrelated jitter, bulkhead and circuit breaker patterns to increase reliability in your applications with Polly">
@@ -36,9 +35,9 @@
 <meta property="og:url" content="https://im5tu.io/article/2022/02/3-ways-to-increase-app-reliability-with-polly/"><meta property="article:section" content="article">
 <meta property="article:published_time" content="2022-02-03T08:30:00+00:00">
 <meta property="article:modified_time" content="2022-02-03T08:30:00+00:00">
-<meta property="article:section" content="k8s">
-<meta property="article:section" content="helm">
-<meta property="article:section" content="Github">
+<meta property="article:section" content="aspnetcore">
+<meta property="article:section" content="dotnet">
+<meta property="article:section" content="diagnostics">
 <meta property="article:published_time" content="2022-02-03 08:30:00 +0000 UTC">
 <link rel=alternate type=application/rss+xml href=https://im5tu.io/article/2022/02/3-ways-to-increase-app-reliability-with-polly/index.xml title="Stuart Blackler's Blog">
 <meta property="og:image" content="https://im5tu.io/img/profile.jpg">
@@ -224,7 +223,7 @@ static AsyncBulkheadPolicy GetBulkheadPolicy(int capacity, int queueLength)
 <hr>
 <div class=post-info>
 <p>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://im5tu.io/tags/k8s>k8s</a></span><span class=tag><a href=https://im5tu.io/tags/helm>helm</a></span><span class=tag><a href=https://im5tu.io/tags/github>Github</a></span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://im5tu.io/tags/aspnetcore>aspnetcore</a></span><span class=tag><a href=https://im5tu.io/tags/dotnet>dotnet</a></span><span class=tag><a href=https://im5tu.io/tags/diagnostics>diagnostics</a></span>
 </p>
 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1536 Words</p>
 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2022-02-03 08:30 +0000</p>
@@ -235,6 +234,12 @@ static AsyncBulkheadPolicy GetBulkheadPolicy(int capacity, int queueLength)
 <hr>
 </div>
 <div class=pagination__buttons>
+<span class="button previous">
+<a href=https://im5tu.io/article/2022/06/video-content-round-up-june-2022/>
+<span class=button__icon>←</span>
+<span class=button__text>Video Content Round Up: June 2022</span>
+</a>
+</span>
 <span class="button next">
 <a href=https://im5tu.io/article/2022/01/creating-a-private-helm-repository-using-github-pages-enterprise/>
 <span class=button__text>Creating a private helm repository using Github Pages Enterprise</span>
