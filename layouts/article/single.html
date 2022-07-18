@@ -50,11 +50,11 @@
                     {{ $posts := (index .Site.Taxonomies.series $series) }}
                     {{ range sort $posts.Pages "Date" }}
                         {{ $.Scratch.Add "total_page_num" 1 }}
-                        {{ if gt $.Date.Unix .Date.Unix }} 
+                        {{ if gt $.Date.Unix .Date.Unix }}
                             {{ $.Scratch.Add "cur_page_num" 1 }}
                         {{ end }}
                     {{ end }}
-                    
+
                     <section class="series series-header">
                         <p><i>This article is part of the <a href="#series">{{ index .Params.series 0 }}</a> series. You are reading part {{ $.Scratch.Get "cur_page_num" }} of {{ $.Scratch.Get "total_page_num" }}.</i></p>
                     </section>
@@ -65,8 +65,19 @@
 
         <hr />
 
-        <div>
-            <p><i>If you like the content please consider <a href="https://github.com/sponsors/Im5tu" target="_blank">sponsoring me on Github</a> and subscribing to my YouTube Channel, <a href="https://bit.ly/im5tu-yt" target="_blank">CodeWithStu</a>. Here you'll find different tip, tricks and tutorials using some of the latest technologies, in bitesize chunks.</i></p>
+        <div style="text-align: center;">
+            <p><i>To get all the latest news from me, <b><a href="https://news.codewithstu.tv">subscribe</a></b> to my new newsletter, <b>Observed!</b>. On my YouTube channel <b><a href="https://codewithstu.tv">CodeWithStu</a></b> you'll find different tip, tricks and tutorials using some of the latest technologies, in bitesize chunks.</i></p>
+        </div>
+
+        <hr />
+
+        <div id="promotions">
+            <!-- Apress -->
+            <a href="https://bit.ly/3IOmG1h" target="_blank">
+                <img src="https://www.ftjcfx.com/image-100677210-15265410" width="728" height="90" alt="Save now"/></a>
+            <!-- Namecheap -->
+            <a href="https://www.anrdoezrs.net/click-100677210-14326263" target="_blank">
+                <img src="https://www.lduhtrp.net/image-100677210-14326263" width="728" height="90" alt="Popular Domains for just 99 Cents at Namecheap!" /></a>
         </div>
 
         <hr />

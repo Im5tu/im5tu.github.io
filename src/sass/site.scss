@@ -27,7 +27,7 @@ $buttonColour: #e2e2e2;
     border-bottom-left-radius: 10px;
     transition: all 250ms ease;
     margin: -18px;
-    
+
     &:hover {
         cursor: pointer;
         opacity: .7;
@@ -59,7 +59,7 @@ pre:hover .copy-code-button {
 table {
     width: 100%;
     border-collapse: collapse;
-    
+
     & th {
         background-color: #cecece;
         color: #222;
@@ -101,8 +101,14 @@ h2, h3, h4, h5 {
     }
 }
 
+#promotions {
+    & img {
+        margin: 20px auto;
+    }
+}
+
 @media print {
-    .copy-code-button { 
+    .copy-code-button {
         display: none;
     }
 }

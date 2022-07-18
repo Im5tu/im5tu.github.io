@@ -18,7 +18,7 @@ ignorefiles = [ "content/draft/.*" ]
   dateformShort   = "Jan 2"
   dateformNum     = "2006-01-02"
   dateformNumTime = "2006-01-02 15:04 -0700"
-  
+
   # Subtitle for home
   homeSubtitle = "I'm Stu, welcome to my online home :)"
 
@@ -71,6 +71,11 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "/article/index.xml"
 
   [[menu.main]]
+    identifier = "news"
+    name       = "FREE Stuff!"
+    url        = "https://news.codewithstu.tv"
+
+  [[menu.main]]
     identifier = "sponsor"
     name       = "Sponsor"
     url        = "https://github.com/sponsors/Im5tu"
@@ -79,7 +84,7 @@ ignorefiles = [ "content/draft/.*" ]
     identifier = "twitter"
     name       = "Twitter"
     url        = "https://bit.ly/im5tu-tw"
-    
+
   [[menu.main]]
     identifier = "youtube"
     name       = "YouTube"
