@@ -28,12 +28,12 @@ ignorefiles = [ "content/draft/.*" ]
 
   # Social icons
   [params.portrait]
-    path = "/img/profile.jpg"
+    path = "/img/profile.png"
     alt = "Portrait"
 
   [[params.social]]
     name = "twitter"
-    url  = "https://bit.ly/im5tu-tw"
+    url  = "https://twitter.com/CodeWithStu"
 
   [[params.social]]
     name = "github"
@@ -45,7 +45,11 @@ ignorefiles = [ "content/draft/.*" ]
 
   [[params.social]]
     name = "youtube"
-    url  = "https://bit.ly/im5tu-youtube"
+    url  = "https://codewithstu.tv"
+
+  [[params.social]]
+    name = "discord"
+    url  = "https://discord.codewithstu.tv"
 
 [markup]
   [markup.highlight]
@@ -62,7 +66,7 @@ ignorefiles = [ "content/draft/.*" ]
 [menu]
   [[menu.main]]
     identifier = "articles"
-    name       = "Articles"
+    name       = "Blog"
     url        = "article/"
 
   [[menu.main]]
@@ -72,8 +76,8 @@ ignorefiles = [ "content/draft/.*" ]
 
   [[menu.main]]
     identifier = "news"
-    name       = "FREE Stuff!"
-    url        = "https://news.codewithstu.tv"
+    name       = "Discord"
+    url        = "https://discord.codewithstu.tv"
 
   [[menu.main]]
     identifier = "sponsor"
@@ -83,12 +87,12 @@ ignorefiles = [ "content/draft/.*" ]
   [[menu.main]]
     identifier = "twitter"
     name       = "Twitter"
-    url        = "https://bit.ly/im5tu-tw"
+    url        = "https://twitter.com/CodeWithStu"
 
   [[menu.main]]
     identifier = "youtube"
     name       = "YouTube"
-    url        = "https://bit.ly/im5tu-yt"
+    url        = "https://bit.ly/im5tu-yt-sub"
 
 [outputs]
   home = ["HTML", "RSS"]
