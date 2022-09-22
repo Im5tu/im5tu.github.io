@@ -30,7 +30,8 @@
                 sponsorLinkElement.onclick = function() {
                     gtag('event', 'sponsor_view', {
                         "company": sponsor.name,
-                        "url": sponsor.url
+                        "url": sponsor.url,
+                        "week": sponsor.week
                     });
                     return true;
                 }
