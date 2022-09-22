@@ -17,8 +17,8 @@
             var days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
             var weekNumber = Math.ceil(days / 7);
 
-            window.testJson = json;
-            console.log(json);
+            //window.testJson = json;
+            //console.log(json);
 
             var sponsorText = "This page is available to sponsor. <a href=\"/sponsorship\">Click Here</a> for more details!";
             var sponsorLink = "/sponsorship";
