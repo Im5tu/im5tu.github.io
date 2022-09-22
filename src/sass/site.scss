@@ -115,6 +115,16 @@ h2, h3, h4, h5 {
     font-size: 0.9em;
 }
 
+.flex-container {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.flex-box {
+    display: block;
+}
+
 .hidden {
     display: hidden;
 }
