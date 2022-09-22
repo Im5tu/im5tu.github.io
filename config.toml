@@ -20,7 +20,7 @@ ignorefiles = [ "content/draft/.*" ]
   dateformNumTime = "2006-01-02 15:04 -0700"
 
   # Subtitle for home
-  homeSubtitle = "I'm Stu, welcome to my online home :)"
+  homeSubtitle = "I'm Stu, welcome to my online home. You can connect with me on one of the socials below :)"
 
   # Logo
   [params.Logo]
@@ -51,6 +51,10 @@ ignorefiles = [ "content/draft/.*" ]
     name = "discord"
     url  = "https://discord.codewithstu.tv"
 
+  [[params.social]]
+    name = "facebook"
+    url  = "https://facebook.com/codewithstu"
+
 [markup]
   [markup.highlight]
     codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.
@@ -80,9 +84,9 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "https://discord.codewithstu.tv"
 
   [[menu.main]]
-    identifier = "sponsor"
-    name       = "Sponsor"
-    url        = "https://github.com/sponsors/Im5tu"
+    identifier = "sponsorship"
+    name       = "Sponsorship"
+    url        = "/sponsorship"
 
   [[menu.main]]
     identifier = "twitter"
