@@ -27,6 +27,18 @@
             if (sponsor !== undefined) {
                 sponsorText = "<b>Sponsored by: </b>" + sponsor.name + ". " + sponsor.message;
                 sponsorLink = sponsor.url;
+                sponsorLinkElement.onclick = function() {
+                    gtag('event', 'sponsor_view', {
+                        "company": sponsor.name,
+                        "url": sponsor.url
+                    });
+                    return true;
+                }
+            } else {
+                sponsorLinkElement.onclick = function() {
+                    gtag('event', 'sponsorship_view', {});
+                    return true;
+                }
             }
 
             sponsorLinkElement.href = sponsorLink;
