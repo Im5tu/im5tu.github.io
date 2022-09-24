@@ -66,6 +66,7 @@
             </div>
         </article>
 
+        {{ if not .Site.IsServer }}
         <hr />
 
         <div id="recommended">
@@ -77,6 +78,7 @@
                 <div class="flex-box"><a href="https://geni.us/4b2QcS" target="_blank" ref="nofollow"><img src="/img/affiliates/Book4.jpg" width="150" height="200" /></a></div>
             </div>
         </div>
+        {{ end }}
 
         <hr />
 
@@ -154,6 +156,7 @@
 
         <hr />
 
+        {{ if not .Site.IsServer }}
         <div id="promotions">
             <h4>Offers From My Partners</h4>
             <!-- Apress -->
@@ -169,5 +172,6 @@
         <hr />
 
         <script src="https://utteranc.es/client.js" repo="Im5tu/im5tu.github.io" issue-term="url" label="Comment" theme="photon-dark" crossorigin="anonymous" async></script>
+        {{ end }}
     </main>
 {{ end }}
