@@ -4,8 +4,7 @@
     "tags": ["aspnetcore", "dotnet", "xunit", "aws", "localstack", "YouTube"],
     "date": "2022-09-25T12:00:00+01:00",
     "categories": ["aspnetcore", "dotnet", "xunit", "aws", "localstack", "YouTube"],
-    "toc": true,
-    "draft": true
+    "toc": true
 }
 
 {{< youtube id="Ad7wruPBp3M" >}}
