@@ -5,8 +5,7 @@
     "date": "2022-10-04T12:00:00+01:00",
     "categories": ["aspnetcore", "dotnet", "YouTube"],
     "series": ["API Versioning"],
-    "toc": true,
-    "draft": true
+    "toc": true
 }
 
 {{< youtube id="YRJGKyzjFlY" >}}
