@@ -4,13 +4,13 @@
 <meta http-equiv=x-ua-compatible content="ie=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
 <meta name=author content="Stuart Blackler ">
-<meta name=description content="Learn how to setup ASPNET Core Versioning for MVC APIs">
+<meta name=description content="Learn how to setup ASPNET Core Versioning for Minimal APIs">
 <meta name=keywords content=",aspnetcore,dotnet,YouTube">
 <meta name=robots content="noodp">
 <meta name=theme-color content>
-<link rel=canonical href=https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/>
+<link rel=canonical href=https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/>
 <title>
-ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
+ASP.NET Core Versioning: Minimal APIs :: Stuart Blackler's Blog
 </title>
 <link href=https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css rel=stylesheet type=text/css>
 <link rel=stylesheet href=/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css>
@@ -21,26 +21,26 @@ ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
 <link rel=mask-icon href=/safari-pinned-tab.svg color>
 <link rel="shortcut icon" href=/favicon.ico>
 <meta name=msapplication-TileColor content>
-<meta itemprop=name content="ASP.NET Core Versioning: MVC APIs">
-<meta itemprop=description content="Learn how to setup ASPNET Core Versioning for MVC APIs"><meta itemprop=datePublished content="2022-09-30T12:00:00+01:00">
-<meta itemprop=dateModified content="2022-09-30T12:00:00+01:00">
-<meta itemprop=wordCount content="1328">
+<meta itemprop=name content="ASP.NET Core Versioning: Minimal APIs">
+<meta itemprop=description content="Learn how to setup ASPNET Core Versioning for Minimal APIs"><meta itemprop=datePublished content="2022-10-04T12:00:00+01:00">
+<meta itemprop=dateModified content="2022-10-04T12:00:00+01:00">
+<meta itemprop=wordCount content="1143">
 <meta itemprop=keywords content="aspnetcore,dotnet,YouTube,">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="ASP.NET Core Versioning: MVC APIs">
-<meta name=twitter:description content="Learn how to setup ASPNET Core Versioning for MVC APIs">
-<meta property="og:title" content="ASP.NET Core Versioning: MVC APIs">
-<meta property="og:description" content="Learn how to setup ASPNET Core Versioning for MVC APIs">
+<meta name=twitter:title content="ASP.NET Core Versioning: Minimal APIs">
+<meta name=twitter:description content="Learn how to setup ASPNET Core Versioning for Minimal APIs">
+<meta property="og:title" content="ASP.NET Core Versioning: Minimal APIs">
+<meta property="og:description" content="Learn how to setup ASPNET Core Versioning for Minimal APIs">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/"><meta property="article:section" content="article">
-<meta property="article:published_time" content="2022-09-30T12:00:00+01:00">
-<meta property="article:modified_time" content="2022-09-30T12:00:00+01:00">
-<meta property="og:see_also" content="https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/">
+<meta property="og:url" content="https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/"><meta property="article:section" content="article">
+<meta property="article:published_time" content="2022-10-04T12:00:00+01:00">
+<meta property="article:modified_time" content="2022-10-04T12:00:00+01:00">
+<meta property="og:see_also" content="https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/">
 <meta property="article:section" content="aspnetcore">
 <meta property="article:section" content="dotnet">
 <meta property="article:section" content="YouTube">
-<meta property="article:published_time" content="2022-09-30 12:00:00 +0100 +0100">
-<link rel=alternate type=application/rss+xml href=https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/index.xml title="Stuart Blackler's Blog">
+<meta property="article:published_time" content="2022-10-04 12:00:00 +0100 +0100">
+<link rel=alternate type=application/rss+xml href=https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/index.xml title="Stuart Blackler's Blog">
 <meta property="og:image" content="https://im5tu.io/img/profile.png">
 <meta property="og:site_name" content="Stuart Blackler's Blog">
 <link rel=alternate type=application/rss+xml href=/index.xml title="Stuart Blackler's Blog">
@@ -85,12 +85,12 @@ ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
 <div id=sponsorMessage class=hidden></div>
 </a>
 <div class=post-info>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 minutes
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6 minutes
 </p>
 </div>
 <article>
 <h1 class=post-title>
-<a href=https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/>ASP.NET Core Versioning: MVC APIs</a>
+<a href=https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/>ASP.NET Core Versioning: Minimal APIs</a>
 </h1>
 <hr>
 <aside id=toc>
@@ -99,11 +99,10 @@ ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
 <ul>
 <li><a href=#versioning-setup>Versioning Setup</a></li>
 <li><a href=#versioning-strategy>Versioning Strategy</a></li>
-<li><a href=#adding-versions-to-mvc-controllers>Adding versions to MVC controllers</a></li>
+<li><a href=#adding-versions-to-minimal-apis>Adding versions to Minimal APIs</a></li>
 <li><a href=#versioning-via-headers>Versioning via Headers</a></li>
 <li><a href=#versioning-via-querystrings>Versioning via QueryStrings</a></li>
 <li><a href=#versioning-via-urls>Versioning via URLs</a></li>
-<li><a href=#accessing-versioning-information>Accessing Versioning Information</a></li>
 <li><a href=#other-versioning-options>Other versioning options</a></li>
 </ul>
 </nav>
@@ -111,7 +110,7 @@ ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
 <hr>
 <div class=post-content>
 <section class="series series-header">
-<p><i>This article is part of the <a href=#series>API Versioning</a> series. You are reading part 1 of 2.</i></p>
+<p><i>This article is part of the <a href=#series>API Versioning</a> series. You are reading part 2 of 2.</i></p>
 </section>
 <div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
 <iframe src=https://www.youtube.com/embed/YRJGKyzjFlY style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
@@ -124,74 +123,57 @@ ASP.NET Core Versioning: MVC APIs :: Stuart Blackler's Blog
 <li>Querystring</li>
 <li>Urls</li>
 </ul>
-<p>I don’t believe there is a right way to do versioning, so I am going to show you all three approaches in this article and let you decide which one is best for your scenario. The article specifically looks at ASP.NET Core MVC APIs.</p>
+<p>I don’t believe there is a right way to do versioning, so I am going to show you all three approaches in this article and let you decide which one is best for your scenario. The article specifically looks at ASP.NET Core Minimal APIs. For MVC APIs, go <a href=/article/2022/09/asp.net-core-versioning-mvc-apis/>here</a>.</p>
 <h2 id=versioning-setup>Versioning Setup</h2>
-<p>Depending on whether we are working with Minimal APIs or MVC depends on which NuGet package we need to add. For MVC based APIs we need to add the <code>Asp.Versioning.Mvc</code> package from NuGet.</p>
+<p>Depending on whether we are working with Minimal APIs or MVC depends on which NuGet package we need to add. For MVC based APIs we need to add the <code>Asp.Versioning.Http</code> package from NuGet.</p>
 <p>It’s worth noting that the name of this package has changed from the previous <code>Microsoft.AspNetCore.Mvc.Versioning</code> package because the main contributor to the repository has now left Microsoft and can’t reuse the Microsoft prefix. You can read more about this <a href=https://github.com/dotnet/aspnet-api-versioning/discussions/807>here</a>.</p>
 <p>Once we’ve add the correct NuGet package for our API type, we can head over to our service collection and call <code>AddApiVersioning</code> - we will want the options later on, so I’m going to setup that lambda function now:</p>
 <pre><code class=language-csharp>using Asp.Versioning;
 using Asp.Versioning.Conventions;
 
+var version1 = new ApiVersion(1);
+var version2 = new ApiVersion(2);
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
 builder.Services.AddApiVersioning(options =&gt;
 {
-    // We will fill this in later on
-})
-.AddMvc();
+    // We will change this later on
+});
 
 var app = builder.Build();
 
-app.MapControllers();
+app.MapGet(&quot;weather&quot;, (HttpContext context) =&gt;
+{
+    var apiVersion = context.GetRequestedApiVersion();
+
+    return &quot;Version &quot; + apiVersion?.MajorVersion?.ToString();
+});
+
 app.Run();
 </code></pre>
-<p>The call to <code>AddMvc</code> at the end of <code>AddApiVersioning</code> is extremely important as without it, MVC does not know how to link the versioning information.</p>
 <h2 id=versioning-strategy>Versioning Strategy</h2>
 <p>One minor thing that you need to consider before you is what style of versioning numbers you’re going to have. For example, I use a major only strategy in which I use a single number to describe a version, eg: v1. Another common versioning strategy is to use a major/minor setup, eg: 1.0.</p>
 <p>You’ll also need to consider how much a version covers for an API. For me, I have versioning setup on a per endpoint basis, but I have also seen all endpoints on an API be versioned as one.</p>
 <p>There is no right strategy for you to pick here, it all depends on your requirements and what you think is easiest for you to manage vs the experience for your consumers. For the rest of this article, I am going to use my standard setup of major-only versioning on a per endpoint basis.</p>
-<h2 id=adding-versions-to-mvc-controllers>Adding versions to MVC controllers</h2>
-<p>With a controller, we can add the version information either at the class level meaning that the api version will apply to all of the actions in that controller (and any derived implementations) as well versioning a specific action.</p>
-<p>To version an entire controller, add the attribute <code>ApiVersion</code> passing in the version that you want:</p>
-<pre><code class=language-csharp>[ApiController]
-[ApiVersion( 1.0 )]
-[ApiVersion( 2.0 )]
-[Route(&quot;weather&quot;)]
-public class WeatherController : ControllerBase
-{
-    [HttpGet]
-    public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-
-    [HttpGet, MapToApiVersion( 2.0 )]
-    public string GetV2( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-}
+<h2 id=adding-versions-to-minimal-apis>Adding versions to Minimal APIs</h2>
+<p>The setup for a minimal API is a bit different to what we would normally do in the MVC world. First we need to create a version set which tells the API versioning subsystem which versions are available to be used. Here we can set some common options like whether to report API Versions or not:</p>
+<pre><code class=language-csharp>var app = builder.Build();
+var versionSet = app.NewApiVersionSet()
+                    .HasApiVersion(version1)
+                    .HasApiVersion(version2)
+                    .Build();
 </code></pre>
-<p>To version a single endpoint, add the same <code>ApiVersion</code> attribute and version number to endpoint you want versioned:</p>
-<pre><code class=language-csharp>[ApiController]
-[Route(&quot;weather&quot;)]
-public class WeatherController : ControllerBase
+<p>From there we are versioning each endpoint by first calling <code>WithApiVersionSet</code> passing in our version set, before either mapping it to a specific version with <code>MapToApiVersion</code> or making it version agnostic with <code>.IsApiVersionNeutral()</code>:</p>
+<pre><code class=language-csharp>app.MapGet(&quot;weather&quot;, (HttpContext context) =&gt;
 {
-    [HttpGet, ApiVersion( 1.0 )]
-    public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
+    var apiVersion = context.GetRequestedApiVersion();
 
-    [HttpGet, ApiVersion( 2.0 )]
-    public string GetV2( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-}
+    return &quot;Version &quot; + apiVersion?.MajorVersion?.ToString();
+})
+.WithApiVersionSet(versionSet)
+.HasApiVersions(new [] {version1, version2});
 </code></pre>
-<p>In order to depreciate a version we can use a parameter on the <code>ApiVersion</code> attribute called <code>Deprecated</code> to tell our users/documentation that a specific version of an API has been deprecated:</p>
-<pre><code class=language-csharp>[ApiController]
-[ApiVersion(1.0, Depreciated = true)]
-[ApiVersion(2.0)]
-[Route(&quot;weather&quot;)]
-public class WeatherController : ControllerBase
-{
-    [HttpGet]
-    public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-
-    [HttpGet, MapToApiVersion( 2.0 )]
-    public string GetV2( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-}
-</code></pre>
+<p>Once this setup is done, for the most part, the api versioning setup is exactly the same in terms of where to get the api version from.</p>
 <h2 id=versioning-via-headers>Versioning via Headers</h2>
 <p>The first way that we can read the version of the request is to use headers. When using a header, we have two approaches that we can use:</p>
 <ul>
@@ -224,19 +206,15 @@ public class WeatherController : ControllerBase
 <p>You can verify this in postman:</p>
 <p><img src=/img/api-versioning/querystring.png alt="Verification in Postman using a querystring"></p>
 <h2 id=versioning-via-urls>Versioning via URLs</h2>
-<p>The last major way of adding in versioning information is to use URLs. To add the version information to the URL we need to modify the route itself. Depending on your setup, this might be via the <code>Route</code> attribute or via the one of the <code>HTTP</code> attributes like <code>HTTPGet</code>. We add a new segment to our URL called <code>version</code> limited to the type <code>apiVersion</code>. This is a special validation that’s created by the versioning package to ensure that correct values are passed in and the correct actions are called.</p>
-<pre><code class=language-csharp>[ApiController]
-[ApiVersion(1.0)]
-[ApiVersion(2.0)]
-[Route(&quot;v{version:apiVersion}/weather&quot;)]
-public class WeatherController : ControllerBase
+<p>The last major way of adding in versioning information is to use URLs. To add the version information to the URL we need to modify the route itself. Instead of changing an attribute like we would in MVC, we just need to edit the route information passed into MapGet, MapPut etc. We put in the new path segment in the exact same way as we did for the MVC route segements, ie: we add a new segment to our URL called <code>version</code> limited to the type <code>apiVersion</code>. This is a special validation that’s created by the versioning package to ensure that correct values are passed in and the correct actions are called:</p>
+<pre><code class=language-csharp>app.MapGet(&quot;v{version:apiVersion}/weather&quot;, (HttpContext context) =&gt;
 {
-    [HttpGet]
-    public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
+    var apiVersion = context.GetRequestedApiVersion();
 
-    [HttpGet, MapToApiVersion( 2.0 )]
-    public string GetV2( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-}
+    return &quot;Version &quot; + apiVersion?.MajorVersion?.ToString();
+})
+.WithApiVersionSet(versionSet)
+.HasApiVersions(new [] {version1, version2});
 </code></pre>
 <p>Once this is setup for your application, the last bit that we need to do is change the ApiVersionReader in the versioning options. We use the type <code>UrlSegementApiVersionReader</code> to make the package read from the route data instead.</p>
 <pre><code class=language-csharp>builder.Services.AddApiVersioning(options =&gt;
@@ -246,16 +224,6 @@ public class WeatherController : ControllerBase
 </code></pre>
 <p>You can verify this in postman:</p>
 <p><img src=/img/api-versioning/url.png alt="Verification in Postman using a route parameter"></p>
-<h2 id=accessing-versioning-information>Accessing Versioning Information</h2>
-<p>For any of the versioning strategies that we’ve just been through, we may come across scenarios where we need to access the version that’s been requested by the user. One way to access this information is to go through the HTTPContext.</p>
-<p>On each HTTP Context instance there is an extension method that we can invoke called <code>GetRequestedApiVersion</code>. If there is a version requested by the user, the method returns this as a <code>ApiVersion</code> instance, otherwise it returns null:</p>
-<pre><code class=language-csharp>[HttpGet]
-public string Get() =&gt; &quot;Version &quot; + Context.GetRequestedApiVersion()?.ToString();
-</code></pre>
-<p>Alternatively, for we can inject the version as a parameter:</p>
-<pre><code class=language-csharp>[HttpGet]
-public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
-</code></pre>
 <h2 id=other-versioning-options>Other versioning options</h2>
 <p>There are other things that we can do with this package such as specifying the default version when one is not specified and reporting the supported and deprecated versions in our responses.</p>
 <p>To set the default version, we would set the option <code>AssumeDefaultVersionWhenUnspecified</code> to <code>true</code> and then <code>DefaultApiVersion</code> to the default version that you wish to be assumed. Note, that this will only work if you are using the header or querystring versioning strategies.</p>
@@ -278,16 +246,16 @@ public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
 <a name=series></a>
 <b>More in the API Versioning series:</b>
 <ol>
-<li>ASP.NET Core Versioning: MVC APIs <i>(This article)</i></li>
-<li><a href=/article/2022/10/asp.net-core-versioning-minimal-apis/>ASP.NET Core Versioning: Minimal APIs</a></li>
+<li><a href=/article/2022/09/asp.net-core-versioning-mvc-apis/>ASP.NET Core Versioning: MVC APIs</a></li>
+<li>ASP.NET Core Versioning: Minimal APIs <i>(This article)</i></li>
 </ol>
 <p><a href=/article>View All Articles</a></p>
 <hr>
 <p>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://im5tu.io/tags/aspnetcore>aspnetcore</a></span><span class=tag><a href=https://im5tu.io/tags/dotnet>dotnet</a></span><span class=tag><a href=https://im5tu.io/tags/youtube>YouTube</a></span>
 </p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1328 Words</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2022-09-30 11:00 +0000</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1143 Words</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2022-10-04 11:00 +0000</p>
 </div>
 <div class=pagination>
 <div class=pagination__title>
@@ -295,15 +263,9 @@ public string Get( ApiVersion version ) =&gt; &quot;Version &quot; + version;
 <hr>
 </div>
 <div class=pagination__buttons>
-<span class="button previous">
-<a href=https://im5tu.io/article/2022/10/asp.net-core-versioning-minimal-apis/>
-<span class=button__icon>←</span>
-<span class=button__text>ASP.NET Core Versioning: Minimal APIs</span>
-</a>
-</span>
 <span class="button next">
-<a href=https://im5tu.io/article/2022/09/pro-testing-with-xunit-localstack/>
-<span class=button__text>Pro Testing with Xunit & Localstack</span>
+<a href=https://im5tu.io/article/2022/09/asp.net-core-versioning-mvc-apis/>
+<span class=button__text>ASP.NET Core Versioning: MVC APIs</span>
 <span class=button__icon>→</span>
 </a>
 </span>
