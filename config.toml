@@ -89,6 +89,11 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "/sponsorship"
 
   [[menu.main]]
+    identifier = "mastodon"
+    name       = "Mastodon"
+    url        = "https://dotnet.social/@codewithstu"
+
+  [[menu.main]]
     identifier = "twitter"
     name       = "Twitter"
     url        = "https://twitter.com/CodeWithStu"
