@@ -79,7 +79,7 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "/article/index.xml"
 
   [[menu.main]]
-    identifier = "news"
+    identifier = "discord"
     name       = "Discord"
     url        = "https://discord.codewithstu.tv"
 
@@ -89,9 +89,9 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "/sponsorship"
 
   [[menu.main]]
-    identifier = "mastodon"
-    name       = "Mastodon"
-    url        = "https://dotnet.social/@codewithstu"
+    identifier = "newsletter"
+    name       = "Newsletter"
+    url        = "https://news.codewithstu.tv"
 
   [[menu.main]]
     identifier = "twitter"
@@ -101,7 +101,7 @@ ignorefiles = [ "content/draft/.*" ]
   [[menu.main]]
     identifier = "youtube"
     name       = "YouTube"
-    url        = "https://bit.ly/im5tu-yt-sub"
+    url        = "https://codewithstu.tv"
 
 [outputs]
   home = ["HTML", "RSS"]
