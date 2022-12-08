@@ -69,13 +69,13 @@ ignorefiles = [ "content/draft/.*" ]
 
 [menu]
   [[menu.main]]
-    identifier = "articles"
+    identifier = "blog"
     name       = "Blog"
     url        = "article/"
 
   [[menu.main]]
     identifier = "rss"
-    name       = "RSS Feed"
+    name       = "RSS"
     url        = "/article/index.xml"
 
   [[menu.main]]
@@ -84,9 +84,9 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "https://discord.codewithstu.tv"
 
   [[menu.main]]
-    identifier = "sponsorship"
-    name       = "Sponsorship"
-    url        = "/sponsorship"
+    identifier = "patreon"
+    name       = "Patreon"
+    url        = "https://www.patreon.com/CodeWithStu"
 
   [[menu.main]]
     identifier = "newsletter"
