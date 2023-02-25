@@ -1,14 +1,15 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-04-21T18:19:47Z",
-   "description": "This post describes how to enable HSTS in ASP.Net MVC using an ActionFilter ",
-   "tags": [ "csharp", "dotnet", "mvc" ],
-   "title": "Enabling HTTP Strict Transport Security HSTS via ASP Net MVC ActionFilters"
+    "categories": [ "Development" ],
+    "date": "2014-04-21T18:19:47Z",
+    "description": "This post describes how to enable HSTS in ASP.Net MVC using an ActionFilter ",
+    "tags": [ "csharp", "dotnet", "mvc" ],
+    "title": "Enabling HTTP Strict Transport Security HSTS via ASP Net MVC ActionFilters",
+    "toc": true
 }
 
 After reading [Troy Hunt's](http://www.troyhunt.com/) free ebook on the [OWASP Top 10 for .Net Developers](http://www.troyhunt.com/2011/12/free-ebook-owasp-top-10-for-net.html), I discovered an additional mechanism to help developers secure their websites. That mechanism is HTTP Strict Transport Security.<!--more-->
 
->HTTP Strict Transport Security (HSTS) is an opt-in security enhancement that is specified by a web application through the use of a special response header. Once a supported browser receives this header that browser will prevent any communications from being sent over HTTP to the specified domain and will instead send all communications over HTTPS. It also prevents HTTPS click through prompts on browsers. The specification has been released and published end of 2012 as [RFC 6797](https://tools.ietf.org/html/rfc6797). [Source](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security)  
+>HTTP Strict Transport Security (HSTS) is an opt-in security enhancement that is specified by a web application through the use of a special response header. Once a supported browser receives this header that browser will prevent any communications from being sent over HTTP to the specified domain and will instead send all communications over HTTPS. It also prevents HTTPS click through prompts on browsers. The specification has been released and published end of 2012 as [RFC 6797](https://tools.ietf.org/html/rfc6797). [Source](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security)
 
 There are three main categories of attacks that are addressed in this specification: Passive Network Attacks, Active Network Attacks and Web Site Development & Deployment Bugs. These are present in [RFC 6797 - Section 2.3.1](https://tools.ietf.org/html/rfc6797) but are re-produced here.
 
@@ -38,11 +39,11 @@ There are three main categories of attacks that are addressed in this specificat
    as session identifiers are often stored in non-Secure cookies to
    permit interoperability with versions of the service offered over
    insecure transport ("Secure cookies" are those cookies containing the
-   "Secure" attribute [RFC6265]).  For example, if the session
+    "Secure" attribute [RFC6265]).  For example, if the session
    identifier for a web site (an email service, say) is stored in a
    non-Secure cookie, it permits an attacker to hijack the user's
    session if the user's UA makes a single insecure HTTP request to the
-   site. 
+   site.
 
 ## Active Network Attacks
 
@@ -93,12 +94,12 @@ Alternatively, if you wish the security to cover all sub-domains of your site, t
 
 *Where 300 is, replace with the duration in seconds.*
 
-
 ## Implementing HSTS as an action filter
 
 The implementation that I provide below **SHOULD** be used alongside the `RequireHttpsAttribute` in order to have the specification fully implemented. The reason is that the header will only be sent over a secure connection, if not already present. Furthermore, the `RequireHttpsAttribute` already takes care of the redirection to a secure connection, so this is not something that I have to worry about implementing correctly.
 
 ## Browser support
+
 - Chromium and Google Chrome since version 4.0.211.0
 - Firefox since version 4; with Firefox 17, Mozilla integrates a list of websites supporting HSTS
 - Opera since version 12

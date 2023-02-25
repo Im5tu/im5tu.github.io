@@ -1,9 +1,9 @@
 {
-   "categories": [ "Development", "Life", "News" ],
-   "date": "2013-06-10T20:14:39Z",
-   "description": "A bit about how I managed to pass the 70-483 Programming in C# exam to offically become a Microsoft Certifed Professional.",
-   "tags": [ "csharp", "dotnet", "news" ],
-   "title": "Becoming An MCP"
+    "categories": [ "Development", "Life", "News" ],
+    "date": "2013-06-10T20:14:39Z",
+    "description": "A bit about how I managed to pass the 70-483 Programming in C# exam to offically become a Microsoft Certifed Professional.",
+    "tags": [ "csharp", "dotnet", "news" ],
+    "title": "Becoming An MCP"
 }
 
 As the title suggests, today I passed the 70-483 Programming in C# exam to offically become a Microsoft Certifed Professional.

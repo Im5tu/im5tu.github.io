@@ -1,15 +1,16 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-06-24T09:21:19Z",
-   "description": "This post details the Expressions that can be reduced in the System.Linq.Expressions namespace.",
-   "tags": [ "csharp", "dotnet", "expressions" ],
-   "title": "Finding Reducible Expressions"
+    "categories": [ "Development" ],
+    "date": "2014-06-24T09:21:19Z",
+    "description": "This post details the Expressions that can be reduced in the System.Linq.Expressions namespace.",
+    "tags": [ "csharp", "dotnet", "expressions" ],
+    "title": "Finding Reducible Expressions",
+    "toc": true
 }
 
 Today I just wanted to share a quick note regarding [a Stack Overflow answer](http://stackoverflow.com/a/2040097/315711) that I recently came across. In the answer the author explains that a call to `Expression.CanReduce` will typically return false, while `Expression.Reduce()` will return the current expression. The author continues to state that one of the types that overrides `Expression.Reduce()` and `Expression.CanReduce` is `MemberInitExpression`.
 <!--more-->
 
-I wanted to find out when `Expression.CanReduce` would actually return `true`. I discovered the [173 page Expression Tree Specification](http://www.codeplex.com/Download?ProjectName=dlr&DownloadId=246540) which provides an additional insight to `CanReduce` and `Reduce()`. 
+I wanted to find out when `Expression.CanReduce` would actually return `true`. I discovered the [173 page Expression Tree Specification](http://www.codeplex.com/Download?ProjectName=dlr&DownloadId=246540) which provides an additional insight to `CanReduce` and `Reduce()`.
 
 ### CanReduce
 
@@ -30,7 +31,7 @@ I wanted to find out when `Expression.CanReduce` would actually return `true`. I
 >Typically the result comprises only common ET types, ET nodes suitable for passing to any compilation or ET processing code.  Usually the result is only partially reduced (that is, only the root node).  You'll probably need to further reduce some nodes.
 
 >Signature:
- 
+
     public virtual Expression Reduce();
 
 ### Reducible Types Inside System.Linq.Expressions

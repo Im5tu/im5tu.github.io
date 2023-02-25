@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-11T20:50:11+01:00",
-   "description": "A handy URL Rewrite snippet to mark cookies as samesite.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Ensuring samesite cookies with URL Rewrite"
+    "categories": [ "Development" ],
+    "date": "2017-06-11T20:50:11+01:00",
+    "description": "A handy URL Rewrite snippet to mark cookies as samesite.",
+    "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Ensuring samesite cookies with URL Rewrite",
+    "toc": true
 }
 
 In this article, we will increase our websites level of protecting against Cross-Site Request Forgery and Cross-Site Script Inclusion attacks by appending an additional modifier to the `Set-Cookie` HTTP header.

@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-05T15:00:59+01:00",
-   "description": "A quick explanition of why consistent urls are important and how to achieve them with url rewriting.",
-   "tags": [ "IIS", "Url Rewrite", "SEO", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Removing trailing slashes with URL Rewrite"
+    "categories": [ "Development" ],
+    "date": "2017-06-05T15:00:59+01:00",
+    "description": "A quick explanition of why consistent urls are important and how to achieve them with url rewriting.",
+    "tags": [ "IIS", "Url Rewrite", "SEO", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Removing trailing slashes with URL Rewrite",
+    "toc": true
 }
 
 In the [previous post](/article/2017/06/canonical-host-urls-with-url-rewrite/), I explained why canonical urls are important and how to enforce them . In this article, I will show you how to have a canonical host url.

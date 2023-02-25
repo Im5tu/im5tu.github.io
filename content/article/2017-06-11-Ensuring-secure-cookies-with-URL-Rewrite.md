@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-11T20:38:07+01:00",
-   "description": "A handy URL Rewrite snippet to mark cookies as secure.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Ensuring secure cookies with URL Rewrite"
+    "categories": [ "Development" ],
+    "date": "2017-06-11T20:38:07+01:00",
+    "description": "A handy URL Rewrite snippet to mark cookies as secure.",
+    "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Ensuring secure cookies with URL Rewrite",
+    "toc": true
 }
 
 In this article, we will take a look at secure cookies, that is by appending an additional modifier to the `Set-Cookie` HTTP header.

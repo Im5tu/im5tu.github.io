@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-04-04T10:38:38+01:00",
-   "description": "",
-   "tags": [ "dotnet", "public speaking" ],
-   "title": "Talks: Episerver Content Providers & Lightening Talk"
+    "categories": [ "Development" ],
+    "date": "2017-04-04T10:38:38+01:00",
+    "description": "",
+    "tags": [ "dotnet", "public speaking" ],
+    "title": "Talks: Episerver Content Providers & Lightening Talk",
+    "toc": true
 }
 
 On the 23rd of March, I had the opportunity to present at the Episerver meetup in Redweb's London offices. I ended up giving two talks: Episerver Content Providers & a 5 minute lightening talk.

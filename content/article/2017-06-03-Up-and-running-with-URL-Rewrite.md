@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-03T15:00:51+01:00",
-   "description": "A quick introduction to URL Rewrite module for IIS and a snippet from going from HTTP to HTTPS.",
-   "tags": [ "IIS", "Url Rewrite", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Up and running with URL Rewrite - going from HTTP to HTTPS"
+    "categories": [ "Development" ],
+    "date": "2017-06-03T15:00:51+01:00",
+    "description": "A quick introduction to URL Rewrite module for IIS and a snippet from going from HTTP to HTTPS.",
+    "tags": [ "IIS", "Url Rewrite", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Up and running with URL Rewrite - going from HTTP to HTTPS",
+    "toc": true
 }
 
 In this series, I am going to take you through a few `web.config` snippets that have come in handy for me when using URL Rewrite on IIS. Firstly, I am going to introduce the URL Rewrite module then show a sample of going from HTTP to HTTPS.

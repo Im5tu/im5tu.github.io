@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2015-08-05T18:37:26Z",
-   "description": "A discussion on technical debt including strategies to help avoid high levels of technical debt.",
-   "tags": [ "Clean Code" ],
-   "title": "Technical Debt: How We Get It And How To Avoid It"
+    "categories": [ "Development" ],
+    "date": "2015-08-05T18:37:26Z",
+    "description": "A discussion on technical debt including strategies to help avoid high levels of technical debt.",
+    "tags": [ "Clean Code" ],
+    "title": "Technical Debt: How We Get It And How To Avoid It",
+    "toc": true
 }
 
 This post started as a rebuttal to Ralf Westphal's [blog](http://geekswithblogs.net/theArchitectsNapkin) and his post, "[There is no such thing as technical debt](http://geekswithblogs.net/theArchitectsNapkin/archive/2015/07/22/there-is-no-such-thing-as-technical-debt.aspx)". There are many points of view on the subject covered by various people such as [Uncle Bob](https://sites.google.com/site/unclebobconsultingllc/a-mess-is-not-a-technical-debt) and [Martin Fowler](http://martinfowler.com/bliki/TechnicalDebt.html), but I thought it might be insightful to show how my team manages our code base.<!--more-->
@@ -16,7 +17,7 @@ Before I talk about how we get into technical debt, I'd like to first remind you
 
 ## Getting into debt
 
-It's frighteningly easy to get yourself into technical debt, but a lot harder to get out of. The most common ways that I have seen so far in my career are: 
+It's frighteningly easy to get yourself into technical debt, but a lot harder to get out of. The most common ways that I have seen so far in my career are:
 
 - Lack of knowledge
 - Lack of time or resource (often driven by business)
@@ -29,13 +30,13 @@ Lack of time or resource is unfortunately bestowed upon us from the business, af
 
 Not following best practices is again, mostly the fault of the developer. At the end of the day, we, the developer write the code so it is our responsibility to write it properly. In the cases where business is the blocker, it is time that we as developers began to fight those long hard battles in our favour. This is the exact same thing that the developers at Microsoft have done. Their drive came from the bottom up, not top down.
 
-Lastly, MVP's or minimally viable products. The concept is absolutely solid when combined with other practises such as TDD/BDD*. One of the key identifiers with this entrant is the question of: "Should I do this because of feature x which **should** be coming in the next 3 weeks, but it will add half a day to the implementation?". Note the emphasis on **should**. A sprints backlog is volatile and subject to the abuse of the business at any given moment. If you keep the code as is, you run the risk of the feature costing more time in the future. On the contrary, the future feature may never be needed because of a changing requirement therefore saving you time. 
+Lastly, MVP's or minimally viable products. The concept is absolutely solid when combined with other practises such as TDD/BDD*. One of the key identifiers with this entrant is the question of: "Should I do this because of feature x which **should** be coming in the next 3 weeks, but it will add half a day to the implementation?". Note the emphasis on **should**. A sprints backlog is volatile and subject to the abuse of the business at any given moment. If you keep the code as is, you run the risk of the feature costing more time in the future. On the contrary, the future feature may never be needed because of a changing requirement therefore saving you time.
 
 *\*I believe that all code should be tested, even if it is a prototype/MVP. You never know whether or not it will be used again. This is one major pain point of many that i've experienced recently as I've picked up legacy projects.*
 
 ## When technical debt is too high
 
-There are a few signs of high technical debt, which are: 
+There are a few signs of high technical debt, which are:
 
 - It's hard to add new functionality
 - The code resembles a spaghetti junction
@@ -45,7 +46,7 @@ Typically, my first two points are attributed to developers not having enough kn
 
 By effectively testing your code, I mean that you should be able to write all types of test against the code you write: Unit, Component and Integration. If you can only write integration tests for the code you have just written, then you likely need to change your code - Unit testing a database layer (specifically the ORM, not physical IO) is usually quite trivial if the code is structured correctly. That said, we are often stopped from unit testing when using certain frameworks such as Microsoft Azure Service Bus due to the lack of abstractions the library provides. In this case, integration tests are often the best that we can do - but at least it is under test.
 
-The key point to make is that if your future self (or colleague) will have trouble maintaining the code you have just written, then we haven't coded it well enough. If you have to write comments then you are probably doing it wrong - unless there is a concious design decision. [Tommy Long](https://twitter.com/smudge202) quite accurately reflects some of my own thoughts on comments in [his post about comments](http://blog.devbot.net/conventions-comments/#code). 
+The key point to make is that if your future self (or colleague) will have trouble maintaining the code you have just written, then we haven't coded it well enough. If you have to write comments then you are probably doing it wrong - unless there is a concious design decision. [Tommy Long](https://twitter.com/smudge202) quite accurately reflects some of my own thoughts on comments in [his post about comments](http://blog.devbot.net/conventions-comments/#code).
 
 ## Strategies to avoid high levels of technical debt
 
@@ -64,7 +65,7 @@ If we have made a shortcut for an MVP or have identified a piece of legacy code 
 
 Before each sprint, we asses the priorities of the business against our current backlog. Once the main priorities have been assigned work items within the sprint, we fill up the remaining space with technical debt. The order in which technical debt and features are tackled within a sprint depends on the business priorities. For example: feature/improvement A must be completed at all costs. As my colleague HerecyDev points out, you should be completing all work within a sprint and not over-committing. I personally favour tackling features first so the business gains value, unless tackling a piece of technical debt can improve the efficiency of implementing a feature. It might not always be possible to add technical debt every sprint, but so long as that is the minority of cases you should be perfectly fine.
 
-With legacy projects, the primary focus should be getting unit tests in place (this might start as an integration test). This ensures that you will not break any existing functionality while you make the code better and flag work items for the future. 
+With legacy projects, the primary focus should be getting unit tests in place (this might start as an integration test). This ensures that you will not break any existing functionality while you make the code better and flag work items for the future.
 
 ### Closing words
 

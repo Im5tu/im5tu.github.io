@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2015-02-17T18:37:00Z",
-   "description": "Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.",
-   "tags": [ "azure", "powershell" ],
-   "title": "3 Easy Steps To Configuring Azure With Powershell"
+    "categories": [ "Development" ],
+    "date": "2015-02-17T18:37:00Z",
+    "description": "Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.",
+    "tags": [ "azure", "powershell" ],
+    "title": "3 Easy Steps To Configuring Azure With Powershell",
+    "toc": true
 }
 
 Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.
@@ -34,6 +35,7 @@ Using the file downloading in the previous step, we can import the settings usin
 $settingsFile = "<pathToFile>"
 Import-AzurePublishSettingsFile -PublishSettingsFile $settingsFile
 ```
+
 This command sets up all of the available subscriptions for you in a nice easy manner.
 
 ## Step 3 - Verify

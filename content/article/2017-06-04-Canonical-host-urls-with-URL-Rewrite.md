@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-04T15:00:55+01:00",
-   "description": "A quick explanition of canonical host urls and how to achieve them with url rewriting.",
-   "tags": [ "IIS", "Url Rewrite", "SEO", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Canonical host urls with URL Rewrite"
+    "categories": [ "Development" ],
+    "date": "2017-06-04T15:00:55+01:00",
+    "description": "A quick explanition of canonical host urls and how to achieve them with url rewriting.",
+    "tags": [ "IIS", "Url Rewrite", "SEO", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Canonical host urls with URL Rewrite",
+    "toc": true
 }
 
 In the [previous post](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/), I gave a brief intoduction to URL Rewriting and showed you how to get from HTTP to HTTPS. In this article, I will show you how to have a canonical host url.<!-- more -->

@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development", "Building a blog" ],
-   "date": "2016-11-19T08:01:38Z",
-   "description": "Setting up a frontend pipeline powered by yarn & gulp.",
-   "tags": ["hugo", "blog", "js", "yarn", "node"],
-   "series": ["Building A Blog With Hugo"],
-   "title": "Blog Building - Part 4 - Frontend"
+    "categories": [ "Development", "Building a blog" ],
+    "date": "2016-11-19T08:01:38Z",
+    "description": "Setting up a frontend pipeline powered by yarn & gulp.",
+    "tags": ["hugo", "blog", "js", "yarn", "node"],
+    "series": ["Building A Blog With Hugo"],
+    "title": "Blog Building - Part 4 - Frontend",
+    "toc": true
 }
 
 So far we have built a very basic site and got a basic understanding of how to configure and override the theme. Next up we are going to configure our frontend workflow using yarn and gulp.
@@ -32,13 +33,15 @@ C:\>npm install yarn -g
 ```
 
 This will install yarn so that it is available for all projects, not just our new blog. Once the installation is complete, we can verify yarn is installed by running the following command:
+
 ``` powershell
 C:\>yarn --version
 0.17.6
 ```
+
 ## Yarn'ing our project
 
-Before we begin installing packages inside of our project, I am going to add a `.gitignore` file as we will generate a lot of files that we don't want inside of our git respository. Here is what I added to start off with: 
+Before we begin installing packages inside of our project, I am going to add a `.gitignore` file as we will generate a lot of files that we don't want inside of our git respository. Here is what I added to start off with:
 
 ``` powershell
 node_modules/
@@ -52,7 +55,7 @@ Now we can setup our project to use yarn:
 
     E:\im5tu-hugo>yarn init
 
-This will ask you a series of questions such as: 
+This will ask you a series of questions such as:
 
 ``` powershell
 E:\im5tu-hugo>yarn init
@@ -217,6 +220,7 @@ var gulp         = require("gulp"),
     del          = require("del"),
     ...
 ```
+
 Now lets create a task to clean out some directories that we are using:
 
 ``` js

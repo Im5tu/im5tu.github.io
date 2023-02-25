@@ -1,12 +1,13 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-06-20T18:21:04Z",
-   "description": "This post describes how a bug exists in most implementations of a binary search algorithm and how to fix it",
-   "tags": [ "csharp", "dotnet", "java" ],
-   "title": "How your binary search implementation is broken and how to fix it"
+    "categories": [ "Development" ],
+    "date": "2014-06-20T18:21:04Z",
+    "description": "This post describes how a bug exists in most implementations of a binary search algorithm and how to fix it",
+    "tags": [ "csharp", "dotnet", "java" ],
+    "title": "How your binary search implementation is broken and how to fix it",
+    "toc": true
 }
 
-I have recently begun studying the theory and implementations of algorithms. During this study, I came across [this post](http://googleresearch.blogspot.co.uk/2006/06/extra-extra-read-all-about-it-nearly.html) which describes how a bug exists in most implementations of a binary search algorithm. <!--more--> 
+I have recently begun studying the theory and implementations of algorithms. During this study, I came across [this post](http://googleresearch.blogspot.co.uk/2006/06/extra-extra-read-all-about-it-nearly.html) which describes how a bug exists in most implementations of a binary search algorithm. <!--more-->
 
 I'll begin with the example given in the post, which is taken from `java.util.Arrays`.
 
@@ -124,4 +125,4 @@ public static int BinarySearch(int[] a, int key) {
 }
 ```
 
-Personally, I prefer the differential version over the bit shift version but I have provided both for completeness. Even though this bug only manifests itself with well over a billion elements in an array, I still thought it was worth pointing out. I encourage you to read the other articles for more complete context.  
+Personally, I prefer the differential version over the bit shift version but I have provided both for completeness. Even though this bug only manifests itself with well over a billion elements in an array, I still thought it was worth pointing out. I encourage you to read the other articles for more complete context.

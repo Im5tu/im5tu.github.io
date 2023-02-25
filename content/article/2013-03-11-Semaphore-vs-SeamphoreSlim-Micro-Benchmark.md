@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2013-03-11T18:06:28Z",
-   "description": "A micro-benchmark to demonstrate the performance difference between the Semaphore and SemaphoreSlim classes in C#",
-   "tags": [ "csharp", "vb", "dotnet" ],
-   "title": "Semaphore vs SeamphoreSlim Micro Benchmark"
+    "categories": [ "Development" ],
+    "date": "2013-03-11T18:06:28Z",
+    "description": "A micro-benchmark to demonstrate the performance difference between the Semaphore and SemaphoreSlim classes in C#",
+    "tags": [ "csharp", "vb", "dotnet" ],
+    "title": "Semaphore vs SeamphoreSlim Micro Benchmark",
+    "toc": true
 }
 
 In this post, I am going to show a small micro-benchmark to demonstrate the performance difference between the `Semaphore` and `SemaphoreSlim` classes in C#. A `Semaphore` is often used to restrict the number of threads than can access some (physical or logical) resource. In this case, we want the restriction to be as little as possible.

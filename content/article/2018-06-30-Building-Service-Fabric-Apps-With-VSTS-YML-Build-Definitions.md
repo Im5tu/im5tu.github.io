@@ -3,7 +3,8 @@
     "description": "Publish an Service Fabric application using a VSTS YML build definition.",
     "tags": ["vsts", "dotnet", "service fabric", "devops"],
     "date": "2018-06-30T19:40:00+01:00",
-    "categories": ["Development"]
+    "categories": ["Development"],
+    "toc": true
 }
 
 In my [previous article](/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/), we setup a standarised build using the new YML build definitions within VSTS, using the .Net CLI tooling. In this article, we will use the same setup as our base, but we will build and publish a service fabric application.

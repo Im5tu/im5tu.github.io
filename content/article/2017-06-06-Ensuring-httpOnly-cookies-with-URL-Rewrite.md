@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-06-06T15:01:04+01:00",
-   "description": "A brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
-   "series": ["Url Rewriting"],
-   "title": "Ensuring httpOnly cookies with URL Rewrite"
+    "categories": [ "Development" ],
+    "date": "2017-06-06T15:01:04+01:00",
+    "description": "A brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite.",
+    "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
+    "series": ["Url Rewriting"],
+    "title": "Ensuring httpOnly cookies with URL Rewrite",
+    "toc": true
 }
 
 In this article, I will give a brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite. We will also be creating our first outbound rewrite rule with a pre-condition.

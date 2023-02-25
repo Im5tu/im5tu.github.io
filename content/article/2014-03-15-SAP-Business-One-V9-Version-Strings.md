@@ -1,13 +1,13 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-03-15T13:18:01Z",
-   "description": "",
-   "tags": [ "SAP", "SAPB1", "SQL", "dotnet" ],
-   "title": "SAP Business One V9 Version Strings"
+    "categories": [ "Development" ],
+    "date": "2014-03-15T13:18:01Z",
+    "description": "",
+    "tags": [ "SAP", "SAPB1", "SQL", "dotnet" ],
+    "title": "SAP Business One V9 Version Strings"
 }
 
 Today I had to figure out what the current version of SAP Business One is. In order to do this, I looked at the table SFMD inside of SBO-Common and found the following results<!--more-->:
-	
+
 	Version	|	Patch Level
     -----------------------
 	900046	|	00
@@ -23,9 +23,9 @@ Today I had to figure out what the current version of SAP Business One is. In or
 	902002	|	10
 
 *Note: I added the Hotfix 1 to clarify. I believe these are correct, I can't find a definitive source to verify these results.*
-	
+
 Then in order to check the target databases version, I ran the following against the target database:
 
     SELECT [Version] FROM [CINF]
-	
+
 There might be a better way of doing this. This article proposes a single solution. If you have an alternative solution, please notify me through social media.

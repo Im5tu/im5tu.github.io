@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-06-18T18:20:25Z",
-   "description": "This post demonstrates often overlooked tests when unit testing an object.",
-   "tags": [ "csharp", "dotnet" ],
-   "title": "Unit Testing Equals The Forgotten Tests"
+    "categories": [ "Development" ],
+    "date": "2014-06-18T18:20:25Z",
+    "description": "This post demonstrates often overlooked tests when unit testing an object.",
+    "tags": [ "csharp", "dotnet" ],
+    "title": "Unit Testing Equals The Forgotten Tests",
+    "toc": true
 }
 
 Today I wanted to cover something that is not often covered when unit testing an object. If an object has the `Equals` method overridden, then there are a number of tests that we should be running as a minimum:<!--more-->
@@ -106,6 +107,6 @@ public void NullTest()
 ### Other notes about overriding Equals
 
 - If you override `Equals()`, ensure that you override `GetHashCode()` as well.
-	+ If two objects are equal, then they must return the same value for `GetHashCode()`
-	+ If `GetHashCode()` is equal, it is not necessary for them to be the same; this is a collision and `Equals()` should be called to see if the objects are equal in reality 
-- If possible, always implement the `IEquatable<T>` interface on your custom objects as this provides type safety for other programmers and prevents boxing on value-types. 
+  - If two objects are equal, then they must return the same value for `GetHashCode()`
+  - If `GetHashCode()` is equal, it is not necessary for them to be the same; this is a collision and `Equals()` should be called to see if the objects are equal in reality
+- If possible, always implement the `IEquatable<T>` interface on your custom objects as this provides type safety for other programmers and prevents boxing on value-types.

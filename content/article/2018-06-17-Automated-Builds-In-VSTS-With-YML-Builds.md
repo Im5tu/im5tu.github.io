@@ -3,7 +3,8 @@
     "description": "Publish an ASPNET Core website using a VSTS YML build definition.",
     "tags": ["vsts", "dotnet", "aspnet", "devops"],
     "date": "2018-06-17T21:35:00+01:00",
-    "categories": ["Development"]
+    "categories": ["Development"],
+    "toc": true
 }
 
 In this article we will explore a preview feature inside of Visual Studio Team Services (VSTS) called YML Build Definitions. In essence, this allows you to change your build process from a `.yml` file in your git repository much in the same way as you can do with other services such as AppVeyor. During the article, we will setup a build definition for an Aspnet Core website.

@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2015-02-23T18:37:14Z",
-   "description": "Here I show you how to quickly get up and running with powershell and git.",
-   "tags": [ "powershell", "git" ],
-   "title": "Up And Running With Git And Powershell"
+    "categories": [ "Development" ],
+    "date": "2015-02-23T18:37:14Z",
+    "description": "Here I show you how to quickly get up and running with powershell and git.",
+    "tags": [ "powershell", "git" ],
+    "title": "Up And Running With Git And Powershell",
+    "toc": true
 }
 
 We've all experienced a time where we use our pc's for a prolonged period of time, accumulating a ton of crap along the way as we try out various technologies and fads. After a while, the pc begins to do funny things like crash for no apparent reason. This week, I needed to rebuild my dev machine and decided to change from Atlassian's Source Tree over to Powershell and raw git.<!--more-->

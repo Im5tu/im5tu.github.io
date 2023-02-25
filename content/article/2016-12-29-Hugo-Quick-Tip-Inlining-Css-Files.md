@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development", "Building a blog" ],
-   "date": "2016-12-29T20:25:58Z",
-   "description": "A very quick look at how to inline a css file using Hugo static site generator.",
-   "tags": ["hugo", "blog", "Quick Tips"],
-   "title": "Hugo Quick Tip: Inlining Css Files"
+    "categories": [ "Development", "Building a blog" ],
+    "date": "2016-12-29T20:25:58Z",
+    "description": "A very quick look at how to inline a css file using Hugo static site generator.",
+    "tags": ["hugo", "blog", "Quick Tips"],
+    "title": "Hugo Quick Tip: Inlining Css Files",
+    "toc": true
 }
 
 Today I have been doing a little bit of work on my site and one of the things that I wanted to do is inline the css file. It's quite a small file anyway, and once compressed with gzip should make a fairly minimal difference to the size of the page.

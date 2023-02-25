@@ -1,10 +1,11 @@
 {
-   "categories": [ "Development", "Building a blog" ],
-   "date": "2016-11-18T19:01:38Z",
-   "description": "Setting up a theme and creating our first article using hugo and bones",
-   "tags": ["hugo", "blogging"],
-   "series": ["Building A Blog With Hugo"],
-   "title": "Blog Building - Part 3 - Theming"
+    "categories": [ "Development", "Building a blog" ],
+    "date": "2016-11-18T19:01:38Z",
+    "description": "Setting up a theme and creating our first article using hugo and bones",
+    "tags": ["hugo", "blogging"],
+    "series": ["Building A Blog With Hugo"],
+    "title": "Blog Building - Part 3 - Theming",
+    "toc": true
 }
 
 In this article, I will show you how the theme has been constructed and show you how the overrides work. So far we have created a site, setup most of our workflow and posted our first article.
@@ -37,11 +38,11 @@ When hugo begins to render a site, the configuration is checked to see if there 
 
 From the directory listing above, you will notice that there are two `layouts` folders. One under the site root and one under themeA. As far as I am aware, the layout of each `layouts` folder is identical. This means that if your theme defines something under `/root/themes/themeA/layouts/_default/list.html` we can override it by placing a file in `/root/layouts/_default/list.html`.
 
-Now that we know this, we can customise the theme how we see fit.   
+Now that we know this, we can customise the theme how we see fit.
 
 ## Rendering
 
-Before continuing, I strongly recommend that you read the [Go Template Primer](http://gohugo.io/templates/go-templates/) created by the hugo team. Don't worry, i'll wait. 
+Before continuing, I strongly recommend that you read the [Go Template Primer](http://gohugo.io/templates/go-templates/) created by the hugo team. Don't worry, i'll wait.
 
 ### baseOf
 
@@ -51,7 +52,7 @@ You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/m
 
 ### .Render
 
-The [.Render](http://gohugo.io/templates/functions/#render) function is a special kind of function that you can call when rendering a list. It's like rendering a partial view but for the current item in an enumeration. 
+The [.Render](http://gohugo.io/templates/functions/#render) function is a special kind of function that you can call when rendering a list. It's like rendering a partial view but for the current item in an enumeration.
 
 ``` go
 {{ range .Data.Pages }}
@@ -59,7 +60,7 @@ The [.Render](http://gohugo.io/templates/functions/#render) function is a specia
 {{ end }}
 ```
 
-The above sample will inspect the page data and enumerate all the available pages associated with the current page before calling render on each item. C#/Java would look something like: 
+The above sample will inspect the page data and enumerate all the available pages associated with the current page before calling render on each item. C#/Java would look something like:
 
 ``` c#
 foreach(var page in this.Data.Pages)
@@ -70,7 +71,7 @@ You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/m
 
 ### partial
 
-[Partial templates](http://gohugo.io/templates/partials/) are often used to separate out sections of a site into reusable components. The main difference between `partial` and `.Render` is that partial can be used to render whole sections of a site with a specific context where is `.Render` is limited to the current item in an enumeration. 
+[Partial templates](http://gohugo.io/templates/partials/) are often used to separate out sections of a site into reusable components. The main difference between `partial` and `.Render` is that partial can be used to render whole sections of a site with a specific context where is `.Render` is limited to the current item in an enumeration.
 
 ``` go
 <body>
@@ -81,10 +82,10 @@ You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/m
 
 The above [example from the baseOf file from bones](https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html) does the following:
 
- - Says to the theming engine that it wants to declare an overridable section content, passing in the current page context
- - Render the partial called `scripts`, located under the `header` folder, inside of the `partials` folder, supplying the current page context 
+- Says to the theming engine that it wants to declare an overridable section content, passing in the current page context
+- Render the partial called `scripts`, located under the `header` folder, inside of the `partials` folder, supplying the current page context
 
-All partials are located under `<root/theme>/layouts/partials/<path>`. Where `<path>` is the folder structure to the file. 
+All partials are located under `<root/theme>/layouts/partials/<path>`. Where `<path>` is the folder structure to the file.
 
 You can see an example of this [here](https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html).
 

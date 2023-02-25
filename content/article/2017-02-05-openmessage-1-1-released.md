@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2017-02-05T15:31:54Z",
-   "description": "OpenMessage 1.1 released",
-   "tags": [ "OpenMessage", "csharp", "vb", "dotnet", "messaging" ],
-   "title": "OpenMessage 1.1 Released"
+    "categories": [ "Development" ],
+    "date": "2017-02-05T15:31:54Z",
+    "description": "OpenMessage 1.1 released",
+    "tags": [ "OpenMessage", "csharp", "vb", "dotnet", "messaging" ],
+    "title": "OpenMessage 1.1 Released",
+    "toc": true
 }
 
 Just a quick update to say that the Azure provider for [OpenMessage](https://github.com/Im5tu/OpenMessage) has been released. This update fixes an issue with scheduling messages on topics.

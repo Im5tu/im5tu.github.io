@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2012-12-30T14:51:38Z",
-   "description": "Just one solution to a flicker problem I encountered when developing a windows form application.",
-   "tags": [ "vb", "dotnet" ],
-   "title": "Flicker free forms and listview in .Net"
+    "categories": [ "Development" ],
+    "date": "2012-12-30T14:51:38Z",
+    "description": "Just one solution to a flicker problem I encountered when developing a windows form application.",
+    "tags": [ "vb", "dotnet" ],
+    "title": "Flicker free forms and listview in .Net",
+    "toc": true
 }
 
 On a project I have been working on recently, I came across a problem where under Windows an Mdi Child form would flicker when it loads. Trying to find information on what was the cause of this was near impossible. I ended up trying a lot of code snippets that I found when googling the problem and this is what I have come up with.
@@ -73,25 +74,25 @@ will need to show all files in VS*) and replace the instances of `ListView` with
 ```vb
 Public Class FlickerFreeListView
     Inherits System.Windows.Forms.ListView
-    
+
     Public Sub New()
-    
+
         MyBase.New()
-    
+
         Me.SetStyle(ControlStyles.Opaque, True)
         Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
         Me.SetStyle(ControlStyles.ResizeRedraw, True)
         Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
         Me.SetStyle(ControlStyles.EnableNotifyMessage, True)
-    
+
     End Sub
-    
+
     Protected Overrides Sub OnNotifyMessage(ByVal m As Message)
         If (m.Msg <> &H14) Then
             MyBase.OnNotifyMessage(m)
         End If
     End Sub
-    
+
 End Class
 ```
 

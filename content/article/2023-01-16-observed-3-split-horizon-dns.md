@@ -3,7 +3,8 @@
     "description": "Welcome to the third edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at Split Horizon DNS.",
     "tags": ["devops", "observed"],
     "date": "2023-01-16T00:00:00+00:00",
-    "categories": ["Development"]
+    "categories": ["Development"],
+    "toc": true
 }
 
 Welcome to the third edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at Split Horizon DNS.
@@ -29,3 +30,7 @@ To configure Split Horizon DNS, you perform the following steps:
 1. Query your DNS
 
 If you have any questions or comments, please don’t hesitate to contact me either in the comments, on Twitter or any medium listed on my website! I’d love to hear your thoughts. Subscribe to the newsletter below!
+
+**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+
+Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

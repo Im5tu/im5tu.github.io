@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-09-28T18:35:57Z",
-   "description": "This article describes the fundamentals of MSMQ. MSMQ is Microsoft's Message Queuing service that can be used to implement both synchronous and asynchronous solutions.",
-   "tags": [ "dotnet", "messaging", "msmq", "csharp" ],
-   "title": "Message Queue Fundementals: MSMQ"
+    "categories": [ "Development" ],
+    "date": "2014-09-28T18:35:57Z",
+    "description": "This article describes the fundamentals of MSMQ. MSMQ is Microsoft's Message Queuing service that can be used to implement both synchronous and asynchronous solutions.",
+    "tags": [ "dotnet", "messaging", "msmq", "csharp" ],
+    "title": "Message Queue Fundementals: MSMQ",
+    "toc": true
 }
 
 MSMQ is Microsoft's Message Queuing service that can be used to implement both synchronous and asynchronous solutions. Typically solutions are architectured using the available C++ API’s or via the relevant COM objects. The .Net Framework exposes the System.Messaging namespace which contains all the classes that you need to work with the MSMQ API. <!--more-->
@@ -13,50 +14,50 @@ If you would like to read the first part to the article, [click here to read abo
 In this article I will cover the following topics:
 
 - Types of Queues in MSMQ
-	- Application Queues
-    	- Public/Private Queues
-	    - Transactional and non-transactional Queues
-    	- Sub-Queues
-	    - Administration Queues
-	    - Response Queues
-    	- Report Queues
-	- System Queues
-	    - Journal Queues
-    	- Internal Private Queues
-	    - Dead-letter Queues
-    	- Connector Queues
-    	- Outgoing Queues
+  - Application Queues
+     - Public/Private Queues
+    - Transactional and non-transactional Queues
+     - Sub-Queues
+    - Administration Queues
+    - Response Queues
+     - Report Queues
+  - System Queues
+    - Journal Queues
+     - Internal Private Queues
+    - Dead-letter Queues
+     - Connector Queues
+     - Outgoing Queues
 - Creating an MSMQ Message Queue
 - Accessing an MSMQ Message Queue
 - Sending a message to a MSMQ Message Queue
-	- Sending a message to a MSMQ Message Queue using transactions
+  - Sending a message to a MSMQ Message Queue using transactions
 - Retrieving a message from a MSMQ Message Queue
-	- Retrieving a message from a MSMQ Message Queue using transactions
+  - Retrieving a message from a MSMQ Message Queue using transactions
 
 *Before you begin, you need to have MSMQ installed on your machine, please do this by following [these instructions](http://msdn.microsoft.com/en-us/library/aa967729(v=vs.110).aspx).*
 
 ## Types of Queues in MSMQ
 
-This section describes the available queue types within MSMQ. Although I will not cover the consumption of all the available types of queue, I will briefly describe the following type of queue: 
+This section describes the available queue types within MSMQ. Although I will not cover the consumption of all the available types of queue, I will briefly describe the following type of queue:
 
 - Application Queues
-    - Public/Private Queues
-    - Transactional and non-transactional Queues
-    - Sub-Queues
-    - Administration Queues
-    - Response Queues
-    - Report Queues
+  - Public/Private Queues
+  - Transactional and non-transactional Queues
+  - Sub-Queues
+  - Administration Queues
+  - Response Queues
+  - Report Queues
 - System Queues
-    - Journal Queues
-    - Internal Private Queues
-    - Dead-letter Queues
-    - Connector Queues
-    - Outgoing Queues
+  - Journal Queues
+  - Internal Private Queues
+  - Dead-letter Queues
+  - Connector Queues
+  - Outgoing Queues
 
 The quintessential difference between application and system queues is the ability to address messages to the queue. With application queues you can have, essentially, read/write capabilities, whereas you can only read messages from a system queue.
 
-
 ### Administration Queues
+
 #### Private vs Public Queues
 
 Deciding between a public and private queue depends on the requirements of the application and the infrastructure available. Public queues use Active Directory Domain Services to replicate the queue through the domain forest, providing reliability. They are both persistent and available to other applications. In contrast, private queues are only displayed on the local computer that contains them. Because private queues involve no replication, they are quicker to create, have lower latency and has no replication overhead as they are not distributed through a domain forest.
@@ -97,6 +98,7 @@ Each computer that has MSMQ installed can have a single report queue created on 
 A report queue can either be created through Active Directory Users and Computers, or programmatically if the correct label and queue type identifier has been specified.
 
 ### System Queues
+
 #### Journal Queues
 
 A journal queue is presented in two forms: A Queue Journal & A Computer Journal. A queue journal details all of the messages that have been removed from a queue. A computer journal contains copies of all the messages that are sent from a computer. Typically, you would use these queues for message diagnosis and audit purposes only.
@@ -106,12 +108,15 @@ A journal queue is presented in two forms: A Queue Journal & A Computer Journal.
 Internal queues are at the core of MSMQ. They are used as interim queues for storing and forwarding messages to a destination queue. They are not published in AD DS and are local to the current computer.
 
 #### Dead-Letter Queues
-Dead-letter queues contain messages that cannot be delivered. MSMQ provides a transactional dead-letter queue and a non-transactional dead-letter queue. The process of storing undelivered messages on a source computer is sometimes referred to as negative source journalling. Applications can only read or delete messages from a dead letter queue. Sending to the queue is handled by the MSMQ internals. 
+
+Dead-letter queues contain messages that cannot be delivered. MSMQ provides a transactional dead-letter queue and a non-transactional dead-letter queue. The process of storing undelivered messages on a source computer is sometimes referred to as negative source journalling. Applications can only read or delete messages from a dead letter queue. Sending to the queue is handled by the MSMQ internals.
 
 #### Connector Queues
+
 Simply put, Connector queues are used for cross-platform messaging. For a detailed guide on how this works, refer to the documentation [on MSDN](http://msdn.microsoft.com/en-us/library/ms706915(v=vs.85).aspx).
 
 #### Outgoing Queues
+
 Outgoing queues are local internal queues that are used to store messages sent to remote queues. Messages can be stored in outgoing queues under off-line conditions and then sent to target queues on remote computers when connectivity is restored. These queues are generated automatically and cannot be created or deleted manually.
 
 ## Creating an MSMQ Message Queue
@@ -125,7 +130,7 @@ In order to access a message queue, you need to add a reference `System.Messagin
 ```csharp
 var mq = new MessageQueue(pathOrFormatOrLabel);
 ```
-    
+
 The path name can be in the following [syntax](http://msdn.microsoft.com/en-us/library/ms706083(v=vs.85).aspx):
 
 ```csharp
@@ -133,7 +138,7 @@ var mq = new MessageQueue(@"ComputerName\QueueName");
 var mq = new MessageQueue(@"ComputerName\PRIVATE$\QueueName");
 var mq = new MessageQueue(@".\QueueName");
 ```
-    
+
 The period shown in the last example is a common computer representation of the local computer.
 
 In order to reference a queue by its label, the string must start with `Label:` followed by the name of the queue. For example:
@@ -141,20 +146,20 @@ In order to reference a queue by its label, the string must start with `Label:` 
 ```csharp
 var mq = new MessageQueue("Label:TestQueue");
 ```
-    
+
 Lastly, accessing a queue via its GUID requires the following format `FormatName:Modifier=GUID", for example:
 
 ```csharp
 var mq = new MessageQueue("FormatName:Public=5A5F7535-AE9A-41d4-935C-845C2AFF7112");
 ```
-    
+
 Dead letter queues, computer journals and queue journals can all be monitored by using the following paths:
 
 ```csharp
 var mq = new MessageQueue(@".\DeadLetter$"); // Non-transactional Dead Letter Queue
-var mq = new MessageQueue(@".\XactDeadLetter$"); // Transactional Dead Letter Queue 
+var mq = new MessageQueue(@".\XactDeadLetter$"); // Transactional Dead Letter Queue
 var mq = new MessageQueue(@".\Journal$"); // Computer Journal
-var mq = new MessageQueue(@".\TestQueue\Journal$"); // Queue Journal                
+var mq = new MessageQueue(@".\TestQueue\Journal$"); // Queue Journal
 ```
 
 ## Sending a message to an MSMQ Message Queue
@@ -172,82 +177,82 @@ Once the queue has been created, we should check that we can write to the queue 
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanWrite)
-	{
-	}
-	else
-	{
-		// we cannot write to the queue
-	}
+ if(mq.CanWrite)
+ {
+ }
+ else
+ {
+  // we cannot write to the queue
+ }
 }
 ```
-    
-Then we can create an instance of the `Message` class and call the `Send` method on the message queue to send our message: 
+
+Then we can create an instance of the `Message` class and call the `Send` method on the message queue to send our message:
 
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanWrite)
-	{
-		var msg = new Message("Hello world");
-		mq.Send(msg);    		
-	}
-	else
-	{
-		// we cannot write to the queue
-	}
+ if(mq.CanWrite)
+ {
+  var msg = new Message("Hello world");
+  mq.Send(msg);
+ }
+ else
+ {
+  // we cannot write to the queue
+ }
 }
 ```
 
 ### Sending a message to an MSMQ Message Queue using transactions
 
 Sometimes we will be required to send messages to a transactional queue. We can extend our previous example to include a check on the `Transactional` property:
-    
+
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanWrite)
-	{
-		var msg = new Message("Hello world");
-		if(mq.Transactional)
-		{
-		}
-		else
-		{	
-			mq.Send(msg);
-		}    		    		
-	}
-	else
-	{
-		// we cannot write to the queue
-	}
+ if(mq.CanWrite)
+ {
+  var msg = new Message("Hello world");
+  if(mq.Transactional)
+  {
+  }
+  else
+  {
+   mq.Send(msg);
+  }
+ }
+ else
+ {
+  // we cannot write to the queue
+ }
 }
 ```
 
 Here I have branched out the original code into the else branch to compare. Next, we should construct a `MessageQueueTransaction` object which in turn can be passed to the `Send` method. Before we call the `Send` method, we need to ensure that we have called the `Begin` method on the transaction object, and `Commit` when we have completed. This will ensure that MSMQ will use the correct transactional semantics:
-    
+
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanWrite)
-	{
-		var msg = new Message("Hello world");
-		if(mq.Transactional)
-		{
-			var transaction = new MessageQueueTransaction();
-			transaction.Begin();
-			mq.Send(msg, transaction);
-			transaction.Commit();
-		}
-		else
-		{	
-			mq.Send(msg);
-		}    		    		
-	}
-	else
-	{
-		// we cannot write to the queue
-	}
+ if(mq.CanWrite)
+ {
+  var msg = new Message("Hello world");
+  if(mq.Transactional)
+  {
+   var transaction = new MessageQueueTransaction();
+   transaction.Begin();
+   mq.Send(msg, transaction);
+   transaction.Commit();
+  }
+  else
+  {
+   mq.Send(msg);
+  }
+ }
+ else
+ {
+  // we cannot write to the queue
+ }
 }
 ```
 
@@ -257,39 +262,39 @@ In order to retrieve a message from a message queue, you need to know how to acc
 
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
-{    
+{
 }
 ```
-    
+
 Once the queue has been created, we should check that we can read from the queue by using the `CanRead` property:
 
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanRead)
-	{
-	}
-	else
-	{
-		// we can not receive from the queue
-	}
+ if(mq.CanRead)
+ {
+ }
+ else
+ {
+  // we can not receive from the queue
+ }
 }
 ```
-    
+
 From here, it is a case of calling the `Receive` method and processing the result:
 
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanRead)
-	{
-		var msg = mq.Receive();
-		// do something with the received message
-	}
-	else
-	{
-		// we can not receive from the queue
-	}
+ if(mq.CanRead)
+ {
+  var msg = mq.Receive();
+  // do something with the received message
+ }
+ else
+ {
+  // we can not receive from the queue
+ }
 }
 ```
 
@@ -302,24 +307,24 @@ Similarly to the transactional code we used when sending a message, we can inspe
 ```csharp
 using(var mq = new MessageQueue(".\TestQueue"))
 {
-	if(mq.CanRead)
-	{
-		if(mq.Transactional)
-		{
-			var transaction = new MessageQueueTransaction();
-			transaction.Begin();
-			mq.Receive(transaction);
-			transaction.Commit();	    		
-		}
-		else
-		{
-			var msg = mq.Receive();
-			// do something with the received message
-		}
-	}
-	else
-	{
-		// we can not receive from the queue
-	}
+ if(mq.CanRead)
+ {
+  if(mq.Transactional)
+  {
+   var transaction = new MessageQueueTransaction();
+   transaction.Begin();
+   mq.Receive(transaction);
+   transaction.Commit();
+  }
+  else
+  {
+   var msg = mq.Receive();
+   // do something with the received message
+  }
+ }
+ else
+ {
+  // we can not receive from the queue
+ }
 }
 ```

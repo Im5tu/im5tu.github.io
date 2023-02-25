@@ -1,21 +1,14 @@
 {
-   "categories": [ "Development" ],
-   "date": "2012-12-01T17:51:38Z",
-   "description": "An introduction into .Net's extension methods, how to create them and how to use them.",
-   "tags": [ "vb", "csharp", "dotnet" ],
-   "title": "Extension methods in dotnet"
+    "categories": [ "Development" ],
+    "date": "2012-12-01T17:51:38Z",
+    "description": "An introduction into .Net's extension methods, how to create them and how to use them.",
+    "tags": [ "vb", "csharp", "dotnet" ],
+    "title": "Extension methods in dotnet",
+    "toc": true
 }
 
 In this article we will take a look at what extension methods are and how to use them in .Net. Personally, they are one of the best things that has been introduced into the .Net framework in terms of readability. I will take you through what extension methods are, how to create them (in c\# and vb) then I will show you some of the extension methods that I have created (in c\# only, conversion is for you to try).
 <!--more-->
-
-Contents
---------
-
--   What are extension methods?
--   How do we create extension methods?
--   Examples of extension methods
--   Related Links
 
 ### What are extension methods?
 
@@ -219,7 +212,7 @@ public static void Each<T>(this ICollection<T> items, Action<T> action)
 
 ```csharp
 List<String> myList = new List<String>();
-myList.Each(el => 
+myList.Each(el =>
 {
     // perform an action(s) on the item
     el.Substring(0,1);
@@ -256,7 +249,7 @@ myInt.In(0, 0, 1, 2, 3); // returns true
 myInt.In(1, 5, 6, 7, 8); // returns false
 ```
 
-Hopefully, you now have an understanding of how to implement extension methods in both C\# and VB.Net. 
+Hopefully, you now have an understanding of how to implement extension methods in both C\# and VB.Net.
 
 ### Related Links
 
@@ -264,4 +257,3 @@ Hopefully, you now have an understanding of how to implement extension methods i
     Guide)](http://msdn.microsoft.com/en-us/library/bb383977.aspx)
 -   [Example of extension methods
     (](http://www.extensionmethod.net/)[http://www.extensionmethod.net/)](http://www.extensionmethod.net/))
-

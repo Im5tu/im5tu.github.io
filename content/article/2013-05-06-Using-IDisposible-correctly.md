@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2013-05-06T18:09:25Z",
-   "description": "A demonstration of how to use IDisposable correctly.",
-   "tags": [ "csharp", "dotnet" ],
-   "title": "Using IDisposible correctly"
+    "categories": [ "Development" ],
+    "date": "2013-05-06T18:09:25Z",
+    "description": "A demonstration of how to use IDisposable correctly.",
+    "tags": [ "csharp", "dotnet" ],
+    "title": "Using IDisposible correctly",
+    "toc": true
 }
 
 In this article, I am going to show you how to use the `IDisposable` interface correctly in your code. When I read others code, it is easy to pick up on subtle bugs. We need to begin to train ourselves to see the bugs and we do this by understanding what we are using. Before we begin, we need to make sure that we understand a core piece of computer science theory: Destructors.
@@ -40,9 +41,9 @@ public sealed class MyClass : IDisposable
 }
 ```
 
-While this implementation is fine if you don't mind waiting for the garbage collector to come and release the resources. What if your class has a large object inside (say ~250mb). Do you really want to wait for the garbage collector? Probably not. 
+While this implementation is fine if you don't mind waiting for the garbage collector to come and release the resources. What if your class has a large object inside (say ~250mb). Do you really want to wait for the garbage collector? Probably not.
 
-In order to fix our implementation, we need to do two things. Firstly, we need to implement a `Finalizer` and then implement an overload to the original `Dispose` method. The reason why we implement a `Finalizer` is because we want to safe-guard ourselves if we forget to call the `Dispose` method. For those that do not know what a `Finalizer` looks like, here it is: 
+In order to fix our implementation, we need to do two things. Firstly, we need to implement a `Finalizer` and then implement an overload to the original `Dispose` method. The reason why we implement a `Finalizer` is because we want to safe-guard ourselves if we forget to call the `Dispose` method. For those that do not know what a `Finalizer` looks like, here it is:
 
 ```csharp
 public sealed class MyClass : IDisposable
@@ -137,7 +138,7 @@ static void Main(string[] args)
 }
 ```
 
-When the compiler sees this code, it actually expands it to this: 
+When the compiler sees this code, it actually expands it to this:
 
 ```csharp
 static void Main(string[] args)
@@ -154,4 +155,4 @@ static void Main(string[] args)
 }
 ```
 
-So there it is. Hopefully now you can implement `IDisposable` correctly according to your needs. 
+So there it is. Hopefully now you can implement `IDisposable` correctly according to your needs.

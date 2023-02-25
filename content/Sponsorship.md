@@ -1,6 +1,6 @@
 {
-   "description": "Reach thousands of developers each month with sponsorships.",
-   "title": "Sponsorship"
+    "description": "Reach thousands of developers each month with sponsorships.",
+    "title": "Sponsorship"
 }
 
 You've come here because you like the content that I develop and you want to support me on my journey, or you think your product/service would be a great fit for my audience.

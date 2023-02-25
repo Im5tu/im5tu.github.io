@@ -1,9 +1,10 @@
 {
-   "categories": [ "Development" ],
-   "date": "2014-09-07T18:35:37Z",
-   "description": "Message queues are a substantial part of modern day enterprise architectures and a vital part of providing scalable solutions. Here I walk you through some of the basic patterns.",
-   "tags": [ "dotnet", "messaging" ],
-   "title": "Message Queue Fundementals: Introduction"
+    "categories": [ "Development" ],
+    "date": "2014-09-07T18:35:37Z",
+    "description": "Message queues are a substantial part of modern day enterprise architectures and a vital part of providing scalable solutions. Here I walk you through some of the basic patterns.",
+    "tags": [ "dotnet", "messaging" ],
+    "title": "Message Queue Fundementals: Introduction",
+    "toc": true
 }
 
 Message queues are a substantial part of modern day enterprise architectures and a vital part of providing scalable solutions. They are designed for asynchronous communication between different parts of the system. They help scale individual components of a system and increase reliability with the optional addition of the persistence of messages to a storage system.<!--more-->
@@ -20,7 +21,7 @@ As mentioned earlier, message queues are designed to perform asynchronous commun
 2. Request-Response
 3. Publish/Subscribe
 
-I will also detail a variant of the Request-Response pattern called Scatter-Gather and an additional technique of the Publish/Subscribe pattern called Subscription Filters. 
+I will also detail a variant of the Request-Response pattern called Scatter-Gather and an additional technique of the Publish/Subscribe pattern called Subscription Filters.
 
 ## Fire & Forget Messaging
 
@@ -30,9 +31,9 @@ The best example I can think of is notifications. Once the application server ha
 
 ## Request-Reponse Messaging
 
-In request-response, two different queues are used; one for processing requests and the other for processing the responses. Whilst sending the message to the request queue, the client often includes a reply address so that a response can be sent to the correct destination. 
+In request-response, two different queues are used; one for processing requests and the other for processing the responses. Whilst sending the message to the request queue, the client often includes a reply address so that a response can be sent to the correct destination.
 
-Each client typically has its own response queue, so that it only receives responses to its own requests. This pattern of messaging allows the client to continue processing while it waits for a response from the response queue, which would have otherwise been completed via synchronous communication. 
+Each client typically has its own response queue, so that it only receives responses to its own requests. This pattern of messaging allows the client to continue processing while it waits for a response from the response queue, which would have otherwise been completed via synchronous communication.
 
 ### Scatter-Gather Messaging
 
@@ -48,7 +49,7 @@ In this scenario, I would typically expect to see three distinct queues:
 
 ## Publish/Subscribe Messaging
 
-The publish/subscribe pattern is not to dissimilar to the observer pattern found in C#/Java. Interested parties subscribe to a specific queue in order to receive notifications. Once a message has been sent to the queue, all parties receive a copy of the message. 
+The publish/subscribe pattern is not to dissimilar to the observer pattern found in C#/Java. Interested parties subscribe to a specific queue in order to receive notifications. Once a message has been sent to the queue, all parties receive a copy of the message.
 
 This pattern is good for event-driven processing, since components can be added or removed with relative ease. An example would be a users address changes. The changes need to be reflected in the database, a CRM system and a third party provider. Without this pattern, the publisher would have to know about the three different systems in order to complete the processing. Instead, the publisher only knows about the queue, and the queue about the subscribers to that queue.
 

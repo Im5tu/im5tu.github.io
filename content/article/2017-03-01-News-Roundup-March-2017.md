@@ -1,9 +1,10 @@
 {
-   "categories": [ "News" ],
-   "date": "2017-03-01T19:32:24Z",
-   "description": "First of a monthly series capturing various articles that I find interesting as I catch up on the tech news from around the web.",
-   "tags": [ "news", "Roundup" ],
-   "title": "News Roundup March 2017"
+    "categories": [ "News" ],
+    "date": "2017-03-01T19:32:24Z",
+    "description": "First of a monthly series capturing various articles that I find interesting as I catch up on the tech news from around the web.",
+    "tags": [ "news", "Roundup" ],
+    "title": "News Roundup March 2017",
+    "toc": true
 }
 
 In this the first of many [news roundups](/categories/news), I am going to look back through the news that you may have missed and the stories/blogs that have interested me over the previous month(s). In this round up I will be taking a look at content from arround mid January, through to the 1st March 2017.

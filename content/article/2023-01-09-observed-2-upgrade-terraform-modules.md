@@ -3,7 +3,8 @@
     "description": "Welcome to the second edition of Observed! your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a technique you can use to upgrade your Terraform modules.",
     "tags": ["devops", "observed"],
     "date": "2023-01-09T00:00:00+00:00",
-    "categories": ["Development"]
+    "categories": ["Development"],
+    "toc": true
 }
 
 Welcome to the second edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a technique you can use to upgrade your Terraform modules.
@@ -52,3 +53,7 @@ With my teams, I always try to look at it from the perspective of “how would I
 Before I leave you to get on with your week, I want to let you know about something happening pretty soon. I’m launching a [DevOps-focused YouTube channel](https://youtube.com/@DevOpsWithStu?sub_confirmation=1)! On the 20th Jan 2023, DevOpsWithStu will go live with three videos. This channel will be the same as this newsletter, with helpful tutorials on AWS, Terraform and general DevOps topics. If you like the content in this newsletter, I’m sure you’ll enjoy the content going out on YouTube, so hit that subscribe button & notification bell to get alerts for when new content is available!
 
 Side note: I also own the [CodeWithStu YouTube channel](https://youtube.com/@CodeWithStu?sub_confirmation=1), which is focused on the .NET stack.
+
+**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+
+Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!
