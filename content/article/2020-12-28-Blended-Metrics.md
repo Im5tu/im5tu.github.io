@@ -1,9 +1,9 @@
 {
     "title": "Blending Metrics Using EventCounters In C#",
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
+    "tags": ["aspnet", "dotnet", "diagnostics", "AWS"],
     "date": "2020-12-27T12:53:17Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "toc": true
 }
 
@@ -54,7 +54,7 @@ public abstract class SimpleMetricObserver : IObserver<MetricUpdate>
 
     /// <inheritDoc />
     public virtual void OnError(Exception error) { }
-    
+
     /// <inheritDoc />
     public abstract void OnNext(MetricUpdate value);
 }

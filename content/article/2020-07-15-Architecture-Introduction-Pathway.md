@@ -1,9 +1,9 @@
 {
     "title": "Architecture Pathway Introduction",
     "description": "A glance at some of the resources that helped me learn software architecture.",
-    "tags": ["architecture"],
+    "tags": ["Architecture"],
     "date": "2020-07-15T20:56:00+01:00",
-    "categories": ["architecture", "Development"],
+    "categories": ["Development"],
     "toc": true
 }
 

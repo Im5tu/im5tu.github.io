@@ -3,7 +3,7 @@
     "description": "Welcome to the second edition of Observed! your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a technique you can use to upgrade your Terraform modules.",
     "tags": ["devops", "observed"],
     "date": "2023-01-09T00:00:00+00:00",
-    "categories": ["devops", "observed"]
+    "categories": ["Development"]
 }
 
 Welcome to the second edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a technique you can use to upgrade your Terraform modules.

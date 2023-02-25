@@ -1,9 +1,9 @@
 {
     "title": "Publish Metrics to Cloudwatch in .NET Core",
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
+    "tags": ["aspnet", "dotnet", "diagnostics", "AWS"],
     "date": "2020-12-13T16:21:58Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "toc": true
 }
 
@@ -262,7 +262,7 @@ internal sealed class CloudwatchMetricObserver : IObserver<MetricUpdate>
     }
 
     public void OnCompleted() { }
-    
+
     public void OnError(Exception error) { }
 
     public void OnNext(MetricUpdate value)
@@ -363,13 +363,13 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
 
     protected override void OnEventWritten(EventWrittenEventArgs eventData)
     {
-        if (eventData.EventName != "EventCounters" 
-                || eventData.Payload.Count <= 0 
-                || !(eventData.Payload[0] is IDictionary<string, object> data) 
-                || !data.TryGetValue("CounterType", out var counterType) 
+        if (eventData.EventName != "EventCounters"
+                || eventData.Payload.Count <= 0
+                || !(eventData.Payload[0] is IDictionary<string, object> data)
+                || !data.TryGetValue("CounterType", out var counterType)
                 || !data.TryGetValue("Name", out var name))
             return;
-        
+
         var metricType = counterType.ToString();
         float metricValue = 0;
 
@@ -381,7 +381,7 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
         {
             metricValue = Convert.ToSingle(mean);
         }
-        
+
         var metric = new MetricUpdate(metricName, metricValue, tags);
         _metricsObservable.WriteMetric(ref metric);
     }

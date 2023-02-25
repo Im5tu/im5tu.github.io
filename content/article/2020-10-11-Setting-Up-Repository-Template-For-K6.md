@@ -3,7 +3,7 @@
     "description": "A look into how we can create K6 performance test suite from a Github repository template.",
     "tags": ["K6", "git", "github"],
     "date": "2020-10-11T10:45:00+01:00",
-    "categories": ["development", "git" ],
+    "categories": ["Development"],
     "series": ["Repository Templates"],
     "toc": true
 }

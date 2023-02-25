@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-06-06T15:01:04+01:00",
    "description": "A brief overview of cookies, why we want them to be httpOnly and how we can ensure this via URL Rewrite.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies" ],
+   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
    "series": ["Url Rewriting"],
    "title": "Ensuring httpOnly cookies with URL Rewrite"
 }
@@ -51,7 +51,7 @@ Within our rule, we are defining the name of the rule which can be viewed inside
 
 Within the precondition, which is matched by name to the `preCondition` attribute in the rule, we do two things:
 
-- (_I think, see below_) Make sure that the `Set-Cookie` header has been set (via the server variable `{RESPONSE_Set_Cookie}`);
+- (*I think, see below*) Make sure that the `Set-Cookie` header has been set (via the server variable `{RESPONSE_Set_Cookie}`);
 - Make sure that we do not already have the `HttpOnly` modifier set
 
 For an unknown reason, probably due to a knowledge gap, the first line is required. I have made a guess as to what this could be, but I am unsure. Strange things happen in the dev tools in Chrome if that first line is not there.

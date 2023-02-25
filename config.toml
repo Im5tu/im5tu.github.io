@@ -1,11 +1,12 @@
 baseurl = "https://im5tu.io/"
-title = "Stuart Blackler's Blog"
+title = "CodeWithStu's Blog"
 languageCode = "en-us"
 theme = "hello-friend-ng"
 metaDataFormat = "json"
 enableRobotsTXT = true
 pygmentsuseclasses = true
 ignorefiles = [ "content/draft/.*" ]
+canonifyURLs = true
 
 [Author]
   name = "Stuart Blackler"
@@ -47,20 +48,14 @@ ignorefiles = [ "content/draft/.*" ]
     name = "youtube"
     url  = "https://codewithstu.tv"
 
-  [[params.social]]
-    name = "discord"
-    url  = "https://discord.codewithstu.tv"
-
-  [[params.social]]
-    name = "facebook"
-    url  = "https://facebook.com/codewithstu"
-
 [markup]
   [markup.highlight]
     codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.
 
 [minify]
   minifyOutput = true
+  [minify.tdewolff.html]
+    keepQuotes = true
 
 [taxonomies]
   category = "categories"
@@ -77,11 +72,6 @@ ignorefiles = [ "content/draft/.*" ]
     identifier = "rss"
     name       = "RSS"
     url        = "/article/index.xml"
-
-  [[menu.main]]
-    identifier = "discord"
-    name       = "Discord"
-    url        = "https://discord.codewithstu.tv"
 
   [[menu.main]]
     identifier = "patreon"
@@ -104,5 +94,5 @@ ignorefiles = [ "content/draft/.*" ]
     url        = "https://codewithstu.tv"
 
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML"]
   page = ["HTML", "RSS"]

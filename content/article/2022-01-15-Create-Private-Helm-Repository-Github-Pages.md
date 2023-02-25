@@ -1,9 +1,9 @@
 {
     "title": "Creating a private helm repository using Github Pages Enterprise",
     "description": "Learn how to publish a private helm repository using Github Pages Enterprise",
-    "tags": ["k8s", "helm", "Github"],
+    "tags": ["k8s", "helm", "github"],
     "date": "2022-01-15T22:15:00Z",
-    "categories": ["k8s", "helm", "Github"],
+    "categories": ["Development"],
     "toc": true
 }
 
@@ -165,8 +165,8 @@ helm repo update
 This will use Github basic authentication to pull the index and allow you to search and use the repository. The result will look something similar to the following:
 
 ```bash
-> helm search repo private       
-NAME                    CHART VERSION   APP VERSION     DESCRIPTION       
+> helm search repo private
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION
 private/generic-service 0.0.1           0.0.2           Generic Helm Chart
 ```
 

@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-06-11T20:50:11+01:00",
    "description": "A handy URL Rewrite snippet to mark cookies as samesite.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies" ],
+   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
    "series": ["Url Rewriting"],
    "title": "Ensuring samesite cookies with URL Rewrite"
 }
@@ -34,7 +34,7 @@ As per the snippet in our previous post, we are going to create an outbound rule
 
 ```xml
 <rewrite>
-    <outboundRules> 
+    <outboundRules>
         <rule name="Ensure samesite Cookies" preCondition="Missing samesite cookie">
         <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
         <action type="Rewrite" value="{R:0}; SameSite=strict" />

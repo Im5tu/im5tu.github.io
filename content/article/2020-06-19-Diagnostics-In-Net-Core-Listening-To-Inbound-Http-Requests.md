@@ -1,9 +1,9 @@
 {
     "title": "Diagnostics in .Net Core 3: Listening to inbound HTTP requests",
     "description": "A look into the EventCounters API in .Net Core 3, and seeing how we can capture inbound HTTP Requests.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics"],
+    "tags": ["aspnet", "dotnet", "diagnostics"],
     "date": "2020-06-19T14:00:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "series": ["Diagnostics in .Net Core 3"],
     "toc": true
 }
@@ -37,7 +37,7 @@ internal sealed class InboundHttpRequestDiagnosticListener : DiagnosticListenerB
     {
         if (diagnosticListener is null || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
             return;
-    
+
         foreach (var observer in _observers)
             Subscribe(diagnosticListener, observer);
     }
@@ -79,7 +79,7 @@ internal sealed class InboundHttpRequestObserver : SimpleDiagnosticListenerObser
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpContext? httpContext;
@@ -103,7 +103,7 @@ internal sealed class InboundHttpResponseObserver : SimpleDiagnosticListenerObse
     {
         _metricBuilder = metricBuilder;
     }
-    
+
     public override void OnNext(KeyValuePair<string, object> value)
     {
         if (value.Key == "Microsoft.AspNetCore.Hosting.EndRequest")
@@ -126,7 +126,7 @@ internal sealed class InboundHttpResponseObserver : SimpleDiagnosticListenerObse
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpContext? httpContext;
@@ -181,11 +181,11 @@ internal sealed class DefaultInboundHttpMetricBuilder : IInboundHttpMetricBuilde
     private readonly ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> _successCounters = new ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter>(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> _errorCounters = new ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter>(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary<List<(string key, string value)>, EventCounter> _latencyCounters = new ConcurrentDictionary<List<(string key, string value)>, EventCounter>(new ListOfTupleEqualityComparer());
-    
+
     public IncrementingEventCounter GetSuccessCounter(HttpRequest request, HttpResponse response) => GetCoreHttpRequestCounter(_successCounters, request, response);
 
     public IncrementingEventCounter GetErrorCounter(HttpRequest request, HttpResponse response) => GetCoreHttpRequestCounter(_errorCounters, request, response);
-    
+
     public EventCounter GetLatencyCounter(HttpRequest request, HttpResponse response)
     {
         return _latencyCounters.GetOrAdd(GetCoreTags(request, response), key =>
@@ -199,9 +199,9 @@ internal sealed class DefaultInboundHttpMetricBuilder : IInboundHttpMetricBuilde
                 counter.AddMetadata(dimension.key, dimension.value);
             CheckoutEventSource.Instance.AddDiagnosticCounter(counter);
             return counter;
-        });        
+        });
     }
-    
+
     private IncrementingEventCounter GetCoreHttpRequestCounter(ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> collection, HttpRequest request, HttpResponse response)
     {
         return collection.GetOrAdd(GetCoreTags(request, response), key =>
@@ -249,10 +249,10 @@ internal sealed class DefaultInboundHttpMetricBuilder : IInboundHttpMetricBuilde
             ("host", request.Host.Host), // host without the port value
             ("request-path", path)
         };
-        
+
         if (request.Protocol.StartsWith("HTTP/"))
             tags.Add(("http-version", request.Protocol.Substring(5)));
-        
+
         return tags;
     }
 
@@ -263,10 +263,10 @@ internal sealed class DefaultInboundHttpMetricBuilder : IInboundHttpMetricBuilde
         {
             if (left is null || right is null)
                 return ReferenceEquals(left, right);
-            
+
             if (left.Count != right.Count)
-                return false; 
-            
+                return false;
+
             if (left.Count == 0)
                 return true; // Both are 0
 

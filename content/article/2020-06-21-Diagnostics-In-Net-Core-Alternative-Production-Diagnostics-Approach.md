@@ -1,9 +1,9 @@
 {
     "title": "Diagnostics in .Net Core 3: An alternative approach to using dotnet-counters with Docker",
     "description": "A look into the EventCounters API in .Net Core 3, and seeing how we can capture inbound HTTP Requests.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics"],
+    "tags": ["aspnet", "dotnet", "diagnostics"],
     "date": "2020-06-25T22:56:00+01:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "series": ["Diagnostics in .Net Core 3"],
     "toc": true
 }

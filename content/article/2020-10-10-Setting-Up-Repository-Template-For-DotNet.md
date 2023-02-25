@@ -1,9 +1,9 @@
 {
     "title": "Setting Up A Repository Template In Github For .Net",
     "description": "A look into how we can create a Github repository to automatically have our core files in it.",
-    "tags": ["aspnetcore", "dotnet", "dotnetcore", "csharp", "git", "github"],
+    "tags": ["aspnet", "dotnet", "csharp", "git", "github"],
     "date": "2020-10-10T17:45:00+01:00",
-    "categories": ["development", "git" ],
+    "categories": ["Development"],
     "series": ["Repository Templates"],
     "toc": true
 }

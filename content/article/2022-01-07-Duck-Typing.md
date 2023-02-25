@@ -1,9 +1,9 @@
 {
     "title": "Things you might not know about CSharp - Duck Typing",
     "description": "",
-    "tags": ["c#", "dotnet"],
+    "tags": ["csharp", "dotnet"],
     "date": "2022-01-07T08:00:00Z",
-    "categories": ["dotnet"],
+    "categories": ["Development"],
     "series": ["Things you might not know about CSharp"],
     "toc": true
 }
@@ -53,7 +53,7 @@ public class Program {
 
 public static class Extensions
 {
-     public static IEnumerator<int> GetEnumerator(this int i) => Enumerable.Range(0, i).GetEnumerator();   
+     public static IEnumerator<int> GetEnumerator(this int i) => Enumerable.Range(0, i).GetEnumerator();
 }
 ```
 
@@ -71,26 +71,26 @@ public class Program {
 
 public static class Extensions
 {
-     public static CustomEnumerator GetEnumerator(this int i) => new CustomEnumerator(i);   
+     public static CustomEnumerator GetEnumerator(this int i) => new CustomEnumerator(i);
 }
 
 public class CustomEnumerator
 {
     private int _limit;
     private int _current;
-    
+
     public int Current => _current - 1;
-    
+
     public CustomEnumerator(int limit) { _limit = limit; }
-    
+
     public bool MoveNext()
     {
         if (_current < _limit)
         {
             _current += 1;
-            return true;   
+            return true;
         }
-        
+
         return false;
     }
 }
@@ -116,7 +116,7 @@ Let's imagine that we want to implement the following code:
 public class Program {
     public static async Task Main() {
         await 1.Seconds();
-    }    
+    }
 }
 
 public static class Extensions
@@ -131,7 +131,7 @@ To make it compile, we need to add the aforementioned parameterless `GetAwaiter`
 public class Program {
     public static async Task Main() {
         await 1.Seconds();
-    }    
+    }
 }
 
 public static class Extensions
@@ -149,7 +149,7 @@ In the above example, we are using the built in awaiter for `Task.Delay` - but w
 public class Program {
     public static async Task Main() {
         await 1.Seconds();
-    }    
+    }
 }
 
 public static class Extensions
@@ -162,7 +162,7 @@ public class TimeSpanAwaiter : INotifyCompletion
 {
     public bool IsCompleted => true;
     public Object GetResult() => null;
-    
+
     public TimeSpanAwaiter(TimeSpan x)
     {
         // Not implemented for brevity
@@ -185,7 +185,7 @@ In ASP.NET Core, there are two main areas were duck typing is used: the Startup 
 
 ```csharp
 public class Startup
-{        
+{
     public void Configure(IApplicationBuilder app)
     {
         app.UseRouting();

@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-06-05T15:00:59+01:00",
    "description": "A quick explanition of why consistent urls are important and how to achieve them with url rewriting.",
-   "tags": [ "IIS", "Url Rewrite", "SEO" ],
+   "tags": [ "IIS", "Url Rewrite", "SEO", "devops" ],
    "series": ["Url Rewriting"],
    "title": "Removing trailing slashes with URL Rewrite"
 }

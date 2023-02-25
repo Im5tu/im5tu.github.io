@@ -1,9 +1,9 @@
 {
     "title": "Implementing Simple Feature Toggles In AspNetCore Using IConfiguration",
     "description": "A look into how we implement simple feature toggles using IConfiguration",
-    "tags": ["aspnetcore", "dotnet", "dotnetcore", "csharp"],
+    "tags": ["aspnet", "dotnet", "csharp"],
     "date": "2020-08-29T11:45:00+01:00",
-    "categories": ["development"],
+    "categories": ["Development"],
     "toc": true
 }
 

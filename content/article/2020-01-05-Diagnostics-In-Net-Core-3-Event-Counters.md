@@ -1,9 +1,9 @@
 {
     "title": "Diagnostics in .Net Core 3: Event Counters",
     "description": "A look into the EventCounters API in .Net Core 3",
-    "tags": ["aspnetcore", "dotnet", "diagnostics"],
+    "tags": ["aspnet", "dotnet", "diagnostics"],
     "date": "2020-01-05T14:00:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "series": ["Diagnostics in .Net Core 3"],
     "toc": true
 }
@@ -389,7 +389,7 @@ In order to detect the lazily initiated EventSources, we need to periodically ca
 ```csharp
 internal sealed class MetricsCollectionService : EventListener, IHostedService
 {
-    private List<string> RegisteredEventSources = new List<string>(); 
+    private List<string> RegisteredEventSources = new List<string>();
     private Task _newDataSourceTask;
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -419,7 +419,7 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
             });
         }
     }
-    
+
     private void GetNewSources()
     {
         foreach (var eventSource in EventSource.GetSources())
@@ -437,13 +437,13 @@ The last bit for us to do is to override the `OnEventWritten`:
 ```csharp
 protected override void OnEventWritten(EventWrittenEventArgs eventData)
 {
-    if (eventData.EventName != "EventCounters" 
-            || eventData.Payload.Count <= 0 
-            || !(eventData.Payload[0] is IDictionary<string, object> data) 
-            || !data.TryGetValue("CounterType", out var counterType) 
+    if (eventData.EventName != "EventCounters"
+            || eventData.Payload.Count <= 0
+            || !(eventData.Payload[0] is IDictionary<string, object> data)
+            || !data.TryGetValue("CounterType", out var counterType)
             || !data.TryGetValue("Name", out var name))
         return;
-    
+
     var metricType = counterType.ToString();
     float metricValue = 0;
 
@@ -455,7 +455,7 @@ protected override void OnEventWritten(EventWrittenEventArgs eventData)
     {
         metricValue = Convert.ToSingle(mean);
     }
-    
+
     // do something with your metric here...
 }
 ```
@@ -467,7 +467,7 @@ Putting all of the above code together, we get something like the following:
 ```csharp
 internal sealed class MetricsCollectionService : EventListener, IHostedService
 {
-    private List<string> RegisteredEventSources = new List<string>(); 
+    private List<string> RegisteredEventSources = new List<string>();
     private Task _newDataSourceTask;
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -500,13 +500,13 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
 
     protected override void OnEventWritten(EventWrittenEventArgs eventData)
     {
-        if (eventData.EventName != "EventCounters" 
-                || eventData.Payload.Count <= 0 
-                || !(eventData.Payload[0] is IDictionary<string, object> data) 
-                || !data.TryGetValue("CounterType", out var counterType) 
+        if (eventData.EventName != "EventCounters"
+                || eventData.Payload.Count <= 0
+                || !(eventData.Payload[0] is IDictionary<string, object> data)
+                || !data.TryGetValue("CounterType", out var counterType)
                 || !data.TryGetValue("Name", out var name))
             return;
-        
+
         var metricType = counterType.ToString();
         float metricValue = 0;
 
@@ -518,7 +518,7 @@ internal sealed class MetricsCollectionService : EventListener, IHostedService
         {
             metricValue = Convert.ToSingle(mean);
         }
-        
+
         // do something with your metric here...
     }
 

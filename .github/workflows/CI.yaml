@@ -20,7 +20,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.91.2'
+          hugo-version: '0.110.0'
           extended: true
 
 # Beginning of yarn setup
@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '>=16.0.0'
           check-latest: true
-      
+
       - name: npm install yarn
         run: |
           npm install --global yarn
@@ -42,12 +42,12 @@ jobs:
           key: v16-node_modules-${{ hashFiles('**/yarn.lock', '**/package.json') }}
           restore-keys: |
             v16-node_modules-
-      
+
       - name: find location of global yarn cache
         id: yarn-cache
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      
+
       - name: cache global yarn cache
         uses: actions/cache@v2
         if: steps.cache-modules.outputs.cache-hit != 'true'

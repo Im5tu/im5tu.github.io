@@ -3,7 +3,7 @@
     "description": "A look into some of the git aliases that I have configured on my machine which are in constant use.",
     "tags": ["git"],
     "date": "2020-07-11T12:56:00+01:00",
-    "categories": ["git", "Development"],
+    "categories": ["Development"],
     "toc": true
 }
 

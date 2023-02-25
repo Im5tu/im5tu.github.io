@@ -2,7 +2,7 @@
    "categories": [ "News" ],
    "date": "2017-03-01T19:32:24Z",
    "description": "First of a monthly series capturing various articles that I find interesting as I catch up on the tech news from around the web.",
-   "tags": [ "News", "Roundup" ],
+   "tags": [ "news", "Roundup" ],
    "title": "News Roundup March 2017"
 }
 
@@ -38,7 +38,7 @@ Spotify actively manage 800 Google Cloud platform projects. They've just release
 
 ### Grafana plugin for DNS analytics
 
-*Via [Marek Vavruša](https://blog.cloudflare.com/author/marek/) on the Cloudflare blog - [Link](https://blog.cloudflare.com/grafana-plugin/)* 
+*Via [Marek Vavruša](https://blog.cloudflare.com/author/marek/) on the Cloudflare blog - [Link](https://blog.cloudflare.com/grafana-plugin/)*
 
 In better news for Cloudflare, they have released a plugin for [Granfana](http://grafana.org/) allowing you to see various details about the DNS traffic on your domain. Read how to [get started](https://support.cloudflare.com/hc/en-us/articles/115002722267).
 

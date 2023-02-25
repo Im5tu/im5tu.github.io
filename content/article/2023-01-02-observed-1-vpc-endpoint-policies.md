@@ -3,7 +3,7 @@
     "description": "Welcome to the very first edition of Observed! Each week I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at VPC endpoint policies in AWS.",
     "tags": ["devops", "observed"],
     "date": "2023-01-02T01:00:00+00:00",
-    "categories": ["devops", "observed"]
+    "categories": ["Development"]
 }
 
 Welcome to the very first edition of Observed! Each week I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at VPC endpoint policies in AWS.

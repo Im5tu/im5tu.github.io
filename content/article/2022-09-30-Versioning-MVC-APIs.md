@@ -1,9 +1,9 @@
 {
     "title": "ASP.NET Core Versioning: MVC APIs",
     "description": "Learn how to setup ASPNET Core Versioning for MVC APIs",
-    "tags": ["aspnetcore", "dotnet", "YouTube"],
+    "tags": ["aspnet", "dotnet", "YouTube"],
     "date": "2022-09-30T12:00:00+01:00",
-    "categories": ["aspnetcore", "dotnet", "YouTube"],
+    "categories": ["Development"],
     "series": ["API Versioning"],
     "toc": true
 }

@@ -1,9 +1,9 @@
 {
     "title": "Extending the AWS SDK for .Net",
     "description": "In this article we're taking a look at how to extend the AWS SDK for .NET, which can be useful for various tasks like adding in some custom observability components into the request pipeline.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics", "AWS"],
+    "tags": ["aspnet", "dotnet", "diagnostics", "AWS"],
     "date": "2022-01-08T08:00:00Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "toc": true
 }
 

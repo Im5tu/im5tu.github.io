@@ -1,9 +1,9 @@
 {
     "title": "Things you might not know about CSharp - Using Params with Indexers",
     "description": "In the first part of this series, we are going to take a look at a little known feature with index parameters. See how to pass multiple arguments to a custom indexer.",
-    "tags": ["c#", "dotnet"],
+    "tags": ["csharp", "dotnet"],
     "date": "2022-01-02T08:00:00Z",
-    "categories": ["dotnet"],
+    "categories": ["Development"],
     "series": ["Things you might not know about CSharp"],
     "toc": true
 }
@@ -20,9 +20,9 @@ Below is a contrived example of how you would create an indexer for a class and 
 
 ```csharp
 public class IndexerExample {
-    
+
     private Dictionary<String, String> _data = new();
-    
+
     public String this[string id]
     {
          get => _data[id];
@@ -32,7 +32,7 @@ public class IndexerExample {
 public class TestClass
 {
     private readonly IndexerExample _instance = new();
-    
+
     public string TestMethod() => _instance["hello"];
 }
 ```
@@ -47,9 +47,9 @@ Whilst indexers are a relatively well-known concept, mainly from their usage in 
 
 ```csharp
 public class IndexerExample {
-    
+
     private Dictionary<String, String> _data = new();
-    
+
     public String this[params string[] ids]
     {
          get => string.Join(", ", ids.Select(x => _data[x]));
@@ -59,7 +59,7 @@ public class IndexerExample {
 public class TestClass
 {
     private readonly IndexerExample _instance = new();
-    
+
     public string TestMethod() => _instance["hello", "world"];
 }
 ```
@@ -70,14 +70,14 @@ In this example, we can specify many arguments into the indexer, and have one or
 
 ```csharp
 public class IndexerExample {
-    
+
     private Dictionary<String, String> _data = new();
-    
+
     public String this[string id]
     {
          get => _data[id];
     }
-    
+
     public IEnumerable<String> this[params string[] ids]
     {
          get => ids.Select(x => _data[x]);

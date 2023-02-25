@@ -1,9 +1,9 @@
 {
     "title": "Automated Builds in VSTS with YML Build Definitions",
     "description": "Publish an ASPNET Core website using a VSTS YML build definition.",
-    "tags": ["vsts", "dotnetcore", "aspnetcore", "devops"],
+    "tags": ["vsts", "dotnet", "aspnet", "devops"],
     "date": "2018-06-17T21:35:00+01:00",
-    "categories": ["development"]
+    "categories": ["Development"]
 }
 
 In this article we will explore a preview feature inside of Visual Studio Team Services (VSTS) called YML Build Definitions. In essence, this allows you to change your build process from a `.yml` file in your git repository much in the same way as you can do with other services such as AppVeyor. During the article, we will setup a build definition for an Aspnet Core website.
@@ -83,7 +83,7 @@ The shorter, inclusive only syntax is:
         [string]
 ```
 
-Personally, I prefer the full syntax, but it doesn't make a difference as I typically only use inclusive only filters. Where `[string]` is present, either place a single entry or if multiple entries are required, follow my example where I place `- ` on the start of each new line of the element.
+Personally, I prefer the full syntax, but it doesn't make a difference as I typically only use inclusive only filters. Where `[string]` is present, either place a single entry or if multiple entries are required, follow my example where I place `-` on the start of each new line of the element.
 
 One last point to note, if you setup your branching policies in VSTS to require a build from the yml build definition, this will always be triggered regardless of the settings in this section - as far as I am aware.
 
@@ -118,10 +118,10 @@ As mentioned earlier in the article, I will be walking through how to create a b
 As a best practise, the first thing that I do in a build process is to reset the state of the repository. This prevents any issues such as false positives from previous builds etc. In order to do this, we can execute a small git magic:
 
 ```yml
-    steps: 
+    steps:
     - script: |
       git clean -d -x -f
-        
+
       displayName: Clean Sources
 ```
 
@@ -163,7 +163,7 @@ In order to build the project(s), I use a two step process: restore the required
         noCache: true
         verbosityRestore: Normal
 ```
-        
+
 In the above snippet, the first thing that I want to mention is that I am using a variable to decide which projects I want nuget packages to be restored for.The projects directive supports a wildcard approach, so we can declare a folder structure such as `**/*.csproj` should we want to. Next, I had to set the `noCache: true` directive as I always wanted the latest versions from the nuget feeds. This shouldn't be required on hosted build servers, but may be needed for your own build servers. Lastly, I set the verbosity level back to normal, where the default is detailed. This massively cleans up the corresponding build logs. I'll leave it up to you, the reader, to extract this to a variable should you wish too.
 
 ```yml

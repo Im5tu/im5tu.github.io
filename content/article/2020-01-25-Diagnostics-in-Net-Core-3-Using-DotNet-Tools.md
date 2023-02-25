@@ -1,9 +1,9 @@
 {
     "title": "Diagnostics in .Net Core 3: Using dotnet-counters with Docker",
     "description": "A look into how we can use dotnet-counters with a docker container",
-    "tags": ["aspnetcore", "dotnet", "diagnostics"],
+    "tags": ["aspnet", "dotnet", "diagnostics"],
     "date": "2020-01-25T13:00:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "series": ["Diagnostics in .Net Core 3"],
     "toc": true
 }
@@ -71,7 +71,7 @@ We mount the volume because as the .Net runtime starts up, it places a load of t
 
 ```
 root@379211a5012a:/# ls /tmp
-CoreFxPipe_root.b5he0_wwfcD_lH7g471Brpw4X   VBCSCompiler                                 
+CoreFxPipe_root.b5he0_wwfcD_lH7g471Brpw4X   VBCSCompiler
 jiksomfd.ri0                                NuGetScratch
 hn2K8eq8bHUcTVSgvuckPlSK9tw9_ORiMDm_Vn4ylfI system-commandline-sentinel-files
 ```

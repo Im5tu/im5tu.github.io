@@ -1,9 +1,9 @@
 {
     "title": "Building Service Fabric Apps With VSTS YML Build Definitions",
     "description": "Publish an Service Fabric application using a VSTS YML build definition.",
-    "tags": ["vsts", "dotnetcore", "service fabric", "devops"],
+    "tags": ["vsts", "dotnet", "service fabric", "devops"],
     "date": "2018-06-30T19:40:00+01:00",
-    "categories": ["development"]
+    "categories": ["Development"]
 }
 
 In my [previous article](/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/), we setup a standarised build using the new YML build definitions within VSTS, using the .Net CLI tooling. In this article, we will use the same setup as our base, but we will build and publish a service fabric application.
@@ -68,7 +68,7 @@ When it comes around to publishing the application(s), I usually create two vers
     arguments: '-c Release /p:Platform=x64 /p:Version=$(Build.BuildNumber) /t:Package /p:PackageLocation=$(Build.ArtifactStagingDirectory)\drop\release\applicationpackage'
 ```
 
-_**Note**_: _Sorry about the formatting, see the full file at the end of the article for the proper formatting._
+_**Note**_: *Sorry about the formatting, see the full file at the end of the article for the proper formatting.*
 
 In this step, we package directly to the artifact staging directory to make publishing to the build artifacts a lot easier later in the process. All of the output is placed inside of the `drop` folder as a way of differentiating between this artifact and others. Under the `drop` folder, we split based on the configuration type: Debug/Release. Both the debug and the release folder mirror the same folder structure which is an `applicationpackage` folder, containing the packaged code and the `projectartifacts` folder which will contain the publish profiles. So the full folder structure appears like:
 

@@ -3,7 +3,7 @@
     "description": "A look into what CloudEvents are, and how they can be used as a internal format for messaging",
     "tags": ["cncf", "messaging" ],
     "date": "2020-11-21T11:34:07Z",
-    "categories": ["development" ],
+    "categories": ["Development"],
     "toc": true
 }
 

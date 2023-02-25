@@ -1,9 +1,9 @@
 {
     "title": "Using Certificates From AWS Private Certificate Authority in .NET",
     "description": "As companies grow, moving to a zero-trust architecture is majorly important. This article explores how to build it in AWS.",
-    "tags": ["aspnetcore", "dotnet", "AWS"],
+    "tags": ["aspnet", "dotnet", "AWS"],
     "date": "2021-01-17T11:43:01Z",
-    "categories": ["aspnetcore", "dotnet"],
+    "categories": ["Development"],
     "toc": true
 }
 

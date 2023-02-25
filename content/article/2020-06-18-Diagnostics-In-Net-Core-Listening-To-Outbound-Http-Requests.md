@@ -1,9 +1,9 @@
 {
     "title": "Diagnostics in .Net Core 3: Listening to outbound HTTP requests",
     "description": "A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests.",
-    "tags": ["aspnetcore", "dotnet", "diagnostics"],
+    "tags": ["aspnet", "dotnet", "diagnostics"],
     "date": "2020-06-18T01:34:00",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "series": ["Diagnostics in .Net Core 3"],
     "toc": true
 }
@@ -41,7 +41,7 @@ internal sealed class DiagnosticsHostedService : IHostedService
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
     }
-    
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _subscription ??= DiagnosticListener.AllListeners.Subscribe(_observer);
@@ -70,7 +70,7 @@ internal class Observer : IObserver<DiagnosticListener>
     {
         _listeners = listeners?.ToList() ?? throw new ArgumentNullException(nameof(listeners));
     }
-    
+
     public void OnCompleted()
     {
         lock (_listeners)
@@ -89,7 +89,7 @@ internal class Observer : IObserver<DiagnosticListener>
         {
             if (_complete)
                 return;
-            
+
             foreach(var listener in _listeners)
                 listener.TryObserve(value);
         }
@@ -133,7 +133,7 @@ public abstract class DiagnosticListenerBase : IDiagnosticListener
 
             _disposed = true;
         }
-        
+
         OnDispose();
     }
 
@@ -169,10 +169,10 @@ internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListener
     {
         if (diagnosticListener is null || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
             return;
-    
+
         foreach (var observer in _observers)
             Subscribe(diagnosticListener, observer);
-    } 
+    }
 }
 ```
 
@@ -198,7 +198,7 @@ public abstract class SimpleDiagnosticListenerObserver : IObserver<KeyValuePair<
 {
     // Gets the conversion factor that's used to go from ticks to a real world time. Inspiration: https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs
     protected static readonly double TimestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
-    
+
     public virtual void OnCompleted()
     {
     }
@@ -208,7 +208,7 @@ public abstract class SimpleDiagnosticListenerObserver : IObserver<KeyValuePair<
     }
 
     public abstract void OnNext(KeyValuePair<string, object> value);
-    
+
     protected static TimeSpan GetDuration(long startTimestampInTicks, long endTimestampInTicks)
     {
         var timestampDelta = endTimestampInTicks - startTimestampInTicks;
@@ -241,11 +241,11 @@ internal sealed class OutboundHttpRequestObserver : SimpleDiagnosticListenerObse
             var data = GetValueAs<TypedData>(value);
             if (data?.Request?.Properties is {})
             {
-                data.Request.Properties["RequestTimestamp"] = data.Timestamp;    
+                data.Request.Properties["RequestTimestamp"] = data.Timestamp;
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpRequestMessage? Request;
@@ -269,7 +269,7 @@ internal sealed class OutboundHttpResponseObserver : SimpleDiagnosticListenerObs
     {
         _metricBuilder = metricBuilder;
     }
-    
+
     public override void OnNext(KeyValuePair<string, object> value)
     {
         if (value.Key == "System.Net.Http.Response")
@@ -290,7 +290,7 @@ internal sealed class OutboundHttpResponseObserver : SimpleDiagnosticListenerObs
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpResponseMessage? Response;
@@ -351,11 +351,11 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
     private readonly ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> _successCounters = new ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter>(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> _errorCounters = new ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter>(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary<List<(string key, string value)>, EventCounter> _latencyCounters = new ConcurrentDictionary<List<(string key, string value)>, EventCounter>(new ListOfTupleEqualityComparer());
-    
+
     public IncrementingEventCounter GetSuccessCounter(HttpRequestMessage request, HttpResponseMessage response) => GetCoreHttpRequestCounter(_successCounters, request, response);
 
     public IncrementingEventCounter GetErrorCounter(HttpRequestMessage request, HttpResponseMessage response) => GetCoreHttpRequestCounter(_errorCounters, request, response);
-    
+
     public EventCounter GetLatencyCounter(HttpRequestMessage request, HttpResponseMessage response)
     {
         return _latencyCounters.GetOrAdd(GetCoreTags(request, response), key =>
@@ -369,9 +369,9 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
                 counter.AddMetadata(dimension.key, dimension.value);
             MyDiagnosticsEventSource.Instance.AddDiagnosticCounter(counter);
             return counter;
-        });        
+        });
     }
-    
+
     private IncrementingEventCounter GetCoreHttpRequestCounter(ConcurrentDictionary<List<(string key, string value)>, IncrementingEventCounter> collection, HttpRequestMessage request, HttpResponseMessage response)
     {
         return collection.GetOrAdd(GetCoreTags(request, response), key =>
@@ -409,7 +409,7 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
                     path = path.Substring(0, queryIndex);
             }
         }
-        
+
         var tags = new List<(string, string)>
         {
             ("http-method", request.Method.ToString()),
@@ -419,7 +419,7 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
             ("http-status-code", ((int)response.StatusCode).ToString()),
             ("request-path", path)
         };
-        
+
         if (request.RequestUri.IsAbsoluteUri)
             tags.Add(("host", request.RequestUri.Authority));
 
@@ -432,8 +432,8 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
         public override bool Equals(List<(string, string)> left, List<(string, string)> right)
         {
             if (left.Count != right.Count)
-                return false; 
-            
+                return false;
+
             if (left.Count == 0)
                 return true; // Both are 0
 

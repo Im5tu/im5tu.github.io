@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-06-03T15:00:51+01:00",
    "description": "A quick introduction to URL Rewrite module for IIS and a snippet from going from HTTP to HTTPS.",
-   "tags": [ "IIS", "Url Rewrite" ],
+   "tags": [ "IIS", "Url Rewrite", "devops" ],
    "series": ["Url Rewriting"],
    "title": "Up and running with URL Rewrite - going from HTTP to HTTPS"
 }

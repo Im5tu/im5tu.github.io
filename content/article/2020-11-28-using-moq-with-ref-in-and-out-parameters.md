@@ -1,9 +1,9 @@
 {
     "title": "Using Moq with ref, in and out parameters in C#",
     "description": "A look into how we can use Moq with ref, in and out parameters in C#",
-    "tags": ["aspnetcore", "dotnet", "diagnostics", "testing", "moq"],
+    "tags": ["aspnet", "dotnet", "diagnostics", "testing", "moq"],
     "date": "2020-11-28T12:39:52Z",
-    "categories": ["aspnetcore", "dotnet", "diagnostics"],
+    "categories": ["Development"],
     "toc": true
 }
 

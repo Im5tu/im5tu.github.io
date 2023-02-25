@@ -1,9 +1,9 @@
 {
     "title": "Utf8Json Media Formatters for ASP.Net Core",
     "description": "An updated sample of the input/output media formatters which use Utf8Json as the serialisation library",
-    "tags": ["aspnetcore", "dotnet", "dotnetcore"],
+    "tags": ["aspnet", "dotnet"],
     "date": "2018-07-29T16:40:00+01:00",
-    "categories": ["development"]
+    "categories": ["Development"]
 }
 
 Recently, I have been looking at the [Utf8Json](https://github.com/neuecc/Utf8Json) project and evaluating for use in our high performance payments API. Looking at the benchmarks on the Github page, and running my own benchmarks, the numbers stated seemed to tally up, so I built a few media formatters for aspnet core.
@@ -51,7 +51,6 @@ internal sealed class Utf8JsonInputFormatter : IInputFormatter
 ```
 
 ## Utf8Json Output Media Formatter
-
 
 ```csharp
 using Microsoft.AspNetCore.Mvc.Formatters;

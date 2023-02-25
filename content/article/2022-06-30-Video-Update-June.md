@@ -1,9 +1,9 @@
 {
     "title": "Video Content Round Up: June 2022",
     "description": "Update on the Youtube channel reboot and details on the 4 new videos that I've posted!",
-    "tags": ["aspnetcore", "dotnet", "Github", "YouTube"],
+    "tags": ["aspnet", "dotnet", "github", "YouTube"],
     "date": "2022-06-30T20:13:05+01:00",
-    "categories": ["aspnetcore", "dotnet", "Github", "YouTube"],
+    "categories": ["Development"],
     "toc": true
 }
 

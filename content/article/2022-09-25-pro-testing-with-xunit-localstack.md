@@ -1,9 +1,9 @@
 {
     "title": "Pro Testing with Xunit & Localstack",
     "description": "Learn how to setup Xunit with any docker image using localstack as our example",
-    "tags": ["aspnetcore", "dotnet", "xunit", "aws", "localstack", "YouTube"],
+    "tags": ["aspnet", "dotnet", "xunit", "AWS", "localstack", "YouTube"],
     "date": "2022-09-25T12:00:00+01:00",
-    "categories": ["aspnetcore", "dotnet", "xunit", "aws", "localstack", "YouTube"],
+    "categories": ["Development"],
     "toc": true
 }
 

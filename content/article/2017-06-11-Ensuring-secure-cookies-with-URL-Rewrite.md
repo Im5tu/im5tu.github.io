@@ -2,7 +2,7 @@
    "categories": [ "Development" ],
    "date": "2017-06-11T20:38:07+01:00",
    "description": "A handy URL Rewrite snippet to mark cookies as secure.",
-   "tags": [ "IIS", "Url Rewrite", "Cookies" ],
+   "tags": [ "IIS", "Url Rewrite", "Cookies", "devops" ],
    "series": ["Url Rewriting"],
    "title": "Ensuring secure cookies with URL Rewrite"
 }
@@ -25,7 +25,7 @@ As per the snippet in our previous post, we are going to create an outbound rule
 
 ```xml
 <rewrite>
-    <outboundRules> 
+    <outboundRules>
         <rule name="Ensure secure Cookies" preCondition="Missing secure cookie">
             <match serverVariable="RESPONSE_Set_Cookie" pattern=".*" negate="false" />
             <action type="Rewrite" value="{R:0}; secure" />
@@ -45,7 +45,7 @@ Within our rule, we are defining the name of the rule which can be viewed inside
 
 Within the precondition, which is matched by name to the `preCondition` attribute in the rule, we do two things:
 
-- (_I think, see below_) Make sure that the `Set-Cookie` header has been set (via the server variable `{RESPONSE_Set_Cookie}`);
+- (*I think, see below*) Make sure that the `Set-Cookie` header has been set (via the server variable `{RESPONSE_Set_Cookie}`);
 - Make sure that we do not already have the `secure` modifier set
 
 As per my previous post, due to a knowledge gap, the first line is required within the pre-condition or funky things happen.
