@@ -1,140 +1,7 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="ie=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=author content="Stuart Blackler ">
-<meta name=description content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests.">
-<meta name=keywords content=",aspnetcore,dotnet,diagnostics">
-<meta name=robots content="noodp">
-<meta name=theme-color content>
-<link rel=canonical href=https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/>
-<title>
-Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackler's Blog
-</title>
-<link href=https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css rel=stylesheet type=text/css>
-<link rel=stylesheet href=/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
-<link rel=mask-icon href=/safari-pinned-tab.svg color>
-<link rel="shortcut icon" href=/favicon.ico>
-<meta name=msapplication-TileColor content>
-<meta itemprop=name content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests">
-<meta itemprop=description content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests."><meta itemprop=datePublished content="2020-06-18T01:34:00+00:00">
-<meta itemprop=dateModified content="2020-06-18T01:34:00+00:00">
-<meta itemprop=wordCount content="2567">
-<meta itemprop=keywords content="aspnetcore,dotnet,diagnostics,">
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests">
-<meta name=twitter:description content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests.">
-<meta property="og:title" content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests">
-<meta property="og:description" content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/"><meta property="article:section" content="article">
-<meta property="article:published_time" content="2020-06-18T01:34:00+00:00">
-<meta property="article:modified_time" content="2020-06-18T01:34:00+00:00">
-<meta property="og:see_also" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/"><meta property="og:see_also" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/"><meta property="og:see_also" content="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/"><meta property="og:see_also" content="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">
-<meta property="article:section" content="aspnetcore">
-<meta property="article:section" content="dotnet">
-<meta property="article:section" content="diagnostics">
-<meta property="article:published_time" content="2020-06-18 01:34:00 +0000 UTC">
-<link rel=alternate type=application/rss+xml href=https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/index.xml title="Stuart Blackler's Blog">
-<meta property="og:image" content="https://im5tu.io/img/profile.png">
-<meta property="og:site_name" content="Stuart Blackler's Blog">
-<link rel=alternate type=application/rss+xml href=/index.xml title="Stuart Blackler's Blog">
-<link rel=preconnect href=https://api.github.com>
-<link rel=preconnect href=https://partner.googleadservices.com>
-<link rel=preconnect href=https://tpc.googlesyndication.com>
-<link rel=preconnect href=https://www.googletagservices.com>
-<link rel=preconnect href=https://googleads.g.doubleclick.net>
-<link rel=preconnect href=https://pagead2.googlesyndication.com>
-<link rel=preload href=/fonts/Inter-UI-Bold.woff2>
-<link rel=preload href=/fonts/Inter-UI-Regular.woff2>
-<style>.post{max-width:1200px}.header__inner{width:100%;max-width:1160px}.toolbar{display:none!important}.copy-code-button{float:right;display:block;padding:8px 12px;font-size:.9em;background-color:#e2e2e2;border-left:1px solid #e2e2e2;border-bottom:1px solid #e2e2e2;border-radius:0;border-bottom-left-radius:10px;transition:all 250ms ease;margin:-18px;opacity:0}.copy-code-button:hover{cursor:pointer;opacity:.7;border-style:solid}.copy-code-button:focus{background-color:#e2e2e2;outline:0;border-style:solid}.copy-code-button:active{background-color:#e2e2e2;opacity:.5;border-style:solid}pre:hover .copy-code-button{opacity:1}.copy-code-button~pre{position:relative}table{width:100%;border-collapse:collapse}table th{background-color:#cecece;color:#222}table tr{margin:0;padding:0}table tr:first-child{border-left:1px solid #acacac;border-top:1px solid #acacac;border-right:1px solid #acacac}table tr td:first-child{border-left:1px solid #acacac}table tr td:last-child{border-right:1px solid #acacac}table td,table th{padding:.5em;border-bottom:1px solid #acacac;margin:0}h2{margin-top:1.5em}h2 a:link,h2 a:visited,h3 a:link,h3 a:visited,h4 a:link,h4 a:visited,h5 a:link,h5 a:visited{text-decoration:none}h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover{text-decoration:underline}#promotions img{margin:20px auto}#sponsorMessage{width:100%;background:#f2cc8f;color:#242325;padding:10px;font-size:.9em}.flex-container{width:100%;display:inline-flex;justify-content:space-between}.flex-box{display:block}.hidden{display:hidden}@media print{.copy-code-button{display:none}}@media(prefers-color-scheme:dark){.copy-code-button{background-color:#969696;color:#323232}}</style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QLMVXHCJ5K"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-QLMVXHCJ5K')</script>
-<script data-ad-client=ca-pub-8597760177900459 async src=https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js></script>
-</head>
-<body>
-<div class=container>
-<header class=header>
-<span class=header__inner>
-<a href=/ style=text-decoration:none>
-<div class=logo>
-<span class=logo__mark>></span>
-<span class=logo__text>im5tu.io</span>
-<span class=logo__cursor>
-</span>
-</div>
-</a>
-<span class=header__right>
-<nav class=menu>
-<ul class=menu__inner><li><a href=/article/>Blog</a></li><li><a href=https://discord.codewithstu.tv>Discord</a></li><li><a href=https://news.codewithstu.tv>Newsletter</a></li><li><a href=https://www.patreon.com/CodeWithStu>Patreon</a></li><li><a href=/article/index.xml>RSS</a></li><li><a href=https://twitter.com/CodeWithStu>Twitter</a></li><li><a href=https://codewithstu.tv>YouTube</a></li>
-</ul>
-</nav>
-<span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-</span>
-</span>
-</span>
-</header>
-<div class=content>
-<main class=post>
-<a id=sponsorLink href=/sponsorship ref=nofollow target=_blank>
-<div id=sponsorMessage class=hidden></div>
-</a>
-<div class=post-info>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 minutes
-</p>
-</div>
-<article>
-<h1 class=post-title>
-<a href=https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/>Diagnostics in .Net Core 3: Listening to outbound HTTP requests</a>
-</h1>
-<hr>
-<aside id=toc>
-<div class=toc-title>Table of Contents</div>
-<nav id=TableOfContents>
-<ul>
-<li><a href=#creating-the-diagnostics-hosted-service>Creating the diagnostics hosted service</a>
-<ul>
-<li><a href=#the-diagnosticshostedservice>The DiagnosticsHostedService</a></li>
-</ul>
-</li>
-<li><a href=#creating-the-observers>Creating the Observers</a>
-<ul>
-<li><a href=#implementing-idiagnosticlistener>Implementing IDiagnosticListener</a></li>
-<li><a href=#simplediagnosticlistenerobserver>SimpleDiagnosticListenerObserver</a></li>
-<li><a href=#creating-the-outboundhttprequestobserver>Creating the OutboundHttpRequestObserver</a></li>
-<li><a href=#creating-the-outboundhttpresponseobserver>Creating the OutboundHttpResponseObserver</a></li>
-</ul>
-</li>
-<li><a href=#creating-metrics-from-the-context-of-the-request>Creating metrics from the context of the request</a></li>
-</ul>
-</nav>
-</aside>
-<hr>
-<div class=post-content>
-<section class="series series-header">
-<p><i>This article is part of the <a href=#series>Diagnostics in .Net Core 3</a> series. You are reading part 3 of 5.</i></p>
-</section>
-<p>Throughout the course of my Diagnostics in .Net Core series, we&rsquo;ve taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.</p>
-<p>Our implementation is going to use a number of technologies combined to get the information that we require about the web request. Here are the steps that we need to complete:</p>
-<ol>
-<li>Create a service that hooks onto DiagnosticListeners as they get created</li>
-<li>Create a observer to listen for the start of an outbound request</li>
-<li>Create a observer to listen for the end of an outbound request</li>
-<li>Create metrics from the context of the request/response</li>
-</ol>
-<p>The classes that I&rsquo;ve added to this article are designed to give you the most flexiblity around how you extend your applications in future, including the next article. Another aim is to give the classes a single purpose to add with testability. If you do not need this level of extensiblity or testability, it should be relatively easy to merge some of the classes together. As this is already a lengthy article, I&rsquo;ve not included the tests here.</p>
-<h2 id=creating-the-diagnostics-hosted-service>Creating the diagnostics hosted service</h2>
-<p>Our <code>DiagnosticsHostedService</code> will help us manage the lifetime of our observers. I&rsquo;ve included here in the article for completeness, although this is an an optional step so log as you register your new <code>DiagnosticListener</code> observer via <code>DiagnosticListener.AllListeners</code> then you should be fine.</p>
-<p>A DiagnosticListener allows us to listen for events that are published in our application, either by a third party or ourselves, for the purposes of diagnostics. The events are sent from a <code>DiagnosticSource</code> that sends us a rich payload that&rsquo;s designed for consumption within the current process. They are multi-cast in nature, meaning that multiple listeners can listen to the same event without any issues. For our use case, we will listen to a single <code>DiagnosticSource</code> with multiple observers, for testability.</p>
-<p>Read more: <a href=https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md#consuming-data-with-diagnosticlistener>Consuming Data with DiagnosticListeners</a> / <a href="https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.diagnosticlistener?view=netcore-3.1">Microsoft Docs</a></p>
-<h3 id=the-diagnosticshostedservice>The DiagnosticsHostedService</h3>
-<p>Now that we have a basic understanding of a <code>DiagnosticListener</code> we can use this in a simple hosted service that uses a special property called <code>AllListeners</code>. This property then exposes a <code>Subscribe</code> method on which we can add our first type of observer:</p>
-<pre><code class=language-csharp>internal sealed class DiagnosticsHostedService : IHostedService
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="author" content="Stuart Blackler "><meta name="description" content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests."><meta name="keywords" content=",aspnet,dotnet,diagnostics"><meta name="robots" content="noodp"><meta name="theme-color" content><link rel="canonical" href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/"><title>Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: CodeWithStu's Blog</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw==" crossorigin="anonymous" referrerpolicy="no-referrer"><link rel="stylesheet" href="https://im5tu.io/main.2a064c455b0ecbd6b1481b3bf9df2441e95838691022f40a5338c2cb1244f075.css" integrity="sha256-KgZMRVsOy9axSBs7+d8kQelYOGkQIvQKUzjCyxJE8HU="><link rel="apple-touch-icon" sizes="180x180" href="https://im5tu.io/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://im5tu.io/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://im5tu.io/favicon-16x16.png"><link rel="manifest" href="https://im5tu.io/site.webmanifest"><link rel="mask-icon" href="https://im5tu.io/safari-pinned-tab.svg" color><link rel="shortcut icon" href="https://im5tu.io/favicon.ico"><meta name="msapplication-TileColor" content><meta itemprop="name" content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests"><meta itemprop="description" content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests."><meta itemprop="datePublished" content="2020-06-18T01:34:00+00:00"><meta itemprop="dateModified" content="2020-06-18T01:34:00+00:00"><meta itemprop="wordCount" content="2567"><meta itemprop="keywords" content="aspnet,dotnet,diagnostics,"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests"><meta name="twitter:description" content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests."><meta property="og:title" content="Diagnostics in .Net Core 3: Listening to outbound HTTP requests"><meta property="og:description" content="A look into the EventCounters API in .Net Core 3, and seeing how we can capture outbound HTTP Requests."><meta property="og:type" content="article"><meta property="og:url" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/"><meta property="article:section" content="article"><meta property="article:published_time" content="2020-06-18T01:34:00+00:00"><meta property="article:modified_time" content="2020-06-18T01:34:00+00:00"><meta property="og:see_also" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/"><meta property="og:see_also" content="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/"><meta property="og:see_also" content="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/"><meta property="og:see_also" content="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/"><meta property="article:section" content="Development"><meta property="article:published_time" content="2020-06-18 01:34:00 +0000 UTC"><link rel="alternate" type="application/rss+xml" href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/index.xml" title="CodeWithStu's Blog"><meta property="og:image" content="https://im5tu.io/img/profile.png"><meta property="og:site_name" content="CodeWithStu's Blog"><link rel="alternate" type="application/rss+xml" href="https://im5tu.io/index.xml" title="Stuart Blackler's Blog"><link rel="preconnect" href="https://api.github.com"><link rel="preconnect" href="https://partner.googleadservices.com"><link rel="preconnect" href="https://tpc.googlesyndication.com"><link rel="preconnect" href="https://www.googletagservices.com"><link rel="preconnect" href="https://googleads.g.doubleclick.net"><link rel="preconnect" href="https://pagead2.googlesyndication.com"><link rel="preload" href="https://im5tu.io/fonts/Inter-UI-Bold.woff2"><link rel="preload" href="https://im5tu.io/fonts/Inter-UI-Regular.woff2"><style>.post{max-width:1200px}.header__inner{width:100%;max-width:1160px}.toolbar{display:none!important}.copy-code-button{float:right;display:block;padding:8px 12px;font-size:.9em;background-color:#e2e2e2;border-left:1px solid #e2e2e2;border-bottom:1px solid #e2e2e2;border-radius:0;border-bottom-left-radius:10px;transition:all 250ms ease;margin:-18px;opacity:0}.copy-code-button:hover{cursor:pointer;opacity:.7;border-style:solid}.copy-code-button:focus{background-color:#e2e2e2;outline:0;border-style:solid}.copy-code-button:active{background-color:#e2e2e2;opacity:.5;border-style:solid}pre:hover .copy-code-button{opacity:1}.copy-code-button~pre{position:relative}table{width:100%;border-collapse:collapse}table th{background-color:#cecece;color:#222}table tr{margin:0;padding:0}table tr:first-child{border-left:1px solid #acacac;border-top:1px solid #acacac;border-right:1px solid #acacac}table tr td:first-child{border-left:1px solid #acacac}table tr td:last-child{border-right:1px solid #acacac}table td,table th{padding:.5em;border-bottom:1px solid #acacac;margin:0}h2{margin-top:1.5em}h2 a:link,h2 a:visited,h3 a:link,h3 a:visited,h4 a:link,h4 a:visited,h5 a:link,h5 a:visited{text-decoration:none}h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover{text-decoration:underline}#promotions img{margin:20px auto}#sponsorMessage{width:100%;background:#f2cc8f;color:#242325;padding:10px;font-size:.9em}.flex-container{width:100%;display:inline-flex;justify-content:space-between}.flex-box{display:block}.hidden{display:hidden}@media print{.copy-code-button{display:none}}@media(prefers-color-scheme:dark){.copy-code-button{background-color:#969696;color:#323232}}</style><script async src="https://www.googletagmanager.com/gtag/js?id=G-QLMVXHCJ5K"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-QLMVXHCJ5K")</script><script data-ad-client="ca-pub-8597760177900459" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script></head><body><div class="container"><header class="header"><span class="header__inner"><a href="https://im5tu.io/" style="text-decoration:none"><div class="logo"><span class="logo__mark">></span>
+<span class="logo__text">im5tu.io</span>
+<span class="logo__cursor"></span></div></a><span class="header__right"><nav class="menu"><ul class="menu__inner"><li><a href="https://im5tu.io/article/">Blog</a></li><li><a href="https://news.codewithstu.tv">Newsletter</a></li><li><a href="https://www.patreon.com/CodeWithStu">Patreon</a></li><li><a href="https://im5tu.io/article/index.xml">RSS</a></li><li><a href="https://twitter.com/CodeWithStu">Twitter</a></li><li><a href="https://codewithstu.tv">YouTube</a></li></ul></nav><span class="menu-trigger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span></span></span></header><div class="content"><main class="post"><a id="sponsorLink" href="https://im5tu.io/sponsorship" ref="nofollow" target="_blank"><div id="sponsorMessage" class="hidden"></div></a><div class="post-info"><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 minutes</p></div><article><h1 class="post-title"><a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/">Diagnostics in .Net Core 3: Listening to outbound HTTP requests</a></h1><hr><aside id="toc"><div class="toc-title">Table of Contents</div><nav id="TableOfContents"><ul><li><a href="#creating-the-diagnostics-hosted-service">Creating the diagnostics hosted service</a><ul><li><a href="#the-diagnosticshostedservice">The DiagnosticsHostedService</a></li></ul></li><li><a href="#creating-the-observers">Creating the Observers</a><ul><li><a href="#implementing-idiagnosticlistener">Implementing IDiagnosticListener</a></li><li><a href="#simplediagnosticlistenerobserver">SimpleDiagnosticListenerObserver</a></li><li><a href="#creating-the-outboundhttprequestobserver">Creating the OutboundHttpRequestObserver</a></li><li><a href="#creating-the-outboundhttpresponseobserver">Creating the OutboundHttpResponseObserver</a></li></ul></li><li><a href="#creating-metrics-from-the-context-of-the-request">Creating metrics from the context of the request</a></li></ul></nav></aside><hr><div class="post-content"><section class="series series-header"><p><i>This article is part of the <a href="#series">Diagnostics in .Net Core 3</a> series. You are reading part 3 of 5.</i></p></section><p>Throughout the course of my Diagnostics in .Net Core series, we&rsquo;ve taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.</p><p>Our implementation is going to use a number of technologies combined to get the information that we require about the web request. Here are the steps that we need to complete:</p><ol><li>Create a service that hooks onto DiagnosticListeners as they get created</li><li>Create a observer to listen for the start of an outbound request</li><li>Create a observer to listen for the end of an outbound request</li><li>Create metrics from the context of the request/response</li></ol><p>The classes that I&rsquo;ve added to this article are designed to give you the most flexiblity around how you extend your applications in future, including the next article. Another aim is to give the classes a single purpose to add with testability. If you do not need this level of extensiblity or testability, it should be relatively easy to merge some of the classes together. As this is already a lengthy article, I&rsquo;ve not included the tests here.</p><h2 id="creating-the-diagnostics-hosted-service">Creating the diagnostics hosted service</h2><p>Our <code>DiagnosticsHostedService</code> will help us manage the lifetime of our observers. I&rsquo;ve included here in the article for completeness, although this is an an optional step so log as you register your new <code>DiagnosticListener</code> observer via <code>DiagnosticListener.AllListeners</code> then you should be fine.</p><p>A DiagnosticListener allows us to listen for events that are published in our application, either by a third party or ourselves, for the purposes of diagnostics. The events are sent from a <code>DiagnosticSource</code> that sends us a rich payload that&rsquo;s designed for consumption within the current process. They are multi-cast in nature, meaning that multiple listeners can listen to the same event without any issues. For our use case, we will listen to a single <code>DiagnosticSource</code> with multiple observers, for testability.</p><p>Read more: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md#consuming-data-with-diagnosticlistener">Consuming Data with DiagnosticListeners</a> / <a href="https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.diagnosticlistener?view=netcore-3.1">Microsoft Docs</a></p><h3 id="the-diagnosticshostedservice">The DiagnosticsHostedService</h3><p>Now that we have a basic understanding of a <code>DiagnosticListener</code> we can use this in a simple hosted service that uses a special property called <code>AllListeners</code>. This property then exposes a <code>Subscribe</code> method on which we can add our first type of observer:</p><pre><code class="language-csharp">internal sealed class DiagnosticsHostedService : IHostedService
 {
     private readonly Observer _observer;
     private IDisposable? _subscription;
@@ -143,7 +10,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
     }
-    
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _subscription ??= DiagnosticListener.AllListeners.Subscribe(_observer);
@@ -156,10 +23,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
         return Task.CompletedTask;
     }
 }
-</code></pre>
-<p>The service above helps us with managing the life-cycle of the observer and keeps hold of the subscription to ensure that it doesn&rsquo;t accidentally get cleaned up. It doesn&rsquo;t matter at which point you call <code>DiagnosticListener.AllListeners</code> because when you subscribe, you will always get all previously registered <code>DiagnosticSource</code>s and any future sources that will be created.</p>
-<p>I&rsquo;m a fan of being able to easily extend applications by adding a new entry to our DI containers. This can be extremely helpful when doing assembly scanning. To keep with this pattern, I&rsquo;ve created a simple wrapper that facilitates this, whilst adding some safety guarantees for graceful shutdown scenarios.</p>
-<pre><code class=language-csharp>internal class Observer : IObserver&lt;DiagnosticListener&gt;
+</code></pre><p>The service above helps us with managing the life-cycle of the observer and keeps hold of the subscription to ensure that it doesn&rsquo;t accidentally get cleaned up. It doesn&rsquo;t matter at which point you call <code>DiagnosticListener.AllListeners</code> because when you subscribe, you will always get all previously registered <code>DiagnosticSource</code>s and any future sources that will be created.</p><p>I&rsquo;m a fan of being able to easily extend applications by adding a new entry to our DI containers. This can be extremely helpful when doing assembly scanning. To keep with this pattern, I&rsquo;ve created a simple wrapper that facilitates this, whilst adding some safety guarantees for graceful shutdown scenarios.</p><pre><code class="language-csharp">internal class Observer : IObserver&lt;DiagnosticListener&gt;
 {
     private readonly List&lt;IDiagnosticListener&gt; _listeners;
     private bool _complete = false;
@@ -168,7 +32,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     {
         _listeners = listeners?.ToList() ?? throw new ArgumentNullException(nameof(listeners));
     }
-    
+
     public void OnCompleted()
     {
         lock (_listeners)
@@ -187,18 +51,13 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
         {
             if (_complete)
                 return;
-            
+
             foreach(var listener in _listeners)
                 listener.TryObserve(value);
         }
     }
 }
-</code></pre>
-<p>Once we&rsquo;ve hooked up the above services in DI, all that&rsquo;s left for us to do is implement the <code>IDiagnosticListener</code> interface and register some observers from within the implementation, binding the implementation of <code>IDiagnosticListener</code> and any observers into our DI container of choice along the way.</p>
-<h2 id=creating-the-observers>Creating the Observers</h2>
-<h3 id=implementing-idiagnosticlistener>Implementing IDiagnosticListener</h3>
-<p>In this article, we will implement some of this functionality again when we implement the inbound metrics, so i&rsquo;ve moved the common functionality to base classes that can be re-used for other purposes. First of all, we have the <code>DiagnosticListenerBase</code>:</p>
-<pre><code class=language-csharp>public abstract class DiagnosticListenerBase : IDiagnosticListener
+</code></pre><p>Once we&rsquo;ve hooked up the above services in DI, all that&rsquo;s left for us to do is implement the <code>IDiagnosticListener</code> interface and register some observers from within the implementation, binding the implementation of <code>IDiagnosticListener</code> and any observers into our DI container of choice along the way.</p><h2 id="creating-the-observers">Creating the Observers</h2><h3 id="implementing-idiagnosticlistener">Implementing IDiagnosticListener</h3><p>In this article, we will implement some of this functionality again when we implement the inbound metrics, so i&rsquo;ve moved the common functionality to base classes that can be re-used for other purposes. First of all, we have the <code>DiagnosticListenerBase</code>:</p><pre><code class="language-csharp">public abstract class DiagnosticListenerBase : IDiagnosticListener
 {
     private readonly List&lt;IDisposable&gt; _subscriptions = new List&lt;IDisposable&gt;();
     private bool _disposed = false;
@@ -225,7 +84,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
 
             _disposed = true;
         }
-        
+
         OnDispose();
     }
 
@@ -233,15 +92,11 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     {
     }
 }
-</code></pre>
-<p>This class is intended to make sure that we manage the subscriptions correctly, just like we did with the <code>DiagnosticsHostedService</code>. We need to make sure that we have some extensibility so I&rsquo;ve added the following interface so that we can re-use it in the next article:</p>
-<pre><code class=language-csharp>public interface IDiagnosticListener : IDisposable
+</code></pre><p>This class is intended to make sure that we manage the subscriptions correctly, just like we did with the <code>DiagnosticsHostedService</code>. We need to make sure that we have some extensibility so I&rsquo;ve added the following interface so that we can re-use it in the next article:</p><pre><code class="language-csharp">public interface IDiagnosticListener : IDisposable
 {
     void TryObserve(DiagnosticListener diagnosticListener);
 }
-</code></pre>
-<p><code>DiagnosticListenerBase</code> also abstractly implements the interfaces <code>TryObserve</code> method, which our <code>OutboundHttpDiagnosticListener</code> can override and subscribe the observers that we need:</p>
-<pre><code class=language-csharp>internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListenerBase
+</code></pre><p><code>DiagnosticListenerBase</code> also abstractly implements the interfaces <code>TryObserve</code> method, which our <code>OutboundHttpDiagnosticListener</code> can override and subscribe the observers that we need:</p><pre><code class="language-csharp">internal sealed class OutboundHttpRequestDiagnosticListener : DiagnosticListenerBase
 {
     private readonly List&lt;IOutboundHttpObserver&gt; _observers;
     private readonly string _name = &quot;HttpHandlerDiagnosticListener&quot;;
@@ -255,29 +110,19 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     {
         if (diagnosticListener is null || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
             return;
-    
+
         foreach (var observer in _observers)
             Subscribe(diagnosticListener, observer);
-    } 
+    }
 }
-</code></pre>
-<p>The intention here is that we only subscribe specific observers when we encounter a DiagnosticListener that&rsquo;s named <code>HttpHandlerDiagnosticListener</code>. This listener has two specific events that we need to listen for:</p>
-<ul>
-<li><code>System.Net.Http.Request</code> - Contains the following properties: Request, LoggingRequestId, TimeStamp</li>
-<li><code>System.Net.Http.Response</code> - Contains the following properties: Response, LoggingRequestId, ResponseTaskStatus, TimeStamp</li>
-</ul>
-<p>Each of the observers that we create will have a marker interface attached to them called <code>IOutboundHttpObserver</code> so that we can plug them into our IoC container. It&rsquo;s simply defined as:</p>
-<pre><code class=language-csharp>internal interface IOutboundHttpObserver : IObserver&lt;KeyValuePair&lt;string, object&gt;&gt;
+</code></pre><p>The intention here is that we only subscribe specific observers when we encounter a DiagnosticListener that&rsquo;s named <code>HttpHandlerDiagnosticListener</code>. This listener has two specific events that we need to listen for:</p><ul><li><code>System.Net.Http.Request</code> - Contains the following properties: Request, LoggingRequestId, TimeStamp</li><li><code>System.Net.Http.Response</code> - Contains the following properties: Response, LoggingRequestId, ResponseTaskStatus, TimeStamp</li></ul><p>Each of the observers that we create will have a marker interface attached to them called <code>IOutboundHttpObserver</code> so that we can plug them into our IoC container. It&rsquo;s simply defined as:</p><pre><code class="language-csharp">internal interface IOutboundHttpObserver : IObserver&lt;KeyValuePair&lt;string, object&gt;&gt;
 {
 }
-</code></pre>
-<h3 id=simplediagnosticlistenerobserver>SimpleDiagnosticListenerObserver</h3>
-<p>When you deal with <code>DiagnosticListener</code>s, we are dealing with the Observer pattern in C#, which means that we always need to implement the following methods: <code>OnCompleted</code>, <code>OnError</code>, <code>OnNext</code>. For our use case, we don&rsquo;t need the <code>OnCompleted</code> or <code>OnError</code> methods in any of our observers, so we can move this functionality into a base class with some additional helper methods: <code>GetDuration</code> and <code>GetValueAs</code>.</p>
-<pre><code class=language-csharp>public abstract class SimpleDiagnosticListenerObserver : IObserver&lt;KeyValuePair&lt;string, object&gt;&gt;
+</code></pre><h3 id="simplediagnosticlistenerobserver">SimpleDiagnosticListenerObserver</h3><p>When you deal with <code>DiagnosticListener</code>s, we are dealing with the Observer pattern in C#, which means that we always need to implement the following methods: <code>OnCompleted</code>, <code>OnError</code>, <code>OnNext</code>. For our use case, we don&rsquo;t need the <code>OnCompleted</code> or <code>OnError</code> methods in any of our observers, so we can move this functionality into a base class with some additional helper methods: <code>GetDuration</code> and <code>GetValueAs</code>.</p><pre><code class="language-csharp">public abstract class SimpleDiagnosticListenerObserver : IObserver&lt;KeyValuePair&lt;string, object&gt;&gt;
 {
     // Gets the conversion factor that's used to go from ticks to a real world time. Inspiration: https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs
     protected static readonly double TimestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
-    
+
     public virtual void OnCompleted()
     {
     }
@@ -287,7 +132,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     }
 
     public abstract void OnNext(KeyValuePair&lt;string, object&gt; value);
-    
+
     protected static TimeSpan GetDuration(long startTimestampInTicks, long endTimestampInTicks)
     {
         var timestampDelta = endTimestampInTicks - startTimestampInTicks;
@@ -298,13 +143,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     protected static T GetValueAs&lt;T&gt;(KeyValuePair&lt;string, object&gt; value)
         where T : class =&gt; Unsafe.As&lt;T&gt;(value.Value);
 }
-</code></pre>
-<p>Each event that we receive in the is typed to be a <code>KeyValuePair&lt;string, object></code>. The key property will always represent the name of the event, while the value property will be the rich payload that&rsquo;s send by the <code>DiagnosticSource</code>.</p>
-<p>The <code>GetDuration</code> method is inspired by the <a href=https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs>ValueStopwatch</a> code that AspNetCore has internally. This allows us to calculate the wall-clock time duration of two ticks. Incidentally, this is the same calculation method that appears to be used in the logging of inbound HTTP requests from what I can tell so far.</p>
-<p>The <code>GetValueAs&lt;T></code> method use some <a href=https://mattwarren.org/2016/09/14/Subverting-.NET-Type-Safety-with-System.Runtime.CompilerServices.Unsafe/>CLR magic</a> to forcefully convert the type for us, ie: it does not perform type checking. We need this because the objects that come along with the events that we listen to are internal to the .Net code base, so we have to mimic the same type/properties and then cast to it so that we can access the information. A &ldquo;safer&rdquo; approach would be to use cached reflection calls, but to me, I understand that this might break in the future no matter what I do so I&rsquo;ve opted for a more performant approach.</p>
-<h3 id=creating-the-outboundhttprequestobserver>Creating the OutboundHttpRequestObserver</h3>
-<p>The purpose of the <code>OutboundHttpRequestObserver</code> is to extract the timestamp property that&rsquo;s contained in the <code>System.Net.Http.Request</code> event, which indicates the ticks that the request started, and attach this as a request property so that we can access it later on.</p>
-<pre><code class=language-csharp>internal sealed class OutboundHttpRequestObserver : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
+</code></pre><p>Each event that we receive in the is typed to be a <code>KeyValuePair&lt;string, object></code>. The key property will always represent the name of the event, while the value property will be the rich payload that&rsquo;s send by the <code>DiagnosticSource</code>.</p><p>The <code>GetDuration</code> method is inspired by the <a href="https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs">ValueStopwatch</a> code that AspNetCore has internally. This allows us to calculate the wall-clock time duration of two ticks. Incidentally, this is the same calculation method that appears to be used in the logging of inbound HTTP requests from what I can tell so far.</p><p>The <code>GetValueAs&lt;T></code> method use some <a href="https://mattwarren.org/2016/09/14/Subverting-.NET-Type-Safety-with-System.Runtime.CompilerServices.Unsafe/">CLR magic</a> to forcefully convert the type for us, ie: it does not perform type checking. We need this because the objects that come along with the events that we listen to are internal to the .Net code base, so we have to mimic the same type/properties and then cast to it so that we can access the information. A &ldquo;safer&rdquo; approach would be to use cached reflection calls, but to me, I understand that this might break in the future no matter what I do so I&rsquo;ve opted for a more performant approach.</p><h3 id="creating-the-outboundhttprequestobserver">Creating the OutboundHttpRequestObserver</h3><p>The purpose of the <code>OutboundHttpRequestObserver</code> is to extract the timestamp property that&rsquo;s contained in the <code>System.Net.Http.Request</code> event, which indicates the ticks that the request started, and attach this as a request property so that we can access it later on.</p><pre><code class="language-csharp">internal sealed class OutboundHttpRequestObserver : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
 {
     public override void OnNext(KeyValuePair&lt;string, object&gt; value)
     {
@@ -313,22 +152,18 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
             var data = GetValueAs&lt;TypedData&gt;(value);
             if (data?.Request?.Properties is {})
             {
-                data.Request.Properties[&quot;RequestTimestamp&quot;] = data.Timestamp;    
+                data.Request.Properties[&quot;RequestTimestamp&quot;] = data.Timestamp;
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpRequestMessage? Request;
         public long Timestamp;
     }
 }
-</code></pre>
-<p>As mentioned in the previous section, we generated a typed class so that we can access the data within the events payload. I&rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need.</p>
-<h3 id=creating-the-outboundhttpresponseobserver>Creating the OutboundHttpResponseObserver</h3>
-<p>The purpose of the <code>OutboundHttpResponseObserver</code> is to extract the timestamp property that&rsquo;s contained in the <code>System.Net.Http.Response</code> event, which indicates the ticks that the request finished, and calculate the duration using the request timestamp that we previously stored in the request properties.</p>
-<pre><code class=language-csharp>internal sealed class OutboundHttpResponseObserver : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
+</code></pre><p>As mentioned in the previous section, we generated a typed class so that we can access the data within the events payload. I&rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need.</p><h3 id="creating-the-outboundhttpresponseobserver">Creating the OutboundHttpResponseObserver</h3><p>The purpose of the <code>OutboundHttpResponseObserver</code> is to extract the timestamp property that&rsquo;s contained in the <code>System.Net.Http.Response</code> event, which indicates the ticks that the request finished, and calculate the duration using the request timestamp that we previously stored in the request properties.</p><pre><code class="language-csharp">internal sealed class OutboundHttpResponseObserver : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
 {
     private readonly IOutboundHttpMetricBuilder _metricBuilder;
 
@@ -336,7 +171,7 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
     {
         _metricBuilder = metricBuilder;
     }
-    
+
     public override void OnNext(KeyValuePair&lt;string, object&gt; value)
     {
         if (value.Key == &quot;System.Net.Http.Response&quot;)
@@ -357,48 +192,20 @@ Diagnostics in .Net Core 3: Listening to outbound HTTP requests :: Stuart Blackl
             }
         }
     }
-    
+
     private class TypedData
     {
         public HttpResponseMessage? Response;
         public long TimeStamp;
     }
 }
-</code></pre>
-<p>As mentioned in a previous section, we generated a typed class so that we can access the data within the events payload. I&rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need. Now that we have all of the data we need to generate some metrics, we can use the injected <code>IOutboundHttpMetricBuilder</code> to create the metrics that we want to track dynamically.</p>
-<h2 id=creating-metrics-from-the-context-of-the-request>Creating metrics from the context of the request</h2>
-<p>In our services, there are a few bits of information that I want to capture about the context of the request:</p>
-<ol>
-<li>Whether the request was successful or not (based on the HTTP Status code)</li>
-<li>The duration of the request, in milliseconds</li>
-</ol>
-<p>With this information, we want to add metadata to the DiagnosticCounters that we generate so that we can use it as dimensions in our monitoring applications like DataDog/Prometheus. The dimensions that we are interested in include:</p>
-<ul>
-<li>HTTP method: GET/POST/PUT/PATCH/DELETE etc</li>
-<li>HTTP version: 1.0/1.1/2.0 etc</li>
-<li>HTTP scheme: HTTP/HTTPS</li>
-<li>HTTP request type: outbound (this article)/inbound (next article)</li>
-<li>HTTP status code: 200/201/202/204/400 etc</li>
-<li>Request Path: <code>/search</code></li>
-<li>Host: <code>www.google.com</code></li>
-</ul>
-<p>With this information, we should have more than enough to filter out specific flows easily, whilst being able to aggregate the results where needed. Each one of the properties is added to each one of the diagnostic counters that we generate:</p>
-<ul>
-<li>Success Counter</li>
-<li>Error Counter</li>
-<li>Latency Counter</li>
-</ul>
-<p>To allow us to override the implementation later on, we can use the following interface:</p>
-<pre><code class=language-csharp>public interface IOutboundHttpMetricBuilder
+</code></pre><p>As mentioned in a previous section, we generated a typed class so that we can access the data within the events payload. I&rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need. Now that we have all of the data we need to generate some metrics, we can use the injected <code>IOutboundHttpMetricBuilder</code> to create the metrics that we want to track dynamically.</p><h2 id="creating-metrics-from-the-context-of-the-request">Creating metrics from the context of the request</h2><p>In our services, there are a few bits of information that I want to capture about the context of the request:</p><ol><li>Whether the request was successful or not (based on the HTTP Status code)</li><li>The duration of the request, in milliseconds</li></ol><p>With this information, we want to add metadata to the DiagnosticCounters that we generate so that we can use it as dimensions in our monitoring applications like DataDog/Prometheus. The dimensions that we are interested in include:</p><ul><li>HTTP method: GET/POST/PUT/PATCH/DELETE etc</li><li>HTTP version: 1.0/1.1/2.0 etc</li><li>HTTP scheme: HTTP/HTTPS</li><li>HTTP request type: outbound (this article)/inbound (next article)</li><li>HTTP status code: 200/201/202/204/400 etc</li><li>Request Path: <code>/search</code></li><li>Host: <code>www.google.com</code></li></ul><p>With this information, we should have more than enough to filter out specific flows easily, whilst being able to aggregate the results where needed. Each one of the properties is added to each one of the diagnostic counters that we generate:</p><ul><li>Success Counter</li><li>Error Counter</li><li>Latency Counter</li></ul><p>To allow us to override the implementation later on, we can use the following interface:</p><pre><code class="language-csharp">public interface IOutboundHttpMetricBuilder
 {
     IncrementingEventCounter? GetSuccessCounter(HttpRequestMessage request, HttpResponseMessage response);
     IncrementingEventCounter? GetErrorCounter(HttpRequestMessage request, HttpResponseMessage response);
     EventCounter? GetLatencyCounter(HttpRequestMessage request, HttpResponseMessage response);
 }
-</code></pre>
-<p><strong>Note:</strong> <em>For a summary of the different types of event counters, please see <a href=https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/>this article</a>.</em></p>
-<p>For the sake of brevity of this article, I&rsquo;m not going to explain all of the below, rather the general concept. Here, the intention is to have a core set of dimensions (listed above) that are are also used to de-duplicate the number of counters that we create overall. Lastly, we have a custom comparer so that we can compare the values of the <code>List</code> that we generate for each type of metric, rather than relying on the default equality comparer. This helps us ensure that we have semantic rather than reference equality.</p>
-<pre><code class=language-csharp>/// &lt;remarks&gt;
+</code></pre><p><strong>Note:</strong> <em>For a summary of the different types of event counters, please see <a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">this article</a>.</em></p><p>For the sake of brevity of this article, I&rsquo;m not going to explain all of the below, rather the general concept. Here, the intention is to have a core set of dimensions (listed above) that are are also used to de-duplicate the number of counters that we create overall. Lastly, we have a custom comparer so that we can compare the values of the <code>List</code> that we generate for each type of metric, rather than relying on the default equality comparer. This helps us ensure that we have semantic rather than reference equality.</p><pre><code class="language-csharp">/// &lt;remarks&gt;
 /// We don't want to add new event counters all the time to the system. So based on the tags, we maintain a list for success/errors/latency.
 /// Because we are storing based on semantic equivalents, we need a custom comparer to ensure that we have uniqueness, this is guarenteed in two ways:
 ///     - Ensuring that hashcodes are generated using a semantic method, given that inputs are the always given in the same ordered way
@@ -409,11 +216,11 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
     private readonly ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, IncrementingEventCounter&gt; _successCounters = new ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, IncrementingEventCounter&gt;(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, IncrementingEventCounter&gt; _errorCounters = new ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, IncrementingEventCounter&gt;(new ListOfTupleEqualityComparer());
     private readonly ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, EventCounter&gt; _latencyCounters = new ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, EventCounter&gt;(new ListOfTupleEqualityComparer());
-    
+
     public IncrementingEventCounter GetSuccessCounter(HttpRequestMessage request, HttpResponseMessage response) =&gt; GetCoreHttpRequestCounter(_successCounters, request, response);
 
     public IncrementingEventCounter GetErrorCounter(HttpRequestMessage request, HttpResponseMessage response) =&gt; GetCoreHttpRequestCounter(_errorCounters, request, response);
-    
+
     public EventCounter GetLatencyCounter(HttpRequestMessage request, HttpResponseMessage response)
     {
         return _latencyCounters.GetOrAdd(GetCoreTags(request, response), key =&gt;
@@ -427,9 +234,9 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
                 counter.AddMetadata(dimension.key, dimension.value);
             MyDiagnosticsEventSource.Instance.AddDiagnosticCounter(counter);
             return counter;
-        });        
+        });
     }
-    
+
     private IncrementingEventCounter GetCoreHttpRequestCounter(ConcurrentDictionary&lt;List&lt;(string key, string value)&gt;, IncrementingEventCounter&gt; collection, HttpRequestMessage request, HttpResponseMessage response)
     {
         return collection.GetOrAdd(GetCoreTags(request, response), key =&gt;
@@ -467,7 +274,7 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
                     path = path.Substring(0, queryIndex);
             }
         }
-        
+
         var tags = new List&lt;(string, string)&gt;
         {
             (&quot;http-method&quot;, request.Method.ToString()),
@@ -477,7 +284,7 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
             (&quot;http-status-code&quot;, ((int)response.StatusCode).ToString()),
             (&quot;request-path&quot;, path)
         };
-        
+
         if (request.RequestUri.IsAbsoluteUri)
             tags.Add((&quot;host&quot;, request.RequestUri.Authority));
 
@@ -490,8 +297,8 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
         public override bool Equals(List&lt;(string, string)&gt; left, List&lt;(string, string)&gt; right)
         {
             if (left.Count != right.Count)
-                return false; 
-            
+                return false;
+
             if (left.Count == 0)
                 return true; // Both are 0
 
@@ -523,97 +330,12 @@ internal sealed class DefaultOutboundHttpMetricBuilder : IOutboundHttpMetricBuil
         }
     }
 }
-</code></pre>
-<p>Naturally, if you use another method like the response body to figure out whether the request was successful or not then you will need to do additional work with the contents of the request. This will be outside the context of this post. Hopefully, you now have all the bits that you would need to build this out in your own applications. In the next article, we will be taking a look at how we mimic the same technique for accurately tracking inbound requests using a lot of the same components that we have built out in this article. Happy request tracking!</p>
-</div>
-</article>
-<hr>
-<div id=recommended>
-<h4>Book Recommendations</h4>
-<p><i>The books below are ones I would personally buy again. All links are redirect to Amazon.</i></p>
-<div class=flex-container>
-<div class=flex-box><a href=https://geni.us/P3Jlg4 target=_blank ref=nofollow><img src=/img/affiliates/Book1.jpg width=150 height=200></a></div>
-<div class=flex-box><a href=https://geni.us/qEg8Cx target=_blank ref=nofollow><img src=/img/affiliates/Book2.jpg width=150 height=200></a></div>
-<div class=flex-box><a href=https://geni.us/k8HBxBA target=_blank ref=nofollow><img src=/img/affiliates/Book3.jpg width=150 height=200></a></div>
-<div class=flex-box><a href=https://geni.us/4b2QcS target=_blank ref=nofollow><img src=/img/affiliates/Book4.jpg width=150 height=200></a></div>
-</div>
-</div>
-<hr>
-<div class=post-info>
-<a name=series></a>
-<b>More in the Diagnostics in .Net Core 3 series:</b>
-<ol>
-<li><a href=/article/2020/01/diagnostics-in-.net-core-3-event-counters/>Diagnostics in .Net Core 3: Event Counters</a></li>
-<li><a href=/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/>Diagnostics in .Net Core 3: Using dotnet-counters with Docker</a></li>
-<li>Diagnostics in .Net Core 3: Listening to outbound HTTP requests <i>(This article)</i></li>
-<li><a href=/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/>Diagnostics in .Net Core 3: Listening to inbound HTTP requests</a></li>
-<li><a href=/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/>Diagnostics in .Net Core 3: An alternative approach to using dotnet-counters with Docker</a></li>
-</ol>
-<p><a href=/article/>View All Articles</a></p>
-<hr>
-<p>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://im5tu.io/tags/aspnetcore/>aspnetcore</a></span><span class=tag><a href=https://im5tu.io/tags/dotnet/>dotnet</a></span><span class=tag><a href=https://im5tu.io/tags/diagnostics/>diagnostics</a></span>
-</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>2567 Words</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2020-06-18 01:34 +0000</p>
-</div>
-<div class=pagination>
-<div class=pagination__title>
-<span class=pagination__title-h></span>
-<hr>
-</div>
-<div class=pagination__buttons>
-<span class="button previous">
-<a href=https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/>
-<span class=button__icon>←</span>
-<span class=button__text>Diagnostics in .Net Core 3: Listening to inbound HTTP requests</span>
-</a>
-</span>
-<span class="button next">
-<a href=https://im5tu.io/article/2020/05/quick-tip-minification-of-assets-with-hugo/>
-<span class=button__text>Quick Tip: Minification of assets with Hugo</span>
-<span class=button__icon>→</span>
-</a>
-</span>
-</div>
-</div>
-<hr>
-<div id=promotions>
-<h4>Offers From My Partners</h4>
-<a href=https://bit.ly/cws-apress-jan23 target=_blank>
-<img src=https://www.tqlkg.com/image-100677210-15429664 width=300 height=50 alt>
-</a>
-<a href=https://bit.ly/3S9620C target=_blank>
-<img src=https://www.awltovhc.com/image-100677210-15083122 width=728 height=90 alt="Free Domain Privacy">
-</a>
-</div>
-<hr>
-<script src=https://utteranc.es/client.js repo=Im5tu/im5tu.github.io issue-term=url label=Comment theme=photon-dark crossorigin=anonymous async></script>
-</main>
-</div>
-<footer class=footer>
-<hr>
-<div class=footer__inner>
-<div class=footer__content>
-<iframe src=https://codewithstu.substack.com/embed width=480 height=320 style="border:1px solid #eee;background:#fff" frameborder=0 scrolling=no></iframe>
-</div>
-</div>
-<hr>
-<div class=footer__inner>
-<div class=footer__content>
-<span>&copy; 2023</span>
-<span><a href=https://im5tu.io/>Stuart Blackler</a></span>
-<span> <a href=https://im5tu.io/article/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a></span>
-</div>
-</div>
-<div class=footer__inner>
-<div class=footer__content>
-<p>This site uses Google Analytics for Analytics only, so may contain cookies.</p>
-</div>
-</div>
-</footer>
-</div>
-<script type=text/javascript src=/bundle.min.599099f1f14b78b657d524b28e10e0c5098e7cd46e9c7aed73d577068a276c3ff1bb234cbf29cb313333e83cf411727b43157c91ce5b809e2ffc81664614608e.js integrity="sha512-WZCZ8fFLeLZX1SSyjhDgxQmOfNRunHrtc9V3BoonbD/xuyNMvynLMTMz6Dz0EXJ7QxV8kc5bgJ4v/IFmRhRgjg=="></script>
-<script src=/js/site-453fab6f.js defer></script>
-</body>
-</html>
+</code></pre><p>Naturally, if you use another method like the response body to figure out whether the request was successful or not then you will need to do additional work with the contents of the request. This will be outside the context of this post. Hopefully, you now have all the bits that you would need to build this out in your own applications. In the next article, we will be taking a look at how we mimic the same technique for accurately tracking inbound requests using a lot of the same components that we have built out in this article. Happy request tracking!</p></div></article><hr><div id="recommended"><h4>Book Recommendations</h4><p><i>The books below are ones I would personally buy again. All links are redirect to Amazon.</i></p><div class="flex-container"><div class="flex-box"><a href="https://geni.us/P3Jlg4" target="_blank" ref="nofollow"><img src="https://im5tu.io/img/affiliates/Book1.jpg" width="150" height="200"></a></div><div class="flex-box"><a href="https://geni.us/qEg8Cx" target="_blank" ref="nofollow"><img src="https://im5tu.io/img/affiliates/Book2.jpg" width="150" height="200"></a></div><div class="flex-box"><a href="https://geni.us/k8HBxBA" target="_blank" ref="nofollow"><img src="https://im5tu.io/img/affiliates/Book3.jpg" width="150" height="200"></a></div><div class="flex-box"><a href="https://geni.us/4b2QcS" target="_blank" ref="nofollow"><img src="https://im5tu.io/img/affiliates/Book4.jpg" width="150" height="200"></a></div></div></div><hr><div class="post-info"><a name="series"></a>
+<b>More in the Diagnostics in .Net Core 3 series:</b><ol><li><a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">Diagnostics in .Net Core 3: Event Counters</a></li><li><a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/">Diagnostics in .Net Core 3: Using dotnet-counters with Docker</a></li><li>Diagnostics in .Net Core 3: Listening to outbound HTTP requests <i>(This article)</i></li><li><a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/">Diagnostics in .Net Core 3: Listening to inbound HTTP requests</a></li><li><a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/">Diagnostics in .Net Core 3: An alternative approach to using dotnet-counters with Docker</a></li></ol><p><a href="https://im5tu.io/article/">View All Articles</a></p><hr><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class="tag"><a href="https://im5tu.io/tags/aspnet/">aspnet</a></span><span class="tag"><a href="https://im5tu.io/tags/dotnet/">dotnet</a></span><span class="tag"><a href="https://im5tu.io/tags/diagnostics/">diagnostics</a></span></p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>2567 Words</p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2020-06-18 01:34 +0000</p></div><div class="pagination"><div class="pagination__title"><span class="pagination__title-h"></span><hr></div><div class="pagination__buttons"><span class="button previous"><a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/"><span class="button__icon">←</span>
+<span class="button__text">Diagnostics in .Net Core 3: Listening to inbound HTTP requests</span></a></span>
+<span class="button next"><a href="https://im5tu.io/article/2020/05/quick-tip-minification-of-assets-with-hugo/"><span class="button__text">Quick Tip: Minification of assets with Hugo</span>
+<span class="button__icon">→</span></a></span></div></div><hr><div id="promotions"><h4>Offers From My Partners</h4><a href="https://bit.ly/cws-apress-jan23" target="_blank"><img src="https://www.tqlkg.com/image-100677210-15429664" width="300" height="50" alt></a>
+<a href="https://bit.ly/3S9620C" target="_blank"><img src="https://www.awltovhc.com/image-100677210-15083122" width="728" height="90" alt="Free Domain Privacy"></a></div><hr><script src="https://utteranc.es/client.js" repo="Im5tu/im5tu.github.io" issue-term="url" label="Comment" theme="photon-dark" crossorigin="anonymous" async></script></main></div><footer class="footer"><hr><div class="footer__inner"><div class="footer__content"><iframe src="https://codewithstu.substack.com/embed" width="480" height="320" style="border:1px solid #eee;background:#fff" frameborder="0" scrolling="no"></iframe></div></div><hr><div class="footer__inner"><div class="footer__content"><span>&copy; 2023</span>
+<span><a href="https://im5tu.io/">Stuart Blackler</a></span>
+<span><a href="https://im5tu.io/article/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a></span></div></div><div class="footer__inner"><div class="footer__content"><p>This site uses Google Analytics for Analytics only, so may contain cookies.</p></div></div></footer></div><script type="text/javascript" src="https://im5tu.io/bundle.min.c90b8161416b87c69a8e02683b54ddd6edb90aea699648bf655e6cbc45b419b8e465d196e715772463dba35a6faf5decb2eb247480d38680484d54645b434570.js" integrity="sha512-yQuBYUFrh8aajgJoO1Td1u25Cupplki/ZV5svEW0GbjkZdGW5xV3JGPbo1pvr13ssuskdIDThoBITVRkW0NFcA=="></script>
+<script src="https://im5tu.io/js/site-453fab6f.js" defer></script></body></html>
