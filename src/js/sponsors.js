@@ -20,7 +20,7 @@
             //window.testJson = json;
             //console.log(json);
 
-            var sponsorText = "This page is available to sponsor. <a href=\"/sponsorship\">Click Here</a> for more details!";
+            var sponsorText = "This page is available to sponsor. <a href=\"/sponsorship/\">Click Here</a> for more details!";
             var sponsorLink = "/sponsorship";
 
             var sponsor = json.find(x => x.week == weekNumber);
