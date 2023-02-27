@@ -4,8 +4,8 @@ static/css/*.css
 static/js/*.js
 public/
 yarn.lock
-.*/
 \.DS_Store
 content/draft/
 resources/
 .hugo_build.lock
+.yarn/
