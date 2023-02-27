@@ -27,7 +27,7 @@ as opposed to your intented css contents. Luckily, there is a piped method that 
 
 ## Reading a hashed file
 
-As you may recall in [my previous Hugo post](/article/2016/11/blog-building---part-4---frontend/), I setup my css files with cache busting capabilites by appending the hash onto the filename. In order to render this as part of the HTML, we need a few things:
+As you may recall in [my previous Hugo post](/article/2016/11/blog-building-part-4-frontend/), I setup my css files with cache busting capabilites by appending the hash onto the filename. In order to render this as part of the HTML, we need a few things:
 
 - Find the name of the hashed file
 - Build the file path

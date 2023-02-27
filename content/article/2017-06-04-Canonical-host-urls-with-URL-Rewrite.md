@@ -8,7 +8,7 @@
     "toc": true
 }
 
-In the [previous post](/article/2017/06/up-and-running-with-url-rewrite---going-from-http-to-https/), I gave a brief intoduction to URL Rewriting and showed you how to get from HTTP to HTTPS. In this article, I will show you how to have a canonical host url.<!-- more -->
+In the [previous post](/article/2017/06/up-and-running-with-url-rewrite-going-from-http-to-https/), I gave a brief intoduction to URL Rewriting and showed you how to get from HTTP to HTTPS. In this article, I will show you how to have a canonical host url.<!-- more -->
 
 ## What is a canonical host url?
 
