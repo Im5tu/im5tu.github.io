@@ -1,18 +1,25 @@
 {{ define "main" }}
 <main class="post">
-    <a id="sponsorLink" href="/sponsorship" ref="nofollow" target="_blank">
-        <div id="sponsorMessage" class="hidden"></div>
-    </a>
+    <div style="font-style: italic; width: 100%; background-color: #FFE12B; color: #333; text-align: center; padding: 1px">
+    {{- if .Params.sponsor -}}
+    {{ $sponsors := $.Site.Data.sponsors }}
+    {{ $index := sub (int .Params.sponsor) 1 }}
+    {{ $sponsor := index $sponsors $index }}
+    {{- with $sponsor -}}
+        <p>This page is sponsored by <b>{{ .company }}</b>: <a href="{{ .url }}" id="sponsorLink" ref="nofollow" target="_blank">{{ .message }}</a></p>
+    {{- end -}}
+    {{- else -}}
+        <p>This page is available to sponsor. <a id="sponsorLink" href="/sponsorship/" ref="nofollow" target="_blank">Click Here</a> for more details!</p>
+    {{- end -}}
+    </div>
     <div class="post-info">
         <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>{{ i18n "readingTime" .Page.ReadingTime }}
-
             {{ if .IsTranslated }}
             | {{ i18n "postAvailable" }}
             {{ range .Translations }}
             <a href="{{ .Permalink }}"><span class="flag flag-icon flag-icon-{{ index $.Site.Data.langFlags (.Lang) }} flag-icon-squared"></span></a>
             {{ end}}
             {{ end }}
-
         </p>
     </div>
 
@@ -43,26 +50,17 @@
         {{ end }}
 
         <div class="post-content">
-            {{ if isset .Params "series" }}
-            {{ $series := lower (index .Params.series 0) }}
-            {{ $series := replace $series " " "-" }}
-            {{ $.Scratch.Add "series" $series }}
-            {{ $.Scratch.Add "total_page_num" 0 }}
-            {{ $.Scratch.Add "cur_page_num" 1 }}
-
-            {{ $posts := (index .Site.Taxonomies.series $series) }}
-            {{ range sort $posts.Pages "Date" }}
-            {{ $.Scratch.Add "total_page_num" 1 }}
-            {{ if gt $.Date.Unix .Date.Unix }}
-            {{ $.Scratch.Add "cur_page_num" 1 }}
-            {{ end }}
-            {{ end }}
-
-            <section class="series series-header">
-                <p><i>This article is part of the <a href="#series">{{ index .Params.series 0 }}</a> series. You are reading part {{ $.Scratch.Get "cur_page_num" }} of {{ $.Scratch.Get "total_page_num" }}.</i></p>
-            </section>
-            {{ end }}
-            {{ .Content }}
+            {{- if .Params.series -}}
+            {{- $series := where .Site.RegularPages.ByDate ".Params.series" "intersect" .Params.series -}}
+            {{ if gt (len $series) 1 }}
+            {{- with index (.GetTerms "series") 0 -}}
+              <div style="font-style: italic; width: 100%; background-color: #63e5ff; color: #333; text-align: center; padding: 5px">
+                <p>This post is part of the <a href="#series" style="font-weight: bold">{{ .LinkTitle }}</a> series.</p>
+              </div>
+            {{- end -}}
+            {{- end -}}
+          {{- end -}}
+          {{- .Content -}}
         </div>
     </article>
 
@@ -89,23 +87,29 @@
 
     <div class="post-info">
         {{ if .Params.series }}
+        {{- $series := where .Site.RegularPages.ByDate ".Params.series" "intersect" .Params.series -}}
+        {{ if gt (len $series) 1 }}
         <a name="series"></a>
         <b>More in the {{ index .Params.series 0 }} series:</b>
         <ol>
-            {{ $posts := (index .Site.Taxonomies.series ($.Scratch.Get "series")) }}
-            {{ range sort $posts.Pages "Date" }}
-            {{ if eq .Page.RelPermalink $.Page.RelPermalink }}
-            <li>{{ .Page.Title }} <i>(This article)</i></li>
-            {{ else if eq .Draft true }}
-            <li><b>[DRAFT]</b> {{ .Page.Title }} <i>(This article)</i></li>
-            {{ else }}
-            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></li>
-            {{ end }}
-            {{ end }}
+        {{- with $series -}}
+        {{- range . -}}
+            <li>
+                {{- if eq .File.UniqueID $.File.UniqueID -}}
+                    <b>{{ .Title }} <i>(This article)</i></b>
+                {{- else -}}
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                {{- end -}}
+            </li>
+        {{- end -}}
+        {{- end -}}
         </ol>
-        <p><a href="/article/">View All Articles</a></p>
+        {{- with index (.GetTerms "series") 0 -}}
+            <p><a href="{{ .Permalink }} ">View All Articles</a></p>
+        {{- end -}}
         <hr />
-        {{ end }}
+        {{- end -}}
+        {{- end -}}
         {{- with .Params.tags }}
         <p>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
