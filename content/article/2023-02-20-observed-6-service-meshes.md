@@ -1,6 +1,6 @@
 {
     "title": "Observed No. 6 - Service Meshes",
-    "description": "",
+    "description": "Service meshes use sidecar proxies to manage microservices communication. They provide benefits like traffic management, security, observability, and simplified deployment. They work best for larger architectures, and implementation depends on the use case.",
     "tags": ["devops", "observed"],
     "date": "2023-02-20T02:00:00+00:00",
     "categories": ["Development"],

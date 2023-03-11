@@ -1,6 +1,6 @@
 {
     "title": "Observed No. 7 - Well Architected",
-    "description": "",
+    "description": "The Well-Architected Framework consists of six pillars to build and operate reliable, secure, efficient, and cost-effective systems on AWS. The framework offers best practices for each pillar.",
     "tags": ["devops", "observed"],
     "date": "2023-02-27T00:00:00+00:00",
     "categories": ["Development"],
