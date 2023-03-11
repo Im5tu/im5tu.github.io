@@ -34,7 +34,7 @@ foreach (var table in (await client.ListTablesAsync()).TableNames)
 
 ```
 
-In order to run the above example, you need to have a working [localstack](https://localstack.cloud/) instance running with one or more DynamoDB tables created. If you want to copy the files that I've used, you can view them in the [appendix](#appendix) below. If you're using my files, then you should see the following when you run the program:
+In order to run the above example, you need to have a working [localstack](/article/2022/09/pro-testing-with-xunit-localstack/) instance running with one or more DynamoDB tables created. If you want to copy the files that I've used, you can view them in the [appendix](#appendix) below. If you're using my files, then you should see the following when you run the program:
 
 ![Output before customization](/img/extending-the-aws-sdk/initial-output.jpg)
 

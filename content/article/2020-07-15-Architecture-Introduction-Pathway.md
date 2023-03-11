@@ -94,7 +94,7 @@ Implement a façade or adapter layer between different subsystems that don't sha
 
 ### [Bulkhead](https://docs.microsoft.com/en-us/azure/architecture/patterns/bulkhead)
 
-The Bulkhead pattern is a type of application design that is tolerant of failure. In a bulkhead architecture, elements of an application are isolated into pools so that if one fails, the others will continue to function. It's named after the sectioned partitions (bulkheads) of a ship's hull.
+The [Bulkhead pattern](/article/2022/02/3-ways-to-increase-app-reliability-with-polly/) is a type of application design that is tolerant of failure. In a bulkhead architecture, elements of an application are isolated into pools so that if one fails, the others will continue to function. It's named after the sectioned partitions (bulkheads) of a ship's hull.
 
 ### [Cache-aside](https://docs.microsoft.com/en-us/azure/architecture/patterns/cache-aside)
 
