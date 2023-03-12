@@ -98,7 +98,7 @@ public class CustomEnumerator
 
 _[Play with this example on sharplab.io](https://sharplab.io/#v2:C4LgTgrgdgNAJiA1AHwAICYCMBYAUKgBgAJVMAWAbj0JMwDoAZASygEcrdqBmE9WgdiIBvPETG8+I3OJlEAZgHswAUwCGAYwAWRABQA3VWCJNjUIpgIBKUbNukAnDqaWOMgL54PnfD1IA2XiIAUQAPYGUoAGcmBSi8KVlUX0wAgGEISOAFAFsgqAhs5TBVLKMAcWVgPIKikqUdYE0mSNNgY0siAF4APiIoZQB3InTMnOrC4tKnF3FPPG5Akazc/Im6sHibMQAHMCYDcNaiAH0AGyZspmBXcV39kuUj4/UIMBUoa62iL6Sj9LeIm0eicXgCPkQALTmG5iH48JZjVa1KYsNrnS7ADpCE7oq5dIi465ELwyOFEABGCgUpyIAFkFHplAA5ZRhHTWaTiBK2YxyXTPV7vNoAHhxFyuHJ5wi+UoFYLaiE60JlPNQgmAkGUFFmnNsJJ5KrEavkqlOkS1Xy8biAA=)_
 
-Although we can `foreach` over pretty much anything we want using duck typing, we cannot use other methods such as those provided by the LINQ extension methods as they rely on a specific interface implementation (ie: no `.Select(x => {})`).
+Although we can `foreach` over pretty much anything we want using duck typing, we cannot use other methods such as those provided by the LINQ [extension methods](/article/2012/12/extension-methods-in-dotnet/) as they rely on a specific interface implementation (ie: no `.Select(x => {})`).
 
 Generally speaking, duck typing just for a foreach statement might not be particularly useful for our applications given that we have a concrete interface contract to follow, but there are more useful examples of duck typing in C# such as awaiting anything we want...
 

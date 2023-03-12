@@ -278,7 +278,7 @@ internal sealed class BlendedMetricOptionsValidation : IValidateOptions<BlendedM
 
 ### Extensions
 
-The last part of our implementation is to add some helpful extension methods for configuring new blended metrics in our IoC containers. These methods bind the necessary components and allow you to configure one or more blended metrics either from configuration or from passing the information into the method:
+The last part of our implementation is to add some helpful [extension methods](/article/2012/12/extension-methods-in-dotnet/) for configuring new blended metrics in our IoC containers. These methods bind the necessary components and allow you to configure one or more blended metrics either from configuration or from passing the information into the method:
 
 ```csharp
 public static IServiceCollection AddBlendedMetrics(this IServiceCollection services, IConfigurationSection configurationSection)

@@ -23,7 +23,7 @@ This article assumes that you already have a certificate issued from your Privat
 
 1. A class that's going to load certificates from AWS PCA ACM;
 2. A instance of `IPasswordFinder` so that BouncyCastle can read the exported PEM file;
-3. A few handy extension methods for hooking up the exported certificate with Kestrel
+3. A few handy [extension methods](/article/2012/12/extension-methods-in-dotnet/) for hooking up the exported certificate with Kestrel
 
 In order to export and read the certificates, we are going to need to install the following packages:
 
@@ -121,7 +121,7 @@ internal sealed class PasswordFinder : IPasswordFinder
 }
 ```
 
-Finally, we have a series of extension methods that allow us to hook up our application in various ways. There's not too much to explain here, as this is hooking up our code above with the Kestrel webserver:
+Finally, we have a series of [extension methods](/article/2012/12/extension-methods-in-dotnet/) that allow us to hook up our application in various ways. There's not too much to explain here, as this is hooking up our code above with the Kestrel webserver:
 
 ```csharp
 /// <summary>
