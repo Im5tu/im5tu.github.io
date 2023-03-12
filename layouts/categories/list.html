@@ -1,7 +1,6 @@
 {{ define "main" }}
     {{ $paginator := .Paginate .Data.Pages }}
     {{ $category := index .Site.Data.categories .Title }}
-
     <main class="posts">
         <h1>{{ .Title }}</h1>
 
