@@ -208,6 +208,11 @@ By using immutable objects with the Builder pattern, you can create complex obje
 
 Generally, yes, but the thread safety of the Builder pattern ultimately depends on how it's implemented and the corresponding usages of the builder itself. If the builder object contains a shared mutable state or if there are other synchronization issues, then thread safety may be compromised. Therefore, ensuring that your implementation of the Builder pattern is thread-safe in your particular use case is essential.
 
-## Related Patterns
+## Essential Design Patterns For .NET Developers
 
-- Factory Pattern
+- Builder Pattern (this article)
+- Decorator Pattern (Coming soon!)
+- Factory Pattern (Coming soon!)
+- Singleton Pattern (Coming soon!)
+<!-- - [Singleton Pattern](/article/2023/05/using-the-singleton-design-pattern-in-.net/) -->
+- Strategy Pattern (Coming soon!)

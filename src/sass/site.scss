@@ -133,6 +133,16 @@ h2, h3, h4, h5 {
     display: hidden;
 }
 
+.post-title {
+    font-weight: bold;
+}
+
+.post-summary {
+    font-style: italic;
+    font-size: .8em;
+    color: #222;
+}
+
 @media print {
     .copy-code-button {
         display: none;
