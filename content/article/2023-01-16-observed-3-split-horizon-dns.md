@@ -31,6 +31,6 @@ To configure Split Horizon DNS, you perform the following steps:
 
 If you have any questions or comments, please don’t hesitate to contact me either in the comments, on Twitter or any medium listed on my website! I’d love to hear your thoughts. Subscribe to the newsletter below!
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

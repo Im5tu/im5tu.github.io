@@ -62,6 +62,6 @@ You can see which AWS services support VPC Endpoint Policies, and other valuable
 
 I believe VPC Endpoint Policies are critical for securing infrastructure in sensitive environments, which is why they are part of my Well Architected Toolkit, which I’ll release later this year. Have you implemented VPC Endpoint Policies? What use cases have you found for them? Let me know how you use them below or reach out to me on [Twitter](https://twitter.com/codewithstu).
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

@@ -87,6 +87,6 @@ For example, a cloud provider might offer an SLA guaranteeing 99.9% availability
 
 In conclusion, SLIs, SLOs, and SLAs are all critical components of measuring the quality of your service. SLIs measure the performance, SLOs set the acceptable level of performance, and SLAs establish the level of service that will be delivered. You can ensure that your service meets your customers' needs by tracking and meeting these metrics.
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

@@ -39,6 +39,6 @@ There are many different products on the market, most of which are open source, 
 
 Service meshes are most beneficial when you have a decent amount of services in your microservices architecture. However, implementing a service mesh can add complexity and overhead and may not be necessary for smaller architectures. If you only have a small number of services, you can manage them using more straightforward tools and techniques. The exact threshold on when to implement a service mesh will depend on the specific use case.
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

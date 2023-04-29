@@ -71,6 +71,6 @@ Also, set a retention policy or backup your logs to S3 storage for even more sav
 
 This only begins to scratch the surface of AWS cost savings. In fact, entire companies are dedicated to saving people money on AWS. Let me know your cost-saving tips below!
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

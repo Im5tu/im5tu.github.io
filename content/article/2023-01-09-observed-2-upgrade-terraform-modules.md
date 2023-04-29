@@ -54,6 +54,6 @@ Before I leave you to get on with your week, I want to let you know about someth
 
 Side note: I also own the [CodeWithStu YouTube channel](https://youtube.com/@CodeWithStu?sub_confirmation=1), which is focused on the .NET stack.
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!

@@ -56,6 +56,6 @@ By embracing a continuous learning and improvement culture, teams can better und
 
 Furthermore, the importance of chaos engineering is magnified by the potential consequences of system failures. Downtime and performance issues can have severe financial, operational, and reputational impacts on organizations. Businesses can mitigate these risks by investing in chaos engineering and ultimately protecting their bottom line.
 
-**📣 Get the Weekly Newsletter Straight to Your Inbox!**
+**📣 Get the Weekly Newsletter Straight to Your Inbox! 📣**
 
 Don't miss out on the latest updates! Subscribe to the [Observed! Newsletter](https://news.codewithstu.tv) now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. [Click here](https://news.codewithstu.tv) to subscribe and start receiving your weekly dose of tech news!
