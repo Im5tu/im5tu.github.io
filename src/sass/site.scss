@@ -143,6 +143,16 @@ h2, h3, h4, h5 {
     color: #222;
 }
 
+.post-tags {
+    font-size: .9em;
+
+    span.tag {
+        margin: 0 .5em;
+        color: #111;
+        text-decoration: underline;
+    }
+}
+
 @media print {
     .copy-code-button {
         display: none;
@@ -153,5 +163,9 @@ h2, h3, h4, h5 {
     .copy-code-button {
         background-color: darken($buttonColour, 30%);
         color: #323232;
+    }
+
+    .post-tags span.tag, .post-summary {
+        color: #eaeaea
     }
 }
