@@ -95,4 +95,4 @@ canonifyURLs = true
 
 [outputs]
   home = ["HTML"]
-  page = ["HTML", "RSS"]
+  page = ["HTML"]
