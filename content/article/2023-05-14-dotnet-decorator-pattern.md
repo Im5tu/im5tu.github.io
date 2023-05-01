@@ -161,11 +161,3 @@ No, the Decorator pattern is designed to add new behaviours or features to an ob
 ### How Does The Decorator Design Pattern Differ From Inheritance?
 
 Inheritance is another way to add new behaviours or features to an object, but it differs from the Decorator pattern in several ways. Inheritance is a static relationship between classes, whereas the Decorator pattern is a dynamic relationship between objects. Inheritance can lead to a problematic class hierarchy to maintain and extend, whereas the Decorator pattern allows for more flexible and modular code.
-
-## Essential Design Patterns For .NET Developers
-
-- [Builder Pattern](/article/2023/03/using-the-builder-design-pattern-in-.net/)
-- Decorator Pattern _(this article)_
-- Factory Pattern (Coming soon!)
-- [Singleton Pattern](/article/2023/05/using-the-singleton-design-pattern-in-.net/)
-- Strategy Pattern (Coming soon!)

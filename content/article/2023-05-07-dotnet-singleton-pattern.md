@@ -139,11 +139,3 @@ While the Singleton pattern can be a powerful tool for managing global access to
 1. Thread-safety: While the Singleton pattern can be made thread-safe with appropriate locking mechanisms, it can be difficult to ensure that all parts of your application use the Singleton instance in a thread-safe manner.
 1. Overuse: The Singleton pattern can be overused, leading to unnecessary complexity and making it difficult to reason about the behaviour of your application.
 1. Testability: Unit tests are designed to test individual units of code in isolation. The Singleton pattern can make unit testing more difficult. When using the Singleton pattern, isolating the code that depends on the Singleton instance can be difficult. This is because the Singleton is typically tightly coupled to the rest of the application, making it problematic to substitute the Singleton instance with a mock or stub during testing.
-
-## Essential Design Patterns For .NET Developers
-
-- [Builder Pattern](/article/2023/03/using-the-builder-design-pattern-in-.net/)
-- Decorator Pattern (Coming soon!)
-- Factory Pattern (Coming soon!)
-- Singleton Pattern (this article)
-- Strategy Pattern (Coming soon!)
