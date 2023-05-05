@@ -1,11 +1,28 @@
+body {
+    line-height: 1.8em;
+}
+
+main {
+    padding: 4em 0 0 0;
+}
+
 // Override for max-width
-.post {
-    max-width: 1200px;
+.post, .posts {
+    max-width: 1400px;
+    padding: 2em 0 0 0;
 }
 
 .header__inner {
     width: 100%;
-    max-width: 1160px;
+    max-width: 1400px;
+}
+
+ul.menu__inner {
+    padding-right: 0;
+
+    & li:last-of-type {
+        margin-right: 0;
+    }
 }
 
 .logo__cursor {
@@ -157,6 +174,69 @@ h2, h3, h4, h5 {
     }
 }
 
+#introduction {
+    margin: 0 auto;
+    text-align: center;
+
+    & p {
+        display: block;
+        text-align: center;
+
+        &:first-child {
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+
+        &:nth-child(2) {
+            font-size: 1.3em;
+            font-style: italic;
+        }
+    }
+}
+
+#introduction-container {
+    width: 80%;
+    max-width: 1400px;
+    text-align: center;
+}
+
+#introduction-whatido {
+    margin-top: 2em;
+    background-color: #fafafa;
+    width: 100%;
+    padding: 3em 0;
+
+    & * {
+        text-align: center;
+    }
+
+    & p {
+        text-align: left;
+    }
+
+    & .flex-box {
+        margin: 0 2.5em;
+        width: 100%;
+
+        & span.home-link {
+            font-size: 1.8em;
+            margin-bottom: 2em;
+            color: #0665ff;
+            font-weight: bold;
+            text-align: center;
+
+            & a, & a:link {
+                text-align: center;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.footer {
+    padding: 0;
+}
+
 @media print {
     .copy-code-button {
         display: none;
@@ -171,5 +251,11 @@ h2, h3, h4, h5 {
 
     .post-tags span.tag, .post-summary {
         color: #eaeaea
+    }
+}
+
+@media (max-width: 1450px) {
+    .posts, .post, main {
+        padding: 2em 4em;
     }
 }

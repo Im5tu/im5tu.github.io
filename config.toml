@@ -21,7 +21,7 @@ canonifyURLs = true
   dateformNumTime = "2006-01-02 15:04 -0700"
 
   # Subtitle for home
-  homeSubtitle = "I'm Stu, welcome to my online home. You can connect with me on one of the socials below :)"
+  homeSubtitle = "Hey, I'm Stu! I help .NET & DevOps engineers expand their knowledge with tips, tricks and tutorials"
 
   # Logo
   [params.Logo]
@@ -29,7 +29,7 @@ canonifyURLs = true
 
   # Social icons
   [params.portrait]
-    path = "/img/profile.png"
+    path = "/img/profile.jpg"
     alt = "Portrait"
 
   [[params.social]]
@@ -67,11 +67,6 @@ canonifyURLs = true
     identifier = "blog"
     name       = "Blog"
     url        = "article/"
-
-  [[menu.main]]
-    identifier = "rss"
-    name       = "RSS"
-    url        = "/article/index.xml"
 
   [[menu.main]]
     identifier = "patreon"
