@@ -6,6 +6,10 @@ main {
     padding: 4em 0 0 0;
 }
 
+a:hover {
+    color: rgb(0, 77, 201);
+}
+
 // Override for max-width
 .post, .posts {
     max-width: 1400px;

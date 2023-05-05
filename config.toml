@@ -22,6 +22,7 @@ canonifyURLs = true
 
   # Subtitle for home
   homeSubtitle = "Hey, I'm Stu! I help .NET & DevOps engineers expand their knowledge with tips, tricks and tutorials"
+  DisableReadOtherPosts = true
 
   # Logo
   [params.Logo]

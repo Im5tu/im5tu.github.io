@@ -152,12 +152,11 @@
             <img src="https://www.ftjcfx.com/image-100677210-15488213" width="728" height="90" alt="See upto 88% more revenue with predictive segments!" />
         </a>
     </div>
+    <!-- {{ if not .Site.IsServer }}
     <hr />
-    {{ if not .Site.IsServer }}
-
     <script src="https://utteranc.es/client.js" repo="Im5tu/im5tu.github.io" issue-term="url" label="Comment"
         theme="photon-dark" crossorigin="anonymous" async></script>
-    {{ end }}
+    {{ end }} -->
 
     {{ if and (not $.Site.Params.DisableReadOtherPosts) (or .NextInSection .PrevInSection) }}
     <div class="pagination">
