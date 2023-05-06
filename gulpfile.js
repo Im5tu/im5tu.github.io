@@ -1,5 +1,5 @@
-const { series, parallel, src, dest, watch } = require('gulp');
-const del = require("del");
+const { watch, src, dest } = require('gulp');
+const { rimraf } = require('rimraf');
 
 var sass = require("gulp-dart-sass"),
     autoprefixer = require("gulp-autoprefixer"),
@@ -19,76 +19,51 @@ var srcRootDir = "src/",
     destCss = destRootDir + "css",
     destJs = destRootDir + "js";
 
-function errorHandler(err) {
-    if (err) {
-        console.error("Pipeline failed", err);
-    }
-}
+exports.default = function () {
+    options = { delay: 500, events: 'all', ignoreInitial: false };
 
-function clean(cb) {
-    del.sync(destJs);
-    del.sync(destCss);
+    watch(srcCss, options, updateCSS);
+    watch(srcJs, options, updateJS);
 
-    cb();
-}
-exports.clean = clean;
-
-function js(cb) {
-    del.sync(destJs);
-
-    pipeline(
-        src(srcJs),
-        concat("site.js"),
-        uglify(),
-        hash(),
-        dest(destJs),
-        hash.manifest("hash.json"),
-        dest("data/"),
-        errorHandler
-    );
-
-    // pipeline(
-    //     src(srcJsDir + "highlight.pack.js"),
-    //     dest(destJs),
-    //     errorHandler
-    // );
-
-    if (cb == {})
-        cb();
-}
-exports.js = js;
-
-function css(cb) {
-    del.sync(destCss);
-
-    pipeline(
-        src(srcCss),
-        sass(),
-        autoprefixer(),
-        cleanCSS(),
-        hash(),
-        dest(destCss),
-        hash.manifest("hash.json"),
-        dest("data/"),
-        errorHandler
-    );
-
-    if (cb == {})
-        cb();
-}
-exports.css = css;
-
-exports.default = exports.watch = function () {
-    options = { events: 'all', ignoreInitial: false };
-
-    watch(srcCssDir, options, series(css));
-    watch(srcJs, options, series(js));
+    updateCSS();
+    updateJS();
 }
 
 exports.deploy = function() {
     return new Promise(function(resolve, reject) {
-        css();
-        js();
+        updateCSS();
+        updateJS();
         resolve();
     });
+}
+
+function updateCSS() {
+    rimraf.sync(destCss);
+
+    return src(srcCss)
+        .pipe(sass())
+        .pipe(autoprefixer())
+        .pipe(cleanCSS())
+        .pipe(hash())
+        .pipe(dest(destCss))
+        .pipe(hash.manifest("hash.json"))
+        .pipe(dest("data/"))
+}
+
+function updateJS(callback) {
+    rimraf.sync(destCss);
+
+    return src(srcJs)
+        .pipe(concat("site.js"))
+        .pipe(uglify())
+        .pipe(hash())
+        .pipe(dest(destJs))
+        .pipe(hash.manifest("hash.json"))
+        .pipe(dest("data/"));
+}
+
+function errorHandler(err) {
+    if (err) {
+        console.error("Pipeline failed", err);
+    }
 }

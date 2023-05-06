@@ -13,7 +13,7 @@ a:hover {
 // Override for max-width
 .post, .posts {
     max-width: 1400px;
-    padding: 2em 0 0 0;
+    padding: 4em 0 0 0;
 }
 
 .header__inner {
@@ -242,11 +242,19 @@ h2, h3, h4, h5 {
 }
 
 #scroll-progress {
-    position: fixed;
-    top: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 0%;
     height: 4px;
     background: #0665ff;
+    z-index: 10000;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
     z-index: 10000;
 }
 
@@ -269,6 +277,6 @@ h2, h3, h4, h5 {
 
 @media (max-width: 1450px) {
     .posts, .post, main {
-        padding: 2em 4em;
+        padding: 4em;
     }
 }
