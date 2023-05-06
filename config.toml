@@ -26,7 +26,7 @@ canonifyURLs = true
 
   # Logo
   [params.Logo]
-    logoText = "im5tu.io"
+    logoText = "CodeWithStu"
 
   # Social icons
   [params.portrait]
