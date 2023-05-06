@@ -134,6 +134,7 @@
     </div>
     {{- end }}
 
+    {{ if not .Site.IsServer }}
     <hr />
 
     <div id="promotions">
@@ -152,6 +153,8 @@
             <img src="https://www.ftjcfx.com/image-100677210-15488213" width="728" height="90" alt="See upto 88% more revenue with predictive segments!" />
         </a>
     </div>
+    {{ end }}
+
     <!-- {{ if not .Site.IsServer }}
     <hr />
     <script src="https://utteranc.es/client.js" repo="Im5tu/im5tu.github.io" issue-term="url" label="Comment"

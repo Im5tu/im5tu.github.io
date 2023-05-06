@@ -1,6 +1,6 @@
 {
     "categories": [ "Development" ],
-    "date": "2023-05-14T07:00:00Z",
+    "date": "2023-05-08T07:00:00Z",
     "description": "Discover how to use the Decorator design pattern in C#/.NET to add new behaviours to an object dynamically without changing its underlying structure. See how you can make your code more maintainable and extensible, and see step-by-step instructions for implementing it in C#. Find out how to use the Decorator pattern with dependency injection.",
     "tags": [ "csharp", "dotnet", "design patterns" ],
     "title": "Using The Decorator Design Pattern in .NET",
@@ -29,7 +29,7 @@ One of the benefits of using the Decorator design pattern is that it allows you 
 
 There are two different ways of implementing the decorator pattern. Like [the singleton design pattern](/article/2023/05/using-the-singleton-design-pattern-in-.net/), we can construct the pattern manually or with dependency injection. We'll take a look at both, starting with manual creation:
 
-1. Define the Component interface or abstract class. This is the base object or interface that you want to modify. It defines the basic behavior or features of the object:
+1. Define the Component interface or abstract class. This is the base object or interface that you want to modify. It defines the basic behaviour or features of the object:
 
 ```csharp
 public interface IComponent
@@ -69,7 +69,7 @@ public abstract class Decorator : IComponent
 }
 ```
 
-4. Create the Concrete Decorator class. This is the concrete implementation of the decorator interface. It provides the specific functionality or behavior that you want to add to the component.
+4. Create the Concrete Decorator class. This is the concrete implementation of the decorator interface. It provides the specific functionality or behaviour that you want to add to the component.
 
 ```csharp
 public class ConcreteDecoratorA : Decorator
