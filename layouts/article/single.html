@@ -8,6 +8,9 @@
     {{- with $sponsor -}}
         <p>This page is sponsored by <b>{{ .company }}</b>: <a href="{{ .url }}" id="sponsorLink" ref="nofollow" target="_blank">{{ .message }}</a></p>
     {{- end -}}
+    {{- else -}}
+        <p>This page is available to sponsor. <a id="sponsorLink" href="/sponsorship/" ref="nofollow" target="_blank">Click Here</a> for more details!</p>
+    {{- end -}}
     </div>
     <div class="post-info">
         <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>{{ i18n "readingTime" .Page.ReadingTime }}
