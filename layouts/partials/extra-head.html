@@ -13,6 +13,7 @@
 {{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
 <style>{{- readFile $siteCssPath | safeCSS -}}</style>
 {{ if not .Site.IsServer }}
+<script defer data-domain="im5tu.io" src="https://plausible.io/js/script.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QLMVXHCJ5K"></script>
 <script>
