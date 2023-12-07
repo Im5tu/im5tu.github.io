@@ -1,0 +1,23 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+<nav class="mb-6 ml-6 bg-slate-50 p-6 w-fit rounded-lg float-right">
+  <h4 class="mt-0">Table of Contents</h4>
+  {{- range .Fragments.Headings }}
+  <ul class="space-y-1 pl-8 list-disc">
+    {{- range .Headings }}
+    <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+    {{- if .Headings }}
+    <ul class="space-y-1 pl-4 list-disc">
+      {{- range .Headings }}
+      <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+    {{- end }}
+  </ul>
+  {{- end }}
+</nav>
+<article>
+{{ .Content }}
+</article>
+{{ end }}

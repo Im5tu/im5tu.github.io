@@ -1,37 +1,127 @@
-{{ define "body" }}
-    <body class="{{ if .Site.Params.backgroundImage }} background-image" style="background-image: url('{{ .Site.Params.backgroundImage }}');" {{ else }}"{{ end }}>
-{{ end }}
-
 {{ define "main" }}
-    <main aria-role="main">
-        <div>
 
-            {{ if .Site.Params.Portrait.Path }}
-               <img src="{{ .Site.Params.Portrait.Path }}" class="circle" alt="{{ .Site.Params.Portrait.Alt }}" style="max-width:{{ .Site.Params.Portrait.MaxWidth }}" />
-            {{ end }}
-
-            <div id="introduction">
-                <p>Hey, I'm Stu!</p>
-                <p>I help .NET & DevOps engineers expand their knowledge with tips, tricks and tutorials</p>
-                {{- with .Site.Params.social }}
-                    <div>
-                        {{ partial "social-icons.html" . }}
-                    </div>
-                {{- end }}
-            </div>
+<section class="py-10 md:py-16">
+    <div class="container max-w-screen-xl mx-auto px-4">
+      <div class="text-center">
+        <div class="flex justify-center mb-16">
+          <img src="assets/image/home-img.png" alt="Image">
         </div>
-    </main>
-
-    <div id="introduction-whatido">
-        <div id="introduction-container" class="flex-container">
-            <div class="flex-box">
-                <span class="home-link"><a href="https://youtube.com/@CodeWithStu" target="_blank">My YouTube Videos</a></span>
-                <p>My YouTube page is where you'll learn about .NET, DevOps & AWS, including: Interviews with the .NET community, Testing techniques with packages like TestContainers, Making use of OpenTelemetry effectively in your applications and How to design specific architectures.</p>
-            </div>
-            <div class="flex-box">
-                <span class="home-link"><a href="/article">My Blog Posts</a></span>
-                <p>My blog is where I write down all of my thoughts about tech and other things, such as: Using The Decorator Design Pattern in .NET, Chaos Engineering on AWS, .NET Serialization Benchmarks and Pro Testing with Xunit & Localstack.</p>
-            </div>
-        </div>
+        <h6 class="font-medium text-gray-600 text-lg md:text-2xl uppercase mb-8">Stuart Blackler</h6>
+        <h1 class="font-normal text-gray-900 text-4xl md:text-7xl leading-none mb-8">Principal Software Engineer</h1>
+        <p class="font-normal text-gray-600 text-md md:text-xl mb-16">I help you grow as a developer. I love to talk
+          about #aws, #devops, #dotnet, #aspnetcore, and #opentelemetry</p>
+      </div>
     </div>
+  </section>
+
+  <section class="py-10 md:py-16">
+
+    <div class="container max-w-screen-xl mx-auto px-4">
+
+      <div class="flex flex-col lg:flex-row justify-between">
+        <div class="mb-10 lg:mb-0">
+          <h1 class="font-medium text-gray-700 text-3xl md:text-4xl mb-5">Latest Articles</h1>
+          <p class="font-normal text-gray-500 text-xs md:text-base">Here you'll find all of the words that I write</p>
+        </div>
+
+        <div class="space-y-24">
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">01</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">02</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">03</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="py-10 md:py-16">
+
+    <div class="container max-w-screen-xl mx-auto px-4">
+
+      <div class="flex flex-col lg:flex-row justify-between">
+        <div class="mb-10 lg:mb-0">
+          <h1 class="font-medium text-gray-700 text-3xl md:text-4xl mb-5">Latest Videos</h1>
+          <p class="font-normal text-gray-500 text-xs md:text-base">Here you'll find all of the latest content from my <a href="https://youtube.com/@codewithstu" title="CodeWithStu YouTube Channel" target="_blank">YouTube channel</a></p>
+        </div>
+
+        <div class="space-y-24">
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">01</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">02</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+
+          <div class="flex space-x-6">
+            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">03</h1>
+
+            <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
+
+            <div>
+              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
+
+              <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
+                to facilitate <br> the process of testing the front-end portion of projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 {{ end }}

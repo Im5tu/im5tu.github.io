@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    table {
+        @apply table-auto border-collapse w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400;
+    }
+    table th {
+        @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+    }
+    table tbody tr {
+        @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 align-top;
+    }
+    table td, table th {
+        @apply px-6 py-4 align-top;
+    }
+    table tbody tr:first-child-of-type(td) {
+        @apply font-medium text-gray-900 whitespace-nowrap dark:text-white;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        @apply leading-none tracking-tight text-gray-900;
+    }
+    h1, h2, h3 {
+        @apply font-extrabold;
+    }
+    h1 {
+        @apply my-8 text-4xl md:text-5xl lg:text-6xl;
+    }
+    h2 {
+        @apply my-6 text-3xl;
+    }
+    h3 {
+        @apply my-4 text-2xl;
+    }
+    h4, h5, h6 {
+        @apply my-3 font-bold;
+    }
+    h4 {
+        @apply text-xl;
+    }
+    p {
+        @apply pb-3 text-base leading-7 text-gray-600;
+    }
+    .mc-field-group {
+        @apply p-2;
+    }
+    .mc-field-group input {
+        @apply rounded-md w-full border-0 px-4 py-2 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
+    }
+  }

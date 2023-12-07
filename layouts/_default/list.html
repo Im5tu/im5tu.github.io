@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="bg-white px-6 py-32 lg:px-8">
+  <div class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
+    <h1>Posts</h1>
+    {{ range .Pages }}
+    <article>
+      <a href="{{ .Permalink }}">
+        <h2>{{ .Title }}</h2>
+      </a>
+      {{ .Summary }}
+    </article>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

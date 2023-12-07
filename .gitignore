@@ -9,3 +9,4 @@ content/draft/
 resources/
 .hugo_build.lock
 .yarn/
+src/css/app.css
