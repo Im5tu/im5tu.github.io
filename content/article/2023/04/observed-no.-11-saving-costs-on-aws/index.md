@@ -12,7 +12,7 @@ Welcome to the 11th edition of Observed! The newsletter delivers a tip you can i
 
 Every company seems to be cutting costs in one way or another. Let’s look at different ways you can visualize and reduce costs.
 
-<!-- more -->
+<!--more-->
 
 ## AWS Cost Explorer
 

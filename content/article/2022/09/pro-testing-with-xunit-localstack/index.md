@@ -14,7 +14,7 @@ _This blog post is also available as a video on my [YouTube Channel](https://cod
 
 Ever wondered how to get docker images to run nicely with XUnit tests? Then you're in the right place. Let me show you how to setup [Localstack](https://localstack.cloud) with XUnit properly so that the only thing you need to worry about is having docker running. I'm using Localstack as the example but you can repeat a very similar process using the techniques shown here.
 
-<!-- more -->
+<!--more-->
 
 We will first setup the base infrastructure using two lesser known XUnit features before doing container management using [TestContainers](https://github.com/testcontainers/testcontainers-dotnet).
 

@@ -10,7 +10,7 @@ tags:
 
 Over the past month I've rebooted my [YouTube Channel](https://bit.ly/im5tu-youtube) as I've had some additional time to sit down and think about how I want things to go moving forward. Here are some of the key updates from the channel. Be sure to take a look and let me know your thoughts.
 
-<!-- more -->
+<!--more-->
 
 ## Style Updates
 

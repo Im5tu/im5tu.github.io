@@ -11,7 +11,7 @@ tags:
 
 In this article we will explore a preview feature inside of Visual Studio Team Services (VSTS) called YML Build Definitions. In essence, this allows you to change your build process from a `.yml` file in your git repository much in the same way as you can do with other services such as AppVeyor. During the article, we will setup a build definition for an Aspnet Core website.
 
-<!-- more -->
+<!--more-->
 
 ## Prerequisites
 

@@ -11,7 +11,7 @@ tags:
 
 The Decorator design pattern is a widely-used technique for extending the functionality of an existing object or component. By wrapping an object in a series of decorators, you can add new behaviours, features, or properties without modifying the underlying code. This makes it a powerful and flexible way to customize and extend software systems. In .NET, the Decorator design pattern can be used in various ways to enhance and modify existing classes and components, which can help you write more maintainable, extensible, and flexible code.
 
-<!-- more -->
+<!--more-->
 
 ## What Is The Decorator Design Pattern?
 

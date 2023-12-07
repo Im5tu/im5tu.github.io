@@ -8,7 +8,7 @@ tags:
 - devops
 ---
 Welcome to the fifth edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at MACH architectures.
-<!-- more -->
+<!--more-->
 
 ## What are MACH architectures?
 

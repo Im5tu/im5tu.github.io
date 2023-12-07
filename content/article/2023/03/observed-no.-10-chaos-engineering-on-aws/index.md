@@ -10,7 +10,7 @@ tags:
 
 Welcome to the 10th edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at the practice of Chaos Engineering.
 
-<!-- more -->
+<!--more-->
 
 ## What is Chaos Engineering?
 

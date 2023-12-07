@@ -11,7 +11,7 @@ tags:
 
 *These are my notes on domain driven design whilst watching the course by Dino Esposito on [Pluralsight](https://app.pluralsight.com/library/courses/modern-software-architecture-domain-models-cqrs-event-sourcing/table-of-contents).*
 
-Domain Driven Design (or DDD), is the process of discovering both data and behavioural requirements for a given problem domain where traditional approaches usually focus purely on data collection aspects. The aim is to provide better tools to tackle the complexity at the heart of software. <!-- more -->
+Domain Driven Design (or DDD), is the process of discovering both data and behavioural requirements for a given problem domain where traditional approaches usually focus purely on data collection aspects. The aim is to provide better tools to tackle the complexity at the heart of software. <!--more-->
 
 Within DDD, there are two distinct parts: an analytical one and a strategical one. To use a DDD centric approach, the analytical aspects are required while the strategical aspects can take one of many forms depending on the requirements gained from analytical insight.
 

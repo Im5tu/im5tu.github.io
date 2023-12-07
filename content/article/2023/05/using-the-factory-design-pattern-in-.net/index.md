@@ -11,7 +11,7 @@ tags:
 
 The Factory Design pattern is a popular technique for creating objects in .NET applications. It allows developers to create objects without specifying the exact class of object that will be created, making it an excellent option for improving code flexibility and maintainability. This article will explore the concept behind the Factory Design pattern, its benefits, and how it can be implemented in C# code.
 
-<!-- more -->
+<!--more-->
 
 ## What is the Factory Design Pattern?
 

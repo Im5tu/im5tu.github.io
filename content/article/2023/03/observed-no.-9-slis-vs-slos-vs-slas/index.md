@@ -10,7 +10,7 @@ tags:
 
 Welcome to the 9th edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition examines the differences between SLIs, SLOs and SLAs.
 
-<!-- more -->
+<!--more-->
 
 When it comes to measuring the quality of your service, three terms are frequently used: Service Level Indicators (SLIs), Service Level Objectives (SLOs), and Service Level Agreements (SLAs). Although they sound similar, they each have different meanings and purposes. Let's dive into each of them.
 

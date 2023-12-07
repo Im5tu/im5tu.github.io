@@ -11,7 +11,7 @@ tags:
 
 As a .NET developer, you're probably familiar with the importance of design patterns for creating maintainable and flexible code. The Builder pattern is one of the most potent creational patterns in the .NET ecosystem. In this blog post, we'll dive deep into the Builder design pattern, explaining what it is, what problems it solves, how to implement it in C#, and answering frequently asked questions.
 
-<!-- more -->
+<!--more-->
 
 ## What is the builder design pattern?
 

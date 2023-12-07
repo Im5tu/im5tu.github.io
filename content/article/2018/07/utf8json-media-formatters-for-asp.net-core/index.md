@@ -10,7 +10,7 @@ tags:
 
 Recently, I have been looking at the [Utf8Json](https://github.com/neuecc/Utf8Json) project and evaluating for use in our high performance payments API. Looking at the benchmarks on the Github page, and running my own benchmarks, the numbers stated seemed to tally up, so I built a few media formatters for aspnet core.
 
-<!-- more -->
+<!--more-->
 
 Now, the project does already ship with some media formatters as a separate nuget package. However, I wanted to improve the following things:
 

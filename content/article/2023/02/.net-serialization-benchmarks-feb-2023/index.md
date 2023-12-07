@@ -10,7 +10,7 @@ tags:
 
 As part of a [YouTube video](https://www.youtube.com/watch?v=XMoNYQPi2k8), I went through a bunch of serializers to see their current levels of performance. As it's been a while, I thought it would be a good idea to get the latest numbers and have a general update. The code is hosted on a [Github Repository](https://github.com/Im5tu/SerializationBenchmarks), which I'm happy to accept community contributions on including fixing any minor issues or adding serialization frameworks.
 
-<!-- more -->
+<!--more-->
 
 ## Changes In This Benchmark
 

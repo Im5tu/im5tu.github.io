@@ -31,8 +31,8 @@ Now that we have git installed, we are ready and raring to go. I'm going to make
 - Right click on the start button
 - Click on System
 - Click on Advanced System Settings on the left
-- Click on the Environment Variables� button on the bottom
-- In the User variables section, click the New� button
+- Click on the Environment Variables' button on the bottom
+- In the User variables section, click the New' button
 - Type the name `GOPATH` for the variable name
 - In the value textbox, type in the folder where you wish to extract hugo to. Eg: `E:\GoLang\`
 

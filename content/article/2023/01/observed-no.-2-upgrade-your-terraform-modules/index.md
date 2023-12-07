@@ -9,7 +9,7 @@ tags:
 ---
 
 Welcome to the second edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a technique you can use to upgrade your Terraform modules.
-<!-- more -->
+<!--more-->
 
 In case you aren’t sure what a Terraform module is, they are a self-contained package of Terraform configurations managed as a group. Modules can be used to create reusable components, improve organization and structure, and improve the reusability and maintainability of your infrastructure.
 

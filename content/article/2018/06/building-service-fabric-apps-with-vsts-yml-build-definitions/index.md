@@ -11,7 +11,7 @@ tags:
 
 In my [previous article](/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/), we setup a standarised build using the new YML build definitions within VSTS, using the .Net CLI tooling. In this article, we will use the same setup as our base, but we will build and publish a service fabric application.
 
-<!-- more -->
+<!--more-->
 
 Our [sample build file](/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/) has the following steps:
 

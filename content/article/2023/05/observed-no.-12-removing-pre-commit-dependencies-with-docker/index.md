@@ -10,7 +10,7 @@ tags:
 
 Welcome to the 12th edition of Observed! The newsletter delivers a tip you can implement across many categories like AWS, Terraform and General DevOps practices in your infrastructure. This week's edition looks how we can use Precommit with existing docker images.
 
-<!-- more -->
+<!--more-->
 
 ## What is Pre-Commit?
 
