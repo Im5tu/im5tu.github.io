@@ -2,6 +2,8 @@
 videoId: GJAhtrc5IbQ
 title: "How to set up OpenTelemetry Collector on Kubernetes"
 date: 2022-07-26T12:00:07+01:00
+thumbnail: "https://i.ytimg.com/vi/GJAhtrc5IbQ/hqdefault.jpg"
+includeInSitemap: true
 ---
 
 OpenTelemetry loves Kubernetes, which is clear to see from the OpenTelemetry Operator for Kubernetes. In this video, you will learn:
@@ -13,7 +15,7 @@ OpenTelemetry loves Kubernetes, which is clear to see from the OpenTelemetry Ope
 
 <!--more-->
 
-{{< youtube GJAhtrc5IbQ >}}
+{{< youtube id="GJAhtrc5IbQ" >}}
 
 ## Video Links
 

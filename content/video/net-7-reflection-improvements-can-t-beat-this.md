@@ -2,13 +2,15 @@
 videoId: AlI-lYmUOaA
 title: ".NET 7 Reflection Improvements Can't Beat THIS"
 date: 2022-08-01T00:08:03+01:00
+thumbnail: "https://i.ytimg.com/vi/AlI-lYmUOaA/hqdefault.jpg"
+includeInSitemap: true
 ---
 
 Inspired by a blog post and video from two of .NET's biggest content creators, I decided to take a look an old trick I knew to see how it compared to the performance improvements in .NET 7 using .NET 6 as a comparison. Stay until the end for something really mind bending!
 
 <!--more-->
 
-{{< youtube AlI-lYmUOaA >}}
+{{< youtube id="AlI-lYmUOaA" >}}
 
 ## Video Links
 

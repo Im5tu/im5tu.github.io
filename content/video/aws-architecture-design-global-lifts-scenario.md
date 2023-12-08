@@ -2,17 +2,19 @@
 videoId: xd_TElOedew
 title: "AWS Architecture Design - Global Lifts Scenario"
 date: 2021-02-04T18:30:09+00:00
+thumbnail: "https://i.ytimg.com/vi/xd_TElOedew/hqdefault.jpg"
+includeInSitemap: true
 ---
 
 Ever wondered how to answer the architecture design questions in interviews? If so, this video is for you. I take a sample of what I often receive as an architecture test and walk through how I would design the architecture on AWS explaining each design decision on the way - often with notes about the technology capabilities along the way. We will also go through some common questions that are often thrown in as curve balls during the process - including how to prevent them through efficient design.
 
 Nothing in this video is scripted or prepared in anyway, just the scenario, the camera (which died) and my thoughts. Please do your own research on the techniques presented here before you implement them in your architectures to make sure you have a real understanding of how it all works.
 
-If you like this video and want to see more like this, or have a scenario you would like me to cover, please let me know in the comments below and we can explore new scenarios together.
+If you like this video and want to see more like this, or have a scenario you would like me to cover, please let me know in the comments below and we can explore new scenarios together :)
 
 <!--more-->
 
-{{< youtube xd_TElOedew >}}
+{{< youtube id="xd_TElOedew" >}}
 
 ## Video Links
 

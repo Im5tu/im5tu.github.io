@@ -1,11 +1,8 @@
 <header class="z-50">
-    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-        <div class="flex lg:flex-1">
-            <img src="assets/image/navbar-logo.png" alt="Logo">
-        </div>
-        <div class="flex lg:hidden">
+    <nav class="flex items-end justify-between py-6 lg:px-8" aria-label="Global">
+        <div class="flex lg:hidden pl-4">
             <button type="button" id="menuOpen"
-                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:text-orange-500">
                 <span class="sr-only">Open main menu</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     aria-hidden="true">
@@ -15,8 +12,11 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            {{ if ne .RelPermalink "/" }}
+            <a href="/" class="text-sm font-semibold leading-6 text-gray-900 mx-12">Home</a>
+            {{ end }}
             {{- range site.Menus.nav }}
-            <a href="{{ .URL }}" class="text-sm font-semibold leading-6 text-gray-900">
+            <a href="{{ .URL }}" class="text-sm font-semibold leading-6 text-gray-900 hover:text-orange-500 mx-12">
                 {{ .Name }}
                 {{- with .Page }}
                 {{- with .Params.version -}}
@@ -28,25 +28,9 @@
         </div>
     </nav>
     <div class="lg:hidden" role="dialog" aria-modal="true">
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 hidden"
+        <div class="fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 hidden"
             id="mobileMenu">
             <div class="flex items-center justify-between">
-                <a href="/" class="-m-1.5 p-1.5">
-                    <span class="sr-only">{{ .Site.Title }}</span>
-                    <svg viewBox="39.76 18.91 532.48 409.44" xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 lg:h-6">
-                      <defs/>
-                      <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="39.756" y1="223.628" x2="572.244" y2="223.628">
-                        <stop offset="0" style="stop-color:#fa6b09"/>
-                        <stop offset="1" style="stop-color:#ffb52a"/>
-                      </linearGradient>
-                      <linearGradient id="SVGID_00000072249670187590090740000013824429078409069218_" gradientUnits="userSpaceOnUse" x1="306" y1="413.897" x2="306" y2="207.895">
-                        <stop offset="0" style="stop-color:#fa6b09"/>
-                        <stop offset="1" style="stop-color:#ffb52a"/>
-                      </linearGradient>
-                      <path style="fill:url(#SVGID_1_)" d="M572.24 428.35 407.11 320.93 306 165.41 204.89 320.93 39.76 428.35 306 18.91z" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, 0)"/>
-                      <path style="fill:url(#SVGID_00000072249670187590090740000013824429078409069218_)" d="M372.98 310.91 306 413.9l-66.98-102.99L306 207.89z" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, 0)"/>
-                    </svg>
-                </a>
                 <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" id="menuClose">
                     <span class="sr-only">Close menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -58,9 +42,14 @@
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-gray-500/10">
                     <div class="space-y-2 py-6">
+                        {{ if ne .RelPermalink "/" }}
+                        <a href="/" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:text-orange-500">
+                            Home
+                        </a>
+                        {{ end }}
                         {{- range site.Menus.nav }}
                         <a href="{{ .URL }}"
-                            class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                            class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:text-orange-500">
                             {{ .Name }}
                             {{- with .Page }}
                             {{- with .Params.version -}}

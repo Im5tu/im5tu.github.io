@@ -2,6 +2,8 @@
 videoId: 4xocB0-bKQM
 title: "My 3 Commonly Used Github Actions and their benefits"
 date: 2021-05-10T09:59:07+01:00
+thumbnail: "https://i.ytimg.com/vi/4xocB0-bKQM/hqdefault.jpg"
+includeInSitemap: true
 ---
 
 In this Github Actions Tutorial, we take a look at three Github Action Workflows that I use on a regular basis for different projects that I work on, including:
@@ -14,7 +16,7 @@ You can use the principals of the workflows shown and customise to your specific
 
 <!--more-->
 
-{{< youtube 4xocB0-bKQM >}}
+{{< youtube id="4xocB0-bKQM" >}}
 
 ## Video Links
 

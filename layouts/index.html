@@ -1,91 +1,82 @@
 {{ define "main" }}
 
-<section class="py-10 md:py-16">
+<section class="py-4 md:py-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-black">
   <div class="container max-w-screen-xl mx-auto px-4">
-    <div class="text-center">
-      <div class="flex justify-center mb-16">
-        <img src="assets/image/home-img.png" alt="Image">
+    <div class="text-center p-8">
+      <div class="flex justify-center">
+        <img src="img/profile.jpg" alt="Stu aka CodeWithStu" class="rounded-full h-48 w-48 mb-8">
       </div>
-      <h6 class="font-medium text-gray-600 text-lg md:text-2xl uppercase mb-8">Stuart Blackler</h6>
-      <h1 class="font-normal text-gray-900 text-4xl md:text-7xl leading-none mb-8">Principal Software Engineer</h1>
-      <p class="font-normal text-gray-600 text-md md:text-xl mb-16">I help you grow as a developer. I love to talk
+      <h6 class="font-medium text-gray-400 text-lg md:text-2xl uppercase mb-8">Stuart Blackler</h6>
+      <h1 class="font-normal text-gray-200 text-4xl md:text-7xl leading-none mb-8">Principal Software Engineer</h1>
+      <p class="font-normal text-gray-400 text-md md:text-xl">I help you grow as a developer. I love to talk
         about #aws, #devops, #dotnet, #aspnetcore, and #opentelemetry</p>
     </div>
   </div>
 </section>
 
-<div class="space-y-24" itemscope itemtype="http://schema.org/Blog">
-  {{ $pages := where .Site.RegularPages "Type" "article" }}
-  {{ range $index, $element := first 5 $pages }}
-      <div class="flex space-x-6" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          <h1 class="font-normal text-gray-700 text-3xl md:text-4xl" itemprop="headline">{{ printf "%02d" (add $index 1) }}</h1>
-          <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
-          <div class="max-w-[80%]">
-              <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5" itemprop="headline">{{ $element.Title }}</h1>
-              <p class="font-normal text-gray-500 text-sm md:text-base" itemprop="articleBody">{{ $element.Summary | plainify }}</p>
-              <meta itemprop="datePublished" content="{{ $element.Date.Format "2006-01-02" }}">
-              <meta itemprop="dateModified" content="{{ $element.Lastmod.Format "2006-01-02" }}">
-              <meta itemprop="author" content="{{ $element.Params.author }}">
-          </div>
-      </div>
-  {{ end }}
-</div>
-
-
+{{ $articles := where .Site.RegularPages "Type" "article" }}
+{{ if gt (len $articles) 0 }}
 <section class="py-10 md:py-16">
-
   <div class="container max-w-screen-xl mx-auto px-4">
-
     <div class="flex flex-col lg:flex-row justify-between">
-      <div class="mb-10 lg:mb-0">
-        <h1 class="font-medium text-gray-700 text-3xl md:text-4xl mb-5">Latest Videos</h1>
+      <div class="mb-10 lg:mb-0 min-w-[25%] max-w-[30%]">
+        <h1 class="font-medium text-gray-700 text-3xl md:text-4xl mb-5">Latest Articles</h1>
+        <p class="font-normal text-gray-500 text-xs md:text-base">Here you can read the words that I write</p>
+      </div>
+
+      <div class="space-y-24 grow-0" itemscope itemtype="http://schema.org/Blog">
+        {{ range $index, $element := first 5 $articles }}
+        <div class="flex space-x-6" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          <h2 class="font-normal text-gray-700 text-3xl md:text-4xl">{{ printf "%02d" (add $index 1) }}</h2>
+          <span class="min-w-[7rem] w-28 h-0.5 bg-gray-300 mt-5"></span>
+          <div class="grow">
+            <a href="{{ .Permalink }}" title="{{ .Title }}"><h2 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5 hover:text-orange-500" itemprop="headline">{{ $element.Title }}</h2></a>
+            {{ $element.Summary }}
+            <meta itemprop="abstract" content="{{ $element.Summary | plainify }}">
+            <meta itemprop="datePublished" content="{{ $element.Date.Format " 2006-01-02" }}">
+            <meta itemprop="dateModified" content="{{ $element.Lastmod.Format " 2006-01-02" }}">
+            <meta itemprop="author" content="Stuart Blackler">
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+  </div>
+</section>
+{{- end -}}
+
+{{ $videos := where .Site.RegularPages "Type" "video" }}
+{{ if gt (len $videos) 0 }}
+<section class="py-10 md:py-16">
+  <div class="container max-w-screen-xl mx-auto px-4">
+    <div class="flex flex-col lg:flex-row justify-between">
+      <div class="mb-10 lg:mb-0 min-w-[25%] max-w-[30%]">
+        <h2 class="font-medium text-gray-700 text-3xl md:text-4xl mb-5">Latest Videos</h2>
         <p class="font-normal text-gray-500 text-xs md:text-base">Here you'll find all of the latest content from my <a
             href="https://youtube.com/@codewithstu" title="CodeWithStu YouTube Channel" target="_blank">YouTube
             channel</a></p>
       </div>
 
-      <div class="space-y-24">
-        <div class="flex space-x-6">
-          <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">01</h1>
-
-          <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
-
-          <div>
-            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
-
-            <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
-              to facilitate <br> the process of testing the front-end portion of projects.</p>
+      <div class="space-y-24 grow-0">
+        {{ range $index, $element := first 5 $videos }}
+        <div class="flex space-x-6" itemscope itemtype="http://schema.org/VideoObject">
+          <h2 class="font-normal text-gray-700 text-3xl md:text-4xl">{{ printf "%02d" (add $index 1) }}</h2>
+          <span class="min-w-[7rem] w-28 h-0.5 bg-gray-300 mt-5"></span>
+          <div class="grow">
+            <a href="{{ .Permalink }}" title="{{ .Title }}"><h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5 hover:text-orange-500" itemprop="name">{{ $element.Title }}</h1></a>
+            {{ $element.Summary }}
+            <meta itemprop="abstract" content="{{ $element.Summary | plainify }}">
+            <meta itemprop="uploadDate" content="{{ $element.Date.Format "2006-01-02" }}">
+            <meta itemprop="thumbnailUrl" content="{{ $element.Params.thumbnail }}">
+            <meta itemprop="author" content="Stuart Blackler">
           </div>
         </div>
-
-        <div class="flex space-x-6">
-          <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">02</h1>
-
-          <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
-
-          <div>
-            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
-
-            <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
-              to facilitate <br> the process of testing the front-end portion of projects.</p>
-          </div>
-        </div>
-
-        <div class="flex space-x-6">
-          <h1 class="font-normal text-gray-700 text-3xl md:text-4xl">03</h1>
-
-          <span class="w-28 h-0.5 bg-gray-300 mt-5"></span>
-
-          <div>
-            <h1 class="font-normal text-gray-700 text-3xl md:text-4xl mb-5">Demo API Generator</h1>
-
-            <p class="font-normal text-gray-500 text-sm md:text-base">A dummy data free and documented API generator
-              to facilitate <br> the process of testing the front-end portion of projects.</p>
-          </div>
-        </div>
+        {{ end }}
       </div>
     </div>
   </div>
 </section>
+{{- end -}}
+
 
 {{ end }}

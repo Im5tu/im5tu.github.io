@@ -2,13 +2,15 @@
 videoId: YRJGKyzjFlY
 title: "How To Version ASP.NET Core MVC & Minimal APIs"
 date: 2022-09-13T05:45:01+01:00
+thumbnail: "https://i.ytimg.com/vi/YRJGKyzjFlY/hqdefault.jpg"
+includeInSitemap: true
 ---
 
 Versioning API's can be extremely important for your product. Learn 4 different ways to version your APIs in .NET minimal APIs and .NET MVC APIs. The techniques you'll learn are: content type negotiation versioning, custom headers versioning, query string versioning and URL versioning.
 
 <!--more-->
 
-{{< youtube YRJGKyzjFlY >}}
+{{< youtube id="YRJGKyzjFlY" >}}
 
 ## Video Links
 

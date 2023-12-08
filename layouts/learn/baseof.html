@@ -24,11 +24,12 @@
         class="fixed top-[3.5rem] h-screen shadow-xl px-4 left-0 hidden peer-checked:block lg:relative lg:top-0 lg:h-auto lg:px-0 lg:block lg:flex-none lg:shadow-none">
         <div class="absolute inset-y-0 right-0 w-full lg:w-[50vw] bg-white lg:bg-slate-50"></div>
         <nav class="sticky top-[4.5rem] w-64 pr-8 text-base lg:text-sm xl:w-72 xl:pr-16">
-          <ul role="list" class="-ml-0.5 overflow-y-auto py-7 pl-0.5 space-y-8">
-            {{ with .Site.GetPage "/docs" }}
+          <h4 class="mb-2">All Content</h4>
+          <ul role="list" class="overflow-y-auto pl-0.5 space-y-8">
+            {{ with .Site.GetPage "/learn" }}
             {{ range .Sections }}
-            <li>
-              {{ partial "sidebar-section-links.html" . }}
+            <li class="list-none">
+              {{ partial "body-sidebar-links" . }}
             </li>
             {{ end }}
             {{ end }}
@@ -39,42 +40,8 @@
 
       <div class="flex-auto max-w-2xl min-w-0 px-4 py-10 lg:max-w-none lg:pr-0 lg:pl-8 xl:px-16">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          {{ if ne .RelPermalink "/docs/" }}
-          <nav class="flex" aria-label="Breadcrumb">
-            <ol role="list" class="flex items-center space-x-4">
-              {{- range .Ancestors.Reverse }}
-              {{ if eq .RelPermalink "/" }}
-              <li>
-                <div>
-                  <a href="/docs" class="text-gray-400 hover:text-gray-500">
-                    <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd"
-                        d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
-                        clip-rule="evenodd" />
-                    </svg>
-                    <span class="sr-only">Home</span>
-                  </a>
-                </div>
-              </li>
-              {{ else if eq .RelPermalink "/docs/" }}
-              {{ else }}
-              <li>
-                <div class="flex items-center">
-                  <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                    aria-hidden="true">
-                    <path fill-rule="evenodd"
-                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                      clip-rule="evenodd" />
-                  </svg>
-                  <a href="{{ .RelPermalink }}" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">{{
-                    .Title }}</a>
-                </div>
-              </li>
-              {{- end }}
-              {{- end }}
-            </ol>
-          </nav>
-          {{- end }}
+          {{ partial "breadcrumb" . }}
+
           {{ block "main" . }}
           {{ .Content }}
           {{ end }}
