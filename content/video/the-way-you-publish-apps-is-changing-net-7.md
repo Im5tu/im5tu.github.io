@@ -4,6 +4,9 @@ title: "The Way You Publish Apps Is Changing | .NET 7"
 date: 2022-11-15T13:00:00+00:00
 thumbnail: "https://i.ytimg.com/vi/a88szDQ1AEo/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
+- aspnetcore
 ---
 
 Go from zero to docker image in 30 seconds! In this video, we're going to discuss the changes that are happening with publishing apps in .NET 7. I'll show you how to make the changes backwards compatible with .NET 6  and how to customize your experience.

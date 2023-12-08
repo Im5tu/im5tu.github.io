@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - devops
+- aws
 ---
 
 Welcome to the very first edition of Observed! Each week I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at VPC endpoint policies in AWS.

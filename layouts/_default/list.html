@@ -3,10 +3,10 @@
   <div class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
     {{- partial "breadcrumb" . -}}
     {{ $currentSection := .CurrentSection.Section }}
-    {{ if eq .Title "Articles" }}
-    <h1>{{ .Title }}</h1>
+    {{ if eq .Title (title (.Type | pluralize)) }}
+    <h1>{{ .Title | title }}</h1>
     {{ else}}
-    <h1>{{ .Title }} {{ title (.Type | pluralize) }}</h1>
+    <h1>{{ .Title | title }} {{ title (.Type | pluralize) }}</h1>
     {{ end }}
     {{ $currentSection := .Section }}
     {{ if .IsSection }}{{ $currentSection = .File.Dir }}{{ end }}

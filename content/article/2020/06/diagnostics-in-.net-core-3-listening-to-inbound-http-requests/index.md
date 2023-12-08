@@ -7,6 +7,7 @@ includeInSitemap: true
 series: "Diagnostics in .Net Core 3"
 tags:
 - dotnet
+- aspnetcore
 ---
 
 In my [previous article](/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/) we took a look at how to monitor outbound HTTP requests using a `DiagnosticListener`. In this article, we will re-use some of the same components to monitor inbound HTTP requests. We could use middleware to do as most approaches do, but this approach is highly dependent on the middleware that you have and the duration of this, so we will re-use some of the code from last time.

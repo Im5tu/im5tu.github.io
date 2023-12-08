@@ -4,6 +4,8 @@ title: "Introduction to Microsoft Orleans"
 date: 2020-11-22T21:05:26+00:00
 thumbnail: "https://i.ytimg.com/vi/yM-gpuw1uhM/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
 ---
 
 In this video, I'm going to take you through an Introduction to the Microsoft Orleans actor framework. You'll learn:
@@ -16,4 +18,3 @@ In this video, I'm going to take you through an Introduction to the Microsoft Or
 <!--more-->
 
 {{< youtube id="yM-gpuw1uhM" >}}
-

@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - devops
+- aws
 ---
 
 Welcome to the 11th edition of Observed! The newsletter delivers a tip you can implement across many categories like AWS, Terraform and General DevOps practices in your infrastructure. This week's edition looks at AWS Cost Savings.

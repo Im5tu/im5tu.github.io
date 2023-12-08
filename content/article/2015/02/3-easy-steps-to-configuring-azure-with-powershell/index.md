@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- azure
 ---
 
 Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.

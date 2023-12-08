@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- aws
 ---
 
 As more and more companies get hacked, there is a strong resurgence in the community for the desire to have TLS for everything, everywhere. There are many valuable projects, tools and resources, such as [LetsEncrypt](https://letsencrypt.org/) available to help both individuals & companies secure their resources. One of those tools is AWS Private Certificate Authority.

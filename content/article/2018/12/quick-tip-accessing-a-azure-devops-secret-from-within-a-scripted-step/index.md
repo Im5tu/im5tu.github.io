@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - devops
+- azure
 ---
 
 In today's quick tip, we are going to see how we can access a secret that we've defined in a variable group as part of a Azure DevOps yml based build.

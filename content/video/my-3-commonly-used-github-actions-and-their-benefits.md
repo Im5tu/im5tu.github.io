@@ -4,6 +4,8 @@ title: "My 3 Commonly Used Github Actions and their benefits"
 date: 2021-05-10T09:59:07+01:00
 thumbnail: "https://i.ytimg.com/vi/4xocB0-bKQM/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- devops
 ---
 
 In this Github Actions Tutorial, we take a look at three Github Action Workflows that I use on a regular basis for different projects that I work on, including:

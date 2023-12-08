@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - devops
+- aws
 ---
 Welcome to the fourth edition of Observed! Your weekly newsletter, where I bring you a tip you can implement in your infrastructure across many categories like AWS, Terraform and General DevOps practices. This week's edition looks at a common pattern emerging across the industry: Centralised Ingress.
 

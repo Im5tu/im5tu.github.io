@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - dotnet
+- aspnetcore
 ---
 
 Recently, we've had the need to build a few feature toggles in our applications that can be changed at runtime. This article walks through a simple approach that you can use in your applications, including a description of a route to dynamic feature toggles.

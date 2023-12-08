@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- aws
 ---
 
 In the vast majority of companies that I've been in, software engineering & infrastructure best practises have often been left as something that needs to be updated later because building the product comes first. This is completely understandable as if you don't have a product, you don't have employment. This presents problems later when companies are beginning to scale rapidly and become popular. Not only does the company becomes a target for malicious actors, but security-related incidents can easily occur by leaving storage devices open accidentally. Once a malicious actor is in your system, you usually have pretty big problems unless you design your architectures with Zero Trust in mind.

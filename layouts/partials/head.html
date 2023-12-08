@@ -1,24 +1,48 @@
-<!-- TODO :: Update all titles -->
-<!-- TODO :: Update all descriptions -->
+{{ $description := "I help you grow as a developer. I love to talk about #aws, #devops, #dotnet, #aspnetcore, and #opentelemetry" }}
+{{ if ne .Page.Description "" }}
+    {{ $description = .Page.Description }}
+{{ end }}
+
+{{ $title := .Site.Title }}
+{{ if not .IsHome }}
+    {{ $sections := slice }}
+    {{ $sections = $sections | append $title }}
+    {{ range .Ancestors.Reverse }}
+        {{ if .IsSection }}
+            {{ $sections = $sections | append (.Title | title) }}
+        {{ end }}
+    {{ end }}
+    {{ $sections = $sections | append .Title }}
+    {{ $filteredSections := where $sections "." "!=" "" }}
+    {{ $title = delimit (collections.Reverse $filteredSections) " | " }}
+{{ end }}
+
+{{ $image := "/img/profile.jpg" }}
+{{/* TODO -- FIX THIS
+{{ if ne .Page.Params.image "" }}
+    {{ $image = .Page.Params.image }}
+{{ end }}  */}}
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="{{ if .Page.Description }}{{.Page.Description}}{{ else }}Bridging the gap between cloud compliance and operational excellence.{{ end }}">
+<meta name="description" content="{{ $description }}">
 <meta name="keywords" content="">
-<title>{{ if .IsHome }}CodeWithStu{{ else }}{{ .Title }} | CodeWithStu{{ end }}</title>
+<title>{{ $title }}</title>
 <link rel="canonical" href="{{ .Permalink }}" />
  <!-- Facebook Meta Tags -->
 <meta property="og:url" content="{{ .Permalink }}">
 <meta property="og:type" content="website">
-<meta property="og:title" content="{{ if .IsHome }}Kortex - Your Cloud, Your Rules{{ else }}{{ .Title }}{{ end }}">
-<meta property="og:description" content="{{ if .Page.Description }}{{.Page.Description}}{{ else }}Bridging the gap between cloud compliance and operational excellence.{{ end }}">
-<meta property="og:image" content="https://kortex.sh/media/logo.svg">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:image" content="{{ $image }}">
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta property="twitter:domain" content="kortex.sh">
+<meta property="twitter:domain" content="im5tu.io">
 <meta property="twitter:url" content="{{ .Permalink }}">
-<meta name="twitter:title" content="{{ if .IsHome }}Kortex - Your Cloud, Your Rules{{ else }}{{ .Title }}{{ end }}">
-<meta name="twitter:description" content="{{ if .Page.Description }}{{.Page.Description}}{{ else }}Bridging the gap between cloud compliance and operational excellence.{{ end }}">
-<meta name="twitter:image" content="https://kortex.sh/media/logo.svg">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $description }}">
+<meta name="twitter:image" content="{{ $image }}">
 {{ partial "head-extra" . }}
 <style type="text/css">
 {{ $css := resources.Get "app.css" }}

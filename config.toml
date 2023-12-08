@@ -5,7 +5,7 @@ canonifyURLs = true
 enableRobotsTXT = true
 cleanDestinationDir = true
 disableHugoGeneratorInject = true
-disableKinds = ["taxonomy", "term"]
+disableKinds = ["taxonomy"]
 
 [markup]
   [markup.goldmark]

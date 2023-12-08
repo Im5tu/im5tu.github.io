@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - dotnet
+- aspnetcore
 ---
 
 After reading [Troy Hunt's](http://www.troyhunt.com/) free ebook on the [OWASP Top 10 for .Net Developers](http://www.troyhunt.com/2011/12/free-ebook-owasp-top-10-for-net.html), I discovered an additional mechanism to help developers secure their websites. That mechanism is HTTP Strict Transport Security.<!--more-->

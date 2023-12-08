@@ -4,9 +4,12 @@ title: "AWS Timestream & .NET - Underrated?"
 date: 2022-10-21T06:45:00+01:00
 thumbnail: "https://i.ytimg.com/vi/NA6LXzTu4Q4/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
+- aws
 ---
 
-Let's look at how to use AWS Timestream in .NET. Timestream is a managed time series database from AWS. It’s fast and scalable, with advanced features like scheduled queries. 
+Let's look at how to use AWS Timestream in .NET. Timestream is a managed time series database from AWS. It’s fast and scalable, with advanced features like scheduled queries.
 
 <!--more-->
 

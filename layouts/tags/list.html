@@ -1,0 +1,55 @@
+{{ define "main" }}
+<div class="bg-white px-6 py-8 lg:px-8">
+    <div class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
+        {{- partial "breadcrumb" . -}}
+        {{ $tag := index .Site.Data.tags .Title }}
+
+        <main class="posts">
+            <h1>Posts Tagged: <i>{{ .Title }}</i></h1>
+
+            <div>
+                {{ if eq $tag nil }}
+                <p>Here you can find articles that have been tagged: {{ .Title }}</p>
+                {{ else }}
+                <p>{{ $tag }}</p>
+                <p><a class="text-orange-500" href="index.xml" title="Tag RSS Feed" target="_blank">Tag RSS Feed</a></p>
+                {{ end }}
+            </div>
+
+            {{ if .Content }}
+            <div class="content">{{ .Content }}</div>
+            {{ end }}
+
+            {{ range .Pages.GroupByDate "2006" }}
+            <div class="border-1 border-top-slate-400">
+                <h2>Posts In {{ .Key }}</h2>
+                <ul class="list-none">
+                    {{ range .Pages }}
+                    <li class="post-item" itemscope itemtype="http://schema.org/BlogPosting">
+                        <meta itemprop="dateModified" content="{{ .Lastmod.Format "2006-01-02" }}">
+                        <meta itemprop="author" content="Stuart Blackler">
+                        <h3>
+                            <a href="{{ .Permalink }}" itemprop="url" class="post-item-inner">
+                                <span itemprop="headline">{{ .Title | title }}</span>
+                            </a>
+                            <i>({{ .Type | title}})</i>
+                        </h3>
+                        <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">
+                            Published by Stuart Blackler on: <span itemprop="datePublished">{{ .Date.Format "2006-01-02" }}.</span>
+                            {{- with .Params.tags }}
+                            Tagged:
+                            {{- range . -}}
+                            <span class="inline mx-2 font-small"><a href="{{ "tags/" | absLangURL }}{{ . | urlize }}/" title="{{.}}" class="hover:text-orange-500">{{.}}</a></span>
+                            {{- end }}
+                          {{- end }}
+                        </p>
+                        <section itemprop="abstract">{{ .Summary }}</section>
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+            {{ end }}
+        </main>
+    </div>
+</div>
+{{ end }}

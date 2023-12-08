@@ -4,6 +4,8 @@ title: "Saying Hello To The Newest .NET Community - WeAreDotnet!"
 date: 2023-04-27T08:54:06+01:00
 thumbnail: "https://i.ytimg.com/vi/nPkNC1msADc/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
 ---
 
 In this first interview of a series, we're meeting the founders of WeAreDotnet, a new .NET community. Tim shares his motivations for starting a new community with Matthias & Gerald and their plans for its future. We dive into what sets WeAreDotnet apart from other .NET communities, how they aim to help developers grow their skills, and the kind of events and resources they offer. Join us as we get to know this exciting new addition to the .NET community landscape!

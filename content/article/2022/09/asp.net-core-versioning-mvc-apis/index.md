@@ -7,6 +7,7 @@ includeInSitemap: true
 series: "API Versioning"
 tags:
 - dotnet
+- aspnetcore
 ---
 
 {{< youtube id="YRJGKyzjFlY" >}}

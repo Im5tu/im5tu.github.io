@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- aws
 ---
 
 In a [previous post](/article/2020/01/diagnostics-in-.net-core-3-event-counters/) I took a look at how we can utilize .NET event counters to record metrics in our applications. However, I never covered the implementation of how I write the metrics to either CloudWatch or DataDog. In this article, I'm going to take a look at how to publish metrics to CloudWatch and one way of integrating it with the aforementioned blog series.

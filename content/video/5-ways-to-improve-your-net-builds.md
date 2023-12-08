@@ -4,6 +4,8 @@ title: "5 Ways To Improve Your .NET Builds"
 date: 2021-01-18T07:30:01+00:00
 thumbnail: "https://i.ytimg.com/vi/b4biMCcEzdA/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
 ---
 
 Ever wish that you could share your .NET project properties across multiple projects? Or debug that funky build? In this video, you'll learn at least 5 different tips and tricks to hack and improve your .NET builds by leveraging some cool features that MsBuild has to offer.

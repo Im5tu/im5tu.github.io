@@ -1,21 +1,32 @@
 {{ define "main" }}
 
 <div class="bg-white px-6 py-8 lg:px-8">
-  <article itemscope itemtype="https://schema.org/BlogPosting" class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
+  <article itemscope itemtype="https://schema.org/BlogPosting"
+    class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
     <meta itemprop="wordCount" content="{{ .Content | countwords }}">
+    <meta itemprop="abstract" content="{{ .Summary }}">
     {{- partial "breadcrumb" . -}}
     {{/* <p class="text-base font-semibold leading-7 text-indigo-600">Introducing</p> */}}
     <h1 itemprop="name" class="mt-2 mb-0 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ .Title }}</h1>
     <div>
-      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Posted by <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Posted by <span itemprop="author" itemscope
+          itemtype="https://schema.org/Person">
           <span itemprop="name">
             {{/* TODO :: Support multiple authors? */}}
             <a itemprop="url" href="/profile">Stuart Blackler</a>
           </span>
-        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.</p>
+        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.
+
+        {{- with .Params.tags }}
+          Tagged:
+          {{- range . -}}
+          <span class="inline mx-2 font-small"><a href="{{ "tags/" | absLangURL }}{{ . | urlize }}/" title="{{.}}" class="hover:text-orange-500">{{.}}</a></span>
+          {{- end }}
+        {{- end }}
+      </p>
     </div>
     {{- if eq .Params.toc true -}}
-    <nav class="mb-6 bg-slate-50 p-6 w-fit rounded-lg">
+    <nav class="mb-2 bg-slate-50 p-6 w-fit rounded-lg">
       <h4 class="mt-0">Table of Contents</h4>
       {{- range .Fragments.Headings }}
       <ul class="space-y-1 pl-1 list-disc">
@@ -36,6 +47,44 @@
     <section itemprop="articleBody">
       {{ .Content }}
     </section>
+    <div class="mt-4 border-t border-slate-400" itemscope itemtype="https://schema.org/Person">
+      <h2 itemprop="name">About Stuart Blackler</h2>
+      <p>
+        <strong>Stuart Blackler</strong> is a seasoned technologist with over <span
+          itemprop="experienceInPlaceOfEducation">15 years of commercial experience in the .NET ecosystem</span>.
+        Holding a degree in <span itemprop="alumniOf">Computer Science</span>, Stuart has previously earned
+        certifications as a C# developer through Microsoft and as an AWS Solutions Architect and Developer. Stuart is
+        the creator of the popular YouTube channel <a href="https://youtube.com/@codewithstu"
+          itemprop="url">CodeWithStu</a>, where he delves into topics close to his heart, including .NET, AWS, DevOps,
+        and software architecture with a commitment to sharing knowledge and fostering a community of learners.
+      </p>
+    </div>
+    <div class="mt-4 border-t border-slate-400">
+      {{ if .Params.series }}
+      {{- $series := where .Site.RegularPages.ByDate ".Params.series" "intersect" .Params.series -}}
+      {{ if gt (len $series) 1 }}
+      <a name="series"></a>
+      <b>More in the {{ index .Params.series 0 }} series:</b>
+      <ol>
+        {{- with $series -}}
+        {{- range . -}}
+        <li>
+          {{- if eq .File.UniqueID $.File.UniqueID -}}
+          <b>{{ .Title }} <i>(This article)</i></b>
+          {{- else -}}
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+          {{- end -}}
+        </li>
+        {{- end -}}
+        {{- end -}}
+      </ol>
+      {{- with index (.GetTerms "series") 0 -}}
+      <p><a href="{{ .Permalink }} ">View All Articles</a></p>
+      {{- end -}}
+
+      {{- end -}}
+      {{- end -}}
+    </div>
   </article>
 </div>
 

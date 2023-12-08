@@ -4,6 +4,8 @@ title: ".NET 7: 10 New Features You Need to Know"
 date: 2022-08-21T20:00:02+01:00
 thumbnail: "https://i.ytimg.com/vi/6USQ3_81wQM/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
 ---
 
 With .NET 7 just around the corner, we have a better idea of the features that are going to in it. Let’s take a look at 10 features you can use today. Links to all of the features can be found below.

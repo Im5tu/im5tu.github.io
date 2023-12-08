@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- git
 ---
 
 Git aliases are used to create new git commands that can either invoke a function, or be used to create commands that map to longer commands. For example, we could map `git co` to `git checkout` or have `git undo` undo our previous commit. In this article, I'm going to show you some of my favourite git aliases.

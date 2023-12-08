@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - dotnet
+- aspnetcore
 ---
 
 Recently, I have been looking at the [Utf8Json](https://github.com/neuecc/Utf8Json) project and evaluating for use in our high performance payments API. Looking at the benchmarks on the Github page, and running my own benchmarks, the numbers stated seemed to tally up, so I built a few media formatters for aspnet core.

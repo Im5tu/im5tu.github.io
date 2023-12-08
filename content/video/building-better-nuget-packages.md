@@ -4,6 +4,8 @@ title: "Building Better NuGet Packages"
 date: 2021-02-01T08:30:01+00:00
 thumbnail: "https://i.ytimg.com/vi/PCGlSt1WAOo/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
 ---
 
 In this NuGet tutorial, learn how to set common package tags in your csproj, enable deterministic builds, enable SourceLink for your packages and validate them using dotnet validate and NuGet Package Explorer.

@@ -4,6 +4,9 @@ title: "AWS Architecture Design - Global Lifts Scenario"
 date: 2021-02-04T18:30:09+00:00
 thumbnail: "https://i.ytimg.com/vi/xd_TElOedew/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
+- aws
 ---
 
 Ever wondered how to answer the architecture design questions in interviews? If so, this video is for you. I take a sample of what I often receive as an architecture test and walk through how I would design the architecture on AWS explaining each design decision on the way - often with notes about the technology capabilities along the way. We will also go through some common questions that are often thrown in as curve balls during the process - including how to prevent them through efficient design.

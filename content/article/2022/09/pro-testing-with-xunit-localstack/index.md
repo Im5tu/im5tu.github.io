@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - dotnet
+- aspnetcore
 ---
 
 {{< youtube id="Ad7wruPBp3M" >}}

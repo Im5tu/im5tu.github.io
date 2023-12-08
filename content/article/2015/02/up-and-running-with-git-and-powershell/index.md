@@ -7,6 +7,7 @@ includeInSitemap: true
 tags:
 - dotnet
 - devops
+- git
 ---
 
 We've all experienced a time where we use our pc's for a prolonged period of time, accumulating a ton of crap along the way as we try out various technologies and fads. After a while, the pc begins to do funny things like crash for no apparent reason. This week, I needed to rebuild my dev machine and decided to change from Atlassian's Source Tree over to Powershell and raw git.<!--more-->

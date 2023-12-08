@@ -4,6 +4,9 @@ title: "OpenTelemetry: Simple Distributed Tracing in .NET Libraries"
 date: 2021-02-11T07:00:09+00:00
 thumbnail: "https://i.ytimg.com/vi/wjglj4jE18Y/hqdefault.jpg"
 includeInSitemap: true
+tags:
+- dotnet
+- opentelemetry
 ---
 
 Following on from our introductory video, this OpenTelemetry tutorial walks through how to add custom ActivitySources that can be used in many libraries such as OpenTelemetry to support a distributed tracing scenario, without creating any dependencies. This is incredibly powerful for .NET library authors as they don't have to wait for .NET 5 to take advantage of this amazing capability.
@@ -11,4 +14,3 @@ Following on from our introductory video, this OpenTelemetry tutorial walks thro
 <!--more-->
 
 {{< youtube id="wjglj4jE18Y" >}}
-

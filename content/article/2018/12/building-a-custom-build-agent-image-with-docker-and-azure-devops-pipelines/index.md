@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - devops
+- azure
 ---
 
 In this article, we will learn how to use a custom dockerfile as the bases for a customised Azure DevOps build agent. There are many reasons why you might want to do this, including running custom tooling that takes a while to setup or tooling that isn't supported yet.

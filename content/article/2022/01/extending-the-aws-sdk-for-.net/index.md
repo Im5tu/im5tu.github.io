@@ -6,6 +6,7 @@ toc: true
 includeInSitemap: true
 tags:
 - dotnet
+- aws
 ---
 
 {{< youtube id="oHXFG7G5bCo" >}}
