@@ -12,7 +12,7 @@
             {{/* TODO :: Support multiple authors? */}}
             <a itemprop="url" href="/profile">Stuart Blackler</a>
           </span>
-        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.
+        </span>. Last Modified: <time itemprop="datePublished" datetime="{{ .Lastmod }}">{{ .Lastmod.Format "January 2, 2006" }}</time>.
       </p>
     </div>
     <nav class="mb-2 bg-slate-50 p-6 w-fit rounded-lg">

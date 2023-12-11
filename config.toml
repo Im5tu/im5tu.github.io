@@ -6,6 +6,7 @@ enableRobotsTXT = true
 cleanDestinationDir = true
 disableHugoGeneratorInject = true
 disableKinds = ["taxonomy"]
+enableGitInfo = true
 
 [markup]
   [markup.goldmark]
@@ -20,3 +21,9 @@ disableKinds = ["taxonomy"]
 [sitemap]
   priority = 0.5
   changeFreq = "monthly"
+
+[frontmatter]
+date = ["date", "publishDate", "lastmod"]
+lastmod = ["lastmod", ":git", "date", "publishDate"]
+publishDate = ["publishDate", "date"]
+expiryDate = ["expiryDate"]
