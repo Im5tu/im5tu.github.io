@@ -602,9 +602,21 @@ ul {
   list-style-type: disc;
 }
 
+ul > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
+}
+
 ol {
   list-style-position: inside;
   list-style-type: decimal;
+}
+
+ol > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
 *, ::before, ::after {
@@ -1450,6 +1462,11 @@ ol {
   color: rgb(79 70 229 / var(--tw-text-opacity));
 }
 
+.text-orange-500 {
+  --tw-text-opacity: 1;
+  color: rgb(249 115 22 / var(--tw-text-opacity));
+}
+
 .text-slate-600 {
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
@@ -1458,11 +1475,6 @@ ol {
 .text-slate-900 {
   --tw-text-opacity: 1;
   color: rgb(15 23 42 / var(--tw-text-opacity));
-}
-
-.text-orange-500 {
-  --tw-text-opacity: 1;
-  color: rgb(249 115 22 / var(--tw-text-opacity));
 }
 
 .underline {
