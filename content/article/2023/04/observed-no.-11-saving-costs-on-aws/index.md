@@ -58,8 +58,6 @@ One lesser-known tip is to centralise your egress. This involves creating a shar
 1. How many NAT gateways do you have?
 1. How many VPC endpoints do you use in each VPC?
 
-You can read more about this approach [here]().
-
 ## Reduce Log Ingestion
 
 The last tip concerns log ingestion. If you’re using AWS Cloudwatch to receive your logs, you might be paying too much for log ingestion. I’ve seen two common mistakes that lead to an increased cost:

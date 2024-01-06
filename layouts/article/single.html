@@ -12,7 +12,6 @@
       <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Posted by <span itemprop="author" itemscope
           itemtype="https://schema.org/Person">
           <span itemprop="name">
-            {{/* TODO :: Support multiple authors? */}}
             <a itemprop="url" href="/about">Stuart Blackler</a>
           </span>
         </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>. Last Updated on <time itemprop="dateModified" datetime="{{ .Lastmod }}">{{ .Lastmod.Format "January 2, 2006" }}</time>.
@@ -48,12 +47,12 @@
       {{ .Content }}
     </section>
     {{ partial "body-author" . }}
+    {{ if .Params.series }}
+    {{ $currentSeries := .Params.series }}
+    {{ $series := where .Site.RegularPages "Params.series" "in" $currentSeries }}
+    {{ if gt (len $series) 1 }}
     <div class="mt-4 border-t border-slate-400">
-      {{ if .Params.series }}
-      {{- $series := where .Site.RegularPages.ByDate ".Params.series" "intersect" .Params.series -}}
-      {{ if gt (len $series) 1 }}
-      <a name="series"></a>
-      <b>More in the {{ index .Params.series 0 }} series:</b>
+      <p><a name="series"></a><b>More in the <i>'{{ $currentSeries }}'</i> series:</b></a></p>
       <ol>
         {{- with $series -}}
         {{- range . -}}
@@ -70,10 +69,9 @@
       {{- with index (.GetTerms "series") 0 -}}
       <p><a href="{{ .Permalink }} ">View All Articles</a></p>
       {{- end -}}
-
-      {{- end -}}
-      {{- end -}}
     </div>
+    {{- end -}}
+    {{- end -}}
   </article>
 </div>
 

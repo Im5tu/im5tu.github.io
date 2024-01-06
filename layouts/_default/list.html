@@ -3,7 +3,7 @@
   <div class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
     {{- partial "breadcrumb" . -}}
     {{ $currentSection := .CurrentSection.Section }}
-    {{ if eq .Title (title (.Type | pluralize)) }}
+    {{ if or (eq .CurrentSection.Parent.Title .Site.Title) (eq .Title (title (.Type | pluralize))) }}
     <h1>{{ .Title | title }}</h1>
     {{ else}}
     <h1>{{ .Title | title }} {{ title (.Type | pluralize) }}</h1>
@@ -25,6 +25,7 @@
     </article>
     {{ end }}
     {{ end }}
+    {{ partial "body-author" . }}
   </div>
 </div>
 {{ end }}
