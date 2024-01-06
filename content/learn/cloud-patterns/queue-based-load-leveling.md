@@ -1,5 +1,6 @@
 ---
 title: Queue-Based Load Leveling
+draft: true
 ---
 
 Queue-based Load Leveling is an architectural pattern that manages a high volume or number of concurrent requests by placing them in the same message queue. This queue acts as a buffer to reduce the load on the system, helping ensure it processes concurrent requests at a sustainable rate, preventing performance or reliability issues.
