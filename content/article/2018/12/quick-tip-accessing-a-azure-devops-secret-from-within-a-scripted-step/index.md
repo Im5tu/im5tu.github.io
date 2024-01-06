@@ -2,7 +2,7 @@
 title: "Quick Tip: Accessing a Azure DevOps secret from within a scripted step"
 description: Learn how to access a Azure DevOps library secret inside of a scripted step
 date: 2018-12-26T14:00:00+00:00
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - devops
@@ -51,7 +51,7 @@ _Replace `SECRET_TOKEN` with the name of your variable that you wish to access._
 
 That's it. From now you should be able to access your secret variables from within your scripts and not have them written out to logs.
 
-### Further Reading
+## Further Reading
 
 - [Build variables - Microsoft Azure Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=vsts&tabs=yaml%2Cbatch)
 - [Sample YML - Github - Im5tu/dns](https://github.com/Im5tu/dns/blob/master/azure-pipelines.yml)

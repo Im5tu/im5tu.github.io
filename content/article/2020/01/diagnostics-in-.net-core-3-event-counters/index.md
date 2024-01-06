@@ -302,19 +302,19 @@ Lastly, in order to complete our circle, we need to be able to listen to the cou
 
 As part of the diagnostic improvements in .Net Core 3, the .Net team introduced a new diagnostics tool called `dotnet-counters`. This is a stand-alone tool that can be installed using the following command:
 
-```plain
+```cmd
 dotnet tool install dotnet-counters --global
 ```
 
 Or updated to the latest version if you already have it installed:
 
-```plain
+```cmd
 dotnet tool update dotnet-counters --global
 ```
 
 After the tool has been installed, you can see the processes that are eligible for attaching to, using:
 
-```plain
+```cmd
 dotnet-counters ps
     10416 dotnet     C:\Program Files\dotnet\dotnet.exe
     20660 dotnet     C:\Program Files\dotnet\dotnet.exe
@@ -323,25 +323,25 @@ dotnet-counters ps
 
 Once you know the process that you want to attach to, you can start monitoring with the following command:
 
-```plain
+```cmd
 dotnet-counters monitor -p 21172
 ```
 
 If you are interested in specific EventSources, then you can supply a space separated list of EventSources like:
 
-```plain
+```cmd
 dotnet-counters monitor -p 21172 System.Runtime MyEventSource
 ```
 
 By default, when you ask to monitor an EventSource, it will capture and display all the counters for you. If no EventSources are specified then a default list is used, including: `System.Runtime`. If you only wish to track a few counters from each EventSource, then you specify them in square brackets directly after the EventSource name:
 
-```plain
+```cmd
 dotnet-counters monitor -p 21172 System.Runtime[cpu-usage] MyEventSource[test]
 ```
 
 All of the monitor commands will output something similar to the following:
 
-```plain
+```cmd
 Press p to pause, r to resume, q to quit.
     Status: Running
 
@@ -353,7 +353,7 @@ Press p to pause, r to resume, q to quit.
 
 Lastly, should you wish to control the rate that the counters are refreshed, supply the `--refresh-interval` parameter:
 
-```plain
+```cmd
 dotnet-counters monitor -p 21172 --refresh-interval 5 System.Runtime[cpu-usage] MyEventSource[test]
 ```
 

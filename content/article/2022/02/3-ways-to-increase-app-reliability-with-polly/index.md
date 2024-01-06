@@ -29,19 +29,19 @@ When we retry, we generally have a period of time in which we backoff to allow t
 
 Our library of choice when implementing retry policies is to use Polly. The team behind Polly, and its many contributors, have placed a lot of effort in behind finding an efficient way of using retry policies with jitter. Without jitter, our retry policies will be correlated like the below:
 
-![Exponential backoff](/img/polly/expo_backoff.png)
+![Exponential backoff](expo_backoff.png)
 
 _[Image Credit](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)_
 
 However, with jitter, our retry policies will be a bit better:
 
-![Exponential backoff with jitter](/img/polly/exponential-backoff-and-jitter.png)
+![Exponential backoff with jitter](exponential-backoff-and-jitter.png)
 
 _[Image Credit](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)_
 
 The Polly team have spent [a lot of time](https://github.com/App-vNext/Polly/issues/530) coming up with a great decorrelated jitter implementation which flattens the curve and reduces the amount of overall work that needs to be done:
 
-![Polly decorrelated jitter implementation](/img/polly/NewJitterFormulaRetryCount5InitialDelay1Second.png)
+![Polly decorrelated jitter implementation](NewJitterFormulaRetryCount5InitialDelay1Second.png)
 
 This implementation is standard in all of my projects both in and outside of work. To use the implementation we need to import the `Polly.Contrib.WaitAndRetry` [NuGet Package](https://www.nuget.org/packages/Polly.Contrib.WaitAndRetry/), followed by setting up a new backoff policy:
 
@@ -69,7 +69,7 @@ The next pattern that we are going to take a look at is the bulkhead pattern. A 
 
 We can visualize this with the diagram below:
 
-![Bulkhead Policy](/img/polly/Bulkhead-Policy.jpg)
+![Bulkhead Policy](Bulkhead-Policy.jpg)
 
 We find the the maximum concurrent requests through [stress testing](https://k6.io/docs/test-types/stress-testing/) our target service so that we know what the breaking point of that service is. We then test our service under load to figure out how many pending requests we can have before our application starts to fail. I usually start with 2-4x our inflight requests number and increase/decrease depending on how the application performs.
 
@@ -96,7 +96,7 @@ The next pattern that we are going to take a look at is the circuit breaker patt
 
 A circuit breaker has three states, as visualised below: Closed, Open, Half-Open
 
-![Circuit Breaker States](/img/polly/CircuitBreakerStates.png)
+![Circuit Breaker States](CircuitBreakerStates.png)
 
 _[Image Credit](https://github.com/App-vNext/Polly/wiki/Circuit-Breaker)_
 
@@ -159,7 +159,7 @@ static AsyncBulkheadPolicy GetBulkheadPolicy(int capacity, int queueLength)
 
 This would produce a policy similar to the following:
 
-![Wrapped Policies](/img/polly/WrappedPolicies.jpg)
+![Wrapped Policies](WrappedPolicies.jpg)
 
 Once the returned policy is executed, then the retry policy is invoked with it's action to be calling the bulkhead policy, which in turn invokes the action specified by the user. This means, in the above example, that we can have all of our calls to our downstream service including those that are retried, all going through the same bulkhead policy that we've implemented. This can help relieve tension on the underlying system.
 

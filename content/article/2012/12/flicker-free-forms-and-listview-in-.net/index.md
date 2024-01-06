@@ -2,7 +2,7 @@
 title: Flicker free forms and listview in .Net
 description: Just one solution to a flicker problem I encountered when developing a windows form application.
 date: 2012-12-30T14:51:38Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet

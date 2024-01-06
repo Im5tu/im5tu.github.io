@@ -16,7 +16,7 @@ Over the past few weeks, I've been updating some of my projects to latest standa
 
 For those who aren't familiar with a Github repository template, it allows you to initialize a new Github repo with what ever files are inside of the template repository at the time of creation. In this post, I am going to walk through some of the files that I have created for my [template repository](https://github.com/Im5tu/template). Here is an overview of what the template looks like at the time of writing:
 
-![Overview](/img/template/overview.png)
+![Overview](overview.png)
 
 ## Community Files
 
@@ -81,11 +81,11 @@ You can also setup other common files to help automate certain actions for yours
 
 Now that we've gone over the files that I've placed inside of my repository, we probably want to see how to use it. Firstly, we need to setup the template repository as a template. To do this, we need to go to the settings page and select the `Template repository` option, as shown here:
 
-![Setup the repository to be a template](/img/template/template-repository-setting.png)
+![Setup the repository to be a template](template-repository-setting.png)
 
 Once this is done, when you create a new repository, you can select the template as the source for this repository:
 
-![New repository](/img/template/new-repository.png)
+![New repository](new-repository.png)
 
 After you click create, Github clones the current files from the template repository into your new repository, ready for you to build greatness!
 

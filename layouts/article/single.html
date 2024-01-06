@@ -13,9 +13,9 @@
           itemtype="https://schema.org/Person">
           <span itemprop="name">
             {{/* TODO :: Support multiple authors? */}}
-            <a itemprop="url" href="/profile">Stuart Blackler</a>
+            <a itemprop="url" href="/about">Stuart Blackler</a>
           </span>
-        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.
+        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>. Last Updated on <time itemprop="dateModified" datetime="{{ .Lastmod }}">{{ .Lastmod.Format "January 2, 2006" }}</time>.
 
         {{- with .Params.tags }}
           Tagged:
@@ -31,11 +31,11 @@
       {{- range .Fragments.Headings }}
       <ul class="space-y-1 pl-1 list-disc">
         {{- range .Headings }}
-        <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+        <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title | safeHTML }}</a></li>
         {{- if .Headings }}
         <ul class="space-y-1 pl-4 list-disc">
           {{- range .Headings }}
-          <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+          <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title  | safeHTML }}</a></li>
           {{- end }}
         </ul>
         {{- end }}

@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: /sponsorship/
-
 Sitemap: https://im5tu.io/sitemap.xml

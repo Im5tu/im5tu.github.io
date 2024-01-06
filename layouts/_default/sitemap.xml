@@ -1,0 +1,22 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" | safeHTML -}}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{- range .Site.RegularPages -}}
+    {{- $isRootLevel := eq .File.Dir "/" -}}
+    {{- $includeInSitemap := or $isRootLevel (eq .Params.includeInSitemap true) -}}
+    {{- if $includeInSitemap -}}
+      <url>
+        <loc>{{ .Permalink }}</loc>
+        <lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+        {{- if $isRootLevel -}}
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        {{- else -}}
+        <changefreq>{{ .Sitemap.ChangeFreq }}</changefreq>
+        {{- if .Sitemap.Priority -}}
+          <priority>{{ printf "%.1f" .Sitemap.Priority }}</priority>
+        {{- end -}}
+        {{- end -}}
+      </url>
+    {{- end -}}
+  {{- end -}}
+</urlset>

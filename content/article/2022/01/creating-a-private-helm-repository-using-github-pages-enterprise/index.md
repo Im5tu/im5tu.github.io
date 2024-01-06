@@ -28,7 +28,7 @@ For this approach to work, you need to have the following in place:
 
 Once you have the prerequisites in place, you will need to setup your Github Pages with the following settings:
 
-![Github Pages Setup](/img/helm-private-github-pages/Pages-Setup.png)
+![Github Pages Setup](Pages-Setup.png)
 
 The key parts of the setup are:
 
@@ -148,11 +148,11 @@ In order to commit all of this back to git we use the following set of commands:
 
 Once the action has published, you should be able to access the generated helm index in your browser (you may need to authenticate with your normal github login or with your PAT token):
 
-![Generated helm index](/img/helm-private-github-pages/Uploaded-Index.png)
+![Generated helm index](Uploaded-Index.png)
 
 And you'll see this in your repository on the `gh-pages` branch:
 
-![Generated Repository Contents](/img/helm-private-github-pages/Repository-Contents.png)
+![Generated Repository Contents](Repository-Contents.png)
 
 ## Using with Helm
 

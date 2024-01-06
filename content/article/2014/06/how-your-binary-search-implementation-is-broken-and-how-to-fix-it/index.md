@@ -2,7 +2,7 @@
 title: How your binary search implementation is broken and how to fix it
 description: This post describes how a bug exists in most implementations of a binary search algorithm and how to fix it
 date: 2014-06-20T18:21:04Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet

@@ -14,17 +14,23 @@ Today I have been doing a little bit of work on my site and one of the things th
 
 In Hugo, the `readFile` function looks for a file relative to the current project working directory and returns it as a string. If we had a file located at: `<root>/static/css/site.css`, then we could render the file out like so:
 
-    <style>{ {- renderFile "/static/css/site.css" -} }</style>
+```xml
+<style>{{- renderFile "/static/css/site.css" -}}</style>
+```
 
 **NB:** *Remember to close the squiggly brackets so that Hugo renders it correctly.*
 
 There is a gotcha with this approach so far. Hugo will try and do its thing with the resultant string and what you will end up with is something along the lines of:
 
-    <script>ZgotmplZ</script>
+```xml
+<script>ZgotmplZ</script>
+```
 
 as opposed to your intented css contents. Luckily, there is a piped method that we can use to sort this out for us:
 
-    <style>{ {- renderFile "css/site.css" | safeCss -} }</style>
+```xml
+<style>{{- renderFile "css/site.css" | safeCss -}}</style>
+```
 
 ## Reading a hashed file
 
@@ -36,20 +42,28 @@ As you may recall in [my previous Hugo post](/article/2016/11/blog-building-part
 
 In order to get the hashed file name, we can inspect the site's data sources, looking for the file name (requires post mentioned above):
 
-    {{ $siteCssHash := (index .Site.Data.hash "site.css")}}
+```xml
+{{ $siteCssHash := (index .Site.Data.hash "site.css") }}
+```
 
 Next, we need to build up the correct file path. Note, this is the file path prior to rendering:
 
-    {{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
+```xml
+{{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
+```
 
 Finally, we need to call `readFile` and ensure that it is marked as a safe css string:
 
-    <style>{{- readFile $siteCssPath | safeCSS -}}</style>
+```xml
+<style>{{- readFile $siteCssPath | safeCSS -}}</style>
+```
 
 So putting the three together:
 
-    {{ $siteCssHash := (index .Site.Data.hash "site.css")}}
-    {{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
-    <style>{{- readFile $siteCssPath | safeCSS -}}</style>
+```xml
+{{ $siteCssHash := (index .Site.Data.hash "site.css") }}
+{{ $siteCssPath := (printf "/static/css/%s" $siteCssHash) }}
+<style>{{- readFile $siteCssPath | safeCSS -}}</style>
+```
 
-And that's it. When the page reloads/is rebuilt, your pages should now contain inlined css. You can view this [exact commit here](https://github.com/Im5tu/im5tu-hugo/blob/84ee887616acbe6cfef7e37b0dc9b4779aad31fd/layouts/partials/header/styles.html).
+And that's it. When the page reloads/is rebuilt, your pages should now contain inlined css.

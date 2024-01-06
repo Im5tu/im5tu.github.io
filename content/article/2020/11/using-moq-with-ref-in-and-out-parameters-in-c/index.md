@@ -2,7 +2,7 @@
 title: "Using Moq with ref, in and out parameters in C#"
 description: A look into how we can use Moq with ref, in and out parameters in C#
 date: 2020-11-28T12:39:52Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet
@@ -91,7 +91,7 @@ public void MustCallAllVisitors()
 
 It now compiles correctly, but when the tests execute you receive the following error:
 
-```
+```plain
 Moq.MockException
 
 Expected invocation on the mock once, but was 0 times: x => x.Visit(null)

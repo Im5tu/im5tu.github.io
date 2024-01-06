@@ -131,7 +131,7 @@ builder.Services.AddApiVersioning(options =>
 
 You can verify this in postman:
 
-![Verification in Postman using the Accept header](/img/api-versioning/media-header.png)
+![Verification in Postman using the Accept header](media-header.png)
 
 To use a custom header such as `X-Api-Version` we need to change the ApiVersionReader to:
 
@@ -144,7 +144,7 @@ builder.Services.AddApiVersioning(options =>
 
 You can verify this in postman:
 
-![Verification in Postman using the Custom header](/img/api-versioning/custom-header.png)
+![Verification in Postman using the Custom header](custom-header.png)
 
 ## Versioning via QueryStrings
 
@@ -159,7 +159,7 @@ builder.Services.AddApiVersioning(options =>
 
 You can verify this in postman:
 
-![Verification in Postman using a querystring](/img/api-versioning/querystring.png)
+![Verification in Postman using a querystring](querystring.png)
 
 ## Versioning via URLs
 
@@ -191,7 +191,7 @@ builder.Services.AddApiVersioning(options =>
 
 You can verify this in postman:
 
-![Verification in Postman using a route parameter](/img/api-versioning/url.png)
+![Verification in Postman using a route parameter](url.png)
 
 ## Accessing Versioning Information
 

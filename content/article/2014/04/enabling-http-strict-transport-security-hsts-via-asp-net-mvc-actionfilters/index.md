@@ -106,4 +106,4 @@ The implementation that I provide below **SHOULD** be used alongside the `Requir
 - Firefox since version 4; with Firefox 17, Mozilla integrates a list of websites supporting HSTS
 - Opera since version 12
 - Safari as of OS X Mavericks
--Internet Explorer does not support HSTS, but is expected to support it in the next major release after IE 11
+- Internet Explorer does not support HSTS, but is expected to support it in the next major release after IE 11

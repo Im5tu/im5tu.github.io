@@ -38,7 +38,7 @@ foreach (var table in (await client.ListTablesAsync()).TableNames)
 
 In order to run the above example, you need to have a working [localstack](/article/2022/09/pro-testing-with-xunit-localstack/) instance running with one or more DynamoDB tables created. If you want to copy the files that I've used, you can view them in the [appendix](#appendix) below. If you're using my files, then you should see the following when you run the program:
 
-![Output before customization](/img/extending-the-aws-sdk/initial-output.jpg)
+![Output before customization](initial-output.jpg)
 
 ## Customizing the request pipeline
 
@@ -120,7 +120,7 @@ internal sealed class AWSPipelineHandler : PipelineHandler
 
 When you combine all of the code, you should receive an output similar to the following:
 
-![Output after customization](/img/extending-the-aws-sdk/final-output.jpg)
+![Output after customization](final-output.jpg)
 
 The instance of `IExecutionContext` that you are passed contains both the request and (eventually) the response object, plus other useful information like the invocation id and whether the last exception is one that can be retried or not.
 

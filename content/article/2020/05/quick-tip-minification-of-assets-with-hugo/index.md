@@ -2,7 +2,7 @@
 title: "Quick Tip: Minification of assets with Hugo"
 description: Learn how to quickly minify assets with Hugo.
 date: 2020-05-16T13:00:00
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - hugo

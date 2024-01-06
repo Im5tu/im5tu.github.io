@@ -14,7 +14,7 @@ In this article, I will show you how the theme has been constructed and show you
 
 When we installed the theme in the previous post, a series of conventions took over and began the process of rending our pages for us. Because hugo is convention based, we can override the defaults by placing files in the correct place, but first we need to understand the layout. Below you can see the parts of the website that we care about the most:
 
-``` powershell
+```powershell
 /root
     /archetypes
     /content

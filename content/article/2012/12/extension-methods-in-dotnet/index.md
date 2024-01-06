@@ -11,7 +11,7 @@ tags:
 In this article we will take a look at what extension methods are and how to use them in .Net. Personally, they are one of the best things that has been introduced into the .Net framework in terms of readability. I will take you through what extension methods are, how to create them (in c\# and vb) then I will show you some of the extension methods that I have created (in c\# only, conversion is for you to try).
 <!--more-->
 
-### What are extension methods?
+## What are extension methods?
 
 Extension methods allow you to easily extend a type, such as an integer or string, without re-compiling or modifying the type. In essence, they are a type of `static` (`shared` in vb) method, but they are called as
 if the method is native to the type. Extension methods are available from the 3.5 version of the .Net Framework and can be implemented on any type in the .Net framework or any custom type that you define.
@@ -19,11 +19,11 @@ if the method is native to the type. Extension methods are available from the 3.
 One downside to extension methods is if that you create an extension method with the same name as another method in that type, the compiler will bind the method call to the native method not any extension. An
 extension method is only called when there is no native method found.
 
-#### Warning
+### Warning
 
 If you declare an extension method on the type Object, you will effectively create the extension method for every type in the framework including but not limited to String, Integer and Lists.
 
-### How do we create extension methods?
+## How do we create extension methods?
 
 The basic outline of a creating extension methods goes something like this:
 
@@ -40,7 +40,9 @@ public static class Extensions
 {
 
 }
+```
 
+```vb
 ' VB
 Module Extenstions
 
@@ -65,7 +67,9 @@ public static class Extensions
         }
     }
 }
+```
 
+```vb
 ' VB
 Module Extenstions
 
@@ -121,7 +125,9 @@ If you copy this code into any project, you should be able to call it like so:
 // C#
 String str = "my new String";
 str = str.GetFirstThreeCharacters();
+```
 
+```vb
 ' VB
 Dim str as String = "my new String"
 str = str.GetFirstThreeCharacters()
@@ -131,11 +137,11 @@ As I explained for both languages above, the effective use of the `this` keyword
 
 *Hint: Try adding an additional `Integer` parameter and using that as a replacement for the 0 in the code above.*
 
-### Examples of extension methods
+## Examples of extension methods
 
 Here are a few of the extensions that I have found or created over time. These are helpful to me and I hope they are to you as well. If you have a question about any of these, drop me a comment below.
 
-#### HasElements
+### HasElements
 
 Something that I often do is check a collection for a value. This method is designed to prevent me constantly checking for a null value and existance of any item in a given collection. This method will work on any collection that implents the `ICollection` interface.
 
@@ -162,7 +168,7 @@ if (myList.HasElements())
 }
 ```
 
-#### IsBetween
+### IsBetween
 
 The `IsBetween` method returns a boolean and determins whether or not a value is between an inclusive upper and lower boundry. This will only work on types that implement the `IComparable` interface.
 
@@ -190,7 +196,7 @@ myInt.IsBetween(0, 5); // returns true
 myInt.IsBetween(1, 5); // returns false
 ```
 
-#### Each
+### Each
 
 Quite often I have to perform a task on a collection of items. This is just a shortcut way for saying for each element in the collection, perform this action. This will work on any collection that implements
 the `ICollection` interface. The action that is parsed in can be a lambda expression or a function/subroutine.
@@ -225,7 +231,7 @@ myList.Each(el =>
 });
 ```
 
-#### In
+### In
 
 Often it is neccessary to determine whether a value is in a set collection. For example, I need to check whether a string is in an allowed list. This method will allows us to check any value against an
 array of values of the same type.
@@ -256,7 +262,7 @@ myInt.In(1, 5, 6, 7, 8); // returns false
 
 Hopefully, you now have an understanding of how to implement extension methods in both C\# and VB.Net.
 
-### Related Links
+## Related Links
 
 - [MSDN: Extension Methods (C\# Programming
     Guide)](http://msdn.microsoft.com/en-us/library/bb383977.aspx)

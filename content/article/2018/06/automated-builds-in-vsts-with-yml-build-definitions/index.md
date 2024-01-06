@@ -58,33 +58,33 @@ The `name` property, from what I can tell, represents the build number which we 
 If you do not specify a trigger section, VSTS will run a build for every branch that you ever commit/push to regardless of what it's called. I usually setup my builds to automatically trigger on any feature/bugfix/release/hotfix branch and, naturally, the master branch. To do this, configure the section as follows:
 
 ```yml
-    trigger:
-        branches:
-            include:
-            - master
-            - hotfix/*
-            - release/*
-            - feature/*
-            - bugfix/*
+trigger:
+    branches:
+        include:
+        - master
+        - hotfix/*
+        - release/*
+        - feature/*
+        - bugfix/*
 ```
 
 The full syntax, if you choose to use it, is:
 
 ```yml
-    trigger:
-    branches:
-        include: [string]
-        exclude: [string]
-    paths:
-        include: [string]
-        exclude: [string]
+trigger:
+branches:
+    include: [string]
+    exclude: [string]
+paths:
+    include: [string]
+    exclude: [string]
 ```
 
 The shorter, inclusive only syntax is:
 
 ```yml
-    trigger:
-        [string]
+trigger:
+    [string]
 ```
 
 Personally, I prefer the full syntax, but it doesn't make a difference as I typically only use inclusive only filters. Where `[string]` is present, either place a single entry or if multiple entries are required, follow my example where I place `-` on the start of each new line of the element.
@@ -96,12 +96,12 @@ One last point to note, if you setup your branching policies in VSTS to require 
 You do not have to use variables in your scripts. If you decide to, they can be extremly powerful. The variables can be passed to task inputs using the macro syntax `$(variableName)`, or accessed within a script using the environment variable. For an example of how the alternative syntaxes, see the [documentation](https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted-phase.md):
 
 ```yml
-    variables:
-       buildConfiguration: 'Release'
-       buildProjects: '**/*.csproj'
-       testProjects: '**/*Tests*.csproj'
-       publishProject: 'src\CHANGEME\CHANGEME.csproj'
-       dotnetCliVersion: '2.1.300'
+variables:
+    buildConfiguration: 'Release'
+    buildProjects: '**/*.csproj'
+    testProjects: '**/*Tests*.csproj'
+    publishProject: 'src\CHANGEME\CHANGEME.csproj'
+    dotnetCliVersion: '2.1.300'
 ```
 
 In our script that we are building, we have some simple variables for some of the key sections of our code. It can be incredibly easy to parameterise everything, but I would advise only do that which is necessary.
@@ -122,11 +122,11 @@ As mentioned earlier in the article, I will be walking through how to create a b
 As a best practise, the first thing that I do in a build process is to reset the state of the repository. This prevents any issues such as false positives from previous builds etc. In order to do this, we can execute a small git magic:
 
 ```yml
-    steps:
-    - script: |
-      git clean -d -x -f
+steps:
+- script: |
+    git clean -d -x -f
 
-      displayName: Clean Sources
+    displayName: Clean Sources
 ```
 
 This portion is declared directly under the `steps:` section in the yml file. Inline scripts, as shown above, are limited to around 500 characters at the time of writing. So you may need to get inventive with your scripts or use an external file (out of scope for this article). As the file is whitespace sensitive, there is no need for quotation marks around most things, so we can just type `Clean Sources` and the space will be preserved in the name of the step when we view it inside of VSTS.
@@ -144,10 +144,10 @@ In my testing, these options successfully remove the build output if present.
 Depending on where you are running your build process, you may or may not need this step, but I always include it for completeness. This steps checks for the specified version of the dotnet CLI and installs it if it is not present. We pull the version from a variable, which I'll cover later.
 
 ```yml
-    - task: DotNetCoreInstaller@0
-    displayName: DotNet CLI Installer
-    inputs:
-        version: $(dotnetCliVersion)
+- task: DotNetCoreInstaller@0
+displayName: DotNet CLI Installer
+inputs:
+    version: $(dotnetCliVersion)
 ```
 
 This should be placed under the definition of Clean Sources above. For each of the remaining steps, place them directly after the last step you entered, unless you want to change the order of the process (the build executes the steps from top to bottom - so the first one in the file is the first one to be run).
@@ -157,26 +157,26 @@ This should be placed under the definition of Clean Sources above. For each of t
 In order to build the project(s), I use a two step process: restore the required nuget packages using a nuget.config file, followed by building the projects.
 
 ```yml
-    - task: DotNetCoreCLI@2
-    displayName: Restore Packages
-    inputs:
-        command: restore
-        feedsToUse: config
-        nugetConfigPath: 'nuget.config'
-        projects: $(buildProjects)
-        noCache: true
-        verbosityRestore: Normal
+- task: DotNetCoreCLI@2
+displayName: Restore Packages
+inputs:
+    command: restore
+    feedsToUse: config
+    nugetConfigPath: 'nuget.config'
+    projects: $(buildProjects)
+    noCache: true
+    verbosityRestore: Normal
 ```
 
 In the above snippet, the first thing that I want to mention is that I am using a variable to decide which projects I want nuget packages to be restored for.The projects directive supports a wildcard approach, so we can declare a folder structure such as `**/*.csproj` should we want to. Next, I had to set the `noCache: true` directive as I always wanted the latest versions from the nuget feeds. This shouldn't be required on hosted build servers, but may be needed for your own build servers. Lastly, I set the verbosity level back to normal, where the default is detailed. This massively cleans up the corresponding build logs. I'll leave it up to you, the reader, to extract this to a variable should you wish too.
 
 ```yml
-    - task: DotNetCoreCLI@2
-    displayName: Build Projects
-    inputs:
-        projects: $(buildProjects)
-        packDirectory: '$(Build.ArtifactStagingDirectory)'
-        arguments: '-c $(buildConfiguration) /p:Version=$(Build.BuildNumber)'
+- task: DotNetCoreCLI@2
+displayName: Build Projects
+inputs:
+    projects: $(buildProjects)
+    packDirectory: '$(Build.ArtifactStagingDirectory)'
+    arguments: '-c $(buildConfiguration) /p:Version=$(Build.BuildNumber)'
 ```
 
 Once again, I have used a couple of variables. The first is the projects to build which is the exact same definition as in the previous step. The second variable is the configuration that we wish to build. In this case, I always have my automated builds built in `Release` mode - so this is how i've defined this variable. Last but by no means least, I set version number in the arguments so the assemblies are versioned correctly.
@@ -186,13 +186,13 @@ Once again, I have used a couple of variables. The first is the projects to buil
 Testing is always a part of my pipeline, regardless of whether or not the solution actually contains any tests at the current time. Luckily, if tests are not present when this step runs, then there is a only a warning on the step rather than a failing build.
 
 ```yml
-    - task: DotNetCoreCLI@2
-    displayName: Test Projects
-    inputs:
-        command: test
-        projects: $(testProjects)
-        publishTestResults: true
-        arguments: '--no-build -c $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+displayName: Test Projects
+inputs:
+    command: test
+    projects: $(testProjects)
+    publishTestResults: true
+    arguments: '--no-build -c $(buildConfiguration)'
 ```
 
 You may of noticed that I used a separate variable for the projects that I wish to test (`$(testProjects)`). For me, this is just a subset of the projects that I have already built and I always want to run in the same configuration that I built in. This allows me to pass in the `--no-build` argument, saving a small amount of time on executing the tests. Luckily, the built in task for tests can automatically publish the test results (if available) via the `publishTestResults: true` input.
@@ -204,13 +204,13 @@ _Sorry about some of the formatting in this section. See the full file at the en
 There are two steps in publishing our website. The first is to build the project with the runtime, placing the output in a staging directory. The second part is taking the build output from the staging directory and publishing it to the artificts of the build.
 
 ```yml
-    - task: DotNetCoreCLI@2
-    displayName: Publish Web App
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-        command: publish
-        projects: $(publishProject)
-        arguments: '-c Release --self-contained -r win7-x64 -o $(Build.ArtifactStagingDirectory)/drop /p:Version=$(Build.BuildNumber)'
+- task: DotNetCoreCLI@2
+displayName: Publish Web App
+condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+inputs:
+    command: publish
+    projects: $(publishProject)
+    arguments: '-c Release --self-contained -r win7-x64 -o $(Build.ArtifactStagingDirectory)/drop /p:Version=$(Build.BuildNumber)'
 ```
 
 This is the first time that we have used a condition. The default condition is `succeeded()` which means "only run this step if the previous one completed successfully". Here I have said, where the previous step completed successfully and the branch that's being built is the `master` branch. For some of our builds we only publish on the master branch, though it can be handy to have this step in place for pull requests etc. It purely depends on the requirements on your build pipeline.
@@ -224,12 +224,12 @@ Taking a look at the arguments, I want to point out the use of: `--self-containe
 The next step is to publish the artifacts so we can use it after the build completes:
 
 ```yml
-    - task: PublishBuildArtifacts@1
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
-        artifactName: 'drop'
-        publishLocation: Container
+- task: PublishBuildArtifacts@1
+condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
+    artifactName: 'drop'
+    publishLocation: Container
 ```
 
 This step takes the contents of the `drop` folder in the staging area, and copies it to the published artifacts `drop` directory. Occassionally, I build and package multiple projects, so I have them split out in the staging/published areas in separate folders. This, however, is not required.
@@ -239,12 +239,12 @@ This step takes the contents of the `drop` folder in the staging area, and copie
 This section requires the [following extension](https://marketplace.visualstudio.com/items?itemName=YodLabs.VariableTasks) to be installed. Though there may be another, built in, way to complete the same task. In my real builds, I usually have multiple tags for our release process. To add additional tags, enter another line at the same indentation as `Build-$(Build.BuildNumber)`.
 
 ```yml
-    - task: YodLabs.VariableTasks.AddTag.AddTag@0
-    displayName: Tag VSTS Build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-        tags: |
-        Build-$(Build.BuildNumber)
+- task: YodLabs.VariableTasks.AddTag.AddTag@0
+displayName: Tag VSTS Build
+condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+inputs:
+    tags: |
+    Build-$(Build.BuildNumber)
 ```
 
 Once this task completes, you should have a tag on your build like: `Build-0.1.0`.

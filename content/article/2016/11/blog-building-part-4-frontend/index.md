@@ -19,9 +19,9 @@ Yarn is a frontend package manager. It replaces the traditional workflow of npm 
 
 ### Installing node.js
 
-Unfortunately, it still runs on node, so we need to get that setup first. Head to [the node website]() and install the correct version for your environment. You can verify node is setup correctly post-installation by running the following command:
+Unfortunately, it still runs on node, so we need to get that setup first. Head to [the node website](https://nodejs.org/en) and install the correct version for your environment. You can verify node is setup correctly post-installation by running the following command:
 
-``` powershell
+```cmd
 C:\>node --version
 v7.1.0
 ```
@@ -30,13 +30,13 @@ v7.1.0
 
 Once node is setup, we can install yarn:
 
-``` powershell
+```powershell
 C:\>npm install yarn -g
 ```
 
 This will install yarn so that it is available for all projects, not just our new blog. Once the installation is complete, we can verify yarn is installed by running the following command:
 
-``` powershell
+```powershell
 C:\>yarn --version
 0.17.6
 ```
@@ -45,7 +45,7 @@ C:\>yarn --version
 
 Before we begin installing packages inside of our project, I am going to add a `.gitignore` file as we will generate a lot of files that we don't want inside of our git respository. Here is what I added to start off with:
 
-``` powershell
+```powershell
 node_modules/
 data/**/hash.*
 static/css/*.css
@@ -59,7 +59,7 @@ Now we can setup our project to use yarn:
 
 This will ask you a series of questions such as:
 
-``` powershell
+```powershell
 E:\im5tu-hugo>yarn init
 yarn init v0.17.6
 question name (im5tu-hugo): im5tu
@@ -79,7 +79,7 @@ Once this is completed, we will have a `package.json` file in our root and we ca
 
 At this point, I assume that you are fairly familiar with `gulp` or at least know what it is. We are going to setup gulp and our initial set of dependencies to do things like minification of files etc. We will add these files as development dependencies:
 
-``` powershell
+```powershell
 yarn add gulp -D
 yarn add gulp-sass -D
 yarn add gulp-autoprefixer -D
@@ -87,7 +87,7 @@ yarn add gulp-autoprefixer -D
 
 Now we need to tell gulp what to do by adding a `gulpfile.js`. Create this in the website root:
 
-``` powershell
+```powershell
 E:\im5tu-hugo>echo "" > gulpfile.js
 ```
 
@@ -111,7 +111,7 @@ var gulp         = require("gulp"),
 
 I have choosen to have a folder structure like the following:
 
-``` powershell
+```powershell
 /root
     /static
         /css
@@ -123,7 +123,7 @@ I have choosen to have a folder structure like the following:
 
 Next inside of our gulp file, we can configure two tasks. One to process any javascript files that we have and another for any scss files that we have:
 
-``` js
+```js
 gulp.task("js", function() {
     gulp
         .src(srcJs)
@@ -145,7 +145,7 @@ gulp.task("css", function() {
 
 Lastly, we need to setup a watch task so that as files are changed they are copied to the static folder. When we combine this with hugo's watch ability we have a dynamically changing site that reloads with the changes as we hit save. We also want to setup a default task, so that we can just run `gulp` from inside of the root directory on the command line. The watch/default tasks look like:
 
-``` js
+```js
 gulp.task("watch", ["css", "js"], function() {
     gulp.watch([srcCss, srcJs], ["css", "js"]);
 });
@@ -155,7 +155,7 @@ gulp.task("default", ["watch"]);
 
 In terms of our gulpfile we are all setup and ready to go. At the time of writing there are problems running gulp directly from the command line. In order to work around this, I needed to add the following to the package.json file in our root directory:
 
-``` js
+```js
 "scripts": {
     "gulp": "gulp"
 }
@@ -163,7 +163,7 @@ In terms of our gulpfile we are all setup and ready to go. At the time of writin
 
 And then I can run gulp as follows:
 
-``` cmd
+```cmd
 yarn gulp
 ```
 
@@ -171,7 +171,7 @@ yarn gulp
 
 Now that we have our frontend pipeline setup and both the watch commands running, we can begin to change our site to include the files that we want. If you are using the bones theme, you need to create the following two files:
 
-``` powershell
+```powershell
 /root
     /layouts
         /partials
@@ -183,19 +183,19 @@ Now that we have our frontend pipeline setup and both the watch commands running
 
 Inside of the scripts file add:
 
-``` html
+```html
 <script src="/js/site.js" async></script>
 ```
 
 Inside of the styles file add:
 
-``` html
+```html
 <link rel="stylesheet" href="/css/site.css" />
 ```
 
 Now you should be able to add the file `/root/src/css/site.scss` with the following content:
 
-``` css
+```css
 body { background: #ababab }
 ```
 
@@ -207,14 +207,14 @@ All being well you should have both files renderd as part of your output.
 
 For our cache busting mechanism, we are going to append the hash of the file to the file. As a new file will be created everytime that our file changes, we will need to clear out the destination css folder. To start, we need to add two more packages, using yarn:
 
-``` powershell
+```powershell
 yarn add gulp-hash -D
 yarn add del -D
 ```
 
 And then add them to our gulpfile:
 
-``` js
+```js
 var gulp         = require("gulp"),
     sass         = require("gulp-sass"),
     autoprefixer = require("gulp-autoprefixer"),
@@ -225,7 +225,7 @@ var gulp         = require("gulp"),
 
 Now lets create a task to clean out some directories that we are using:
 
-``` js
+```js
 gulp.task("clean", function() {
     del([destCssDir, destJsDir, "data"]);
 });
@@ -233,7 +233,7 @@ gulp.task("clean", function() {
 
 Now we can easily clean the directories that we need to at will. This could come in handy at a later date. Next we can change our task definitions to clean up their respective directories:
 
-``` js
+```js
 gulp.task("js", function() {
     del.sync([destJsDir]);
 ...
@@ -243,7 +243,7 @@ gulp.task("css", function() {
 
 Finally, we can add the hash of the file prior to writing it to its destination in each task:
 
-``` js
+```js
 ...
 .pipe(hash())
 .pipe(gulp.dest(...)); // change ... to the relevant destination eg: destCssDir
@@ -255,7 +255,7 @@ In hugo, the `/root/data` directory is used to store any data that we might need
 
 `gulp-hash` has a built in manifest method that will generate a json file containing the hash for us. We can change our gulp tasks to leverage this functionality and place it inside of the `/root/data` directory:
 
-``` js
+```js
 // js gulp task
 ...
 .pipe(gulp.dest(destJsDir))
@@ -271,25 +271,25 @@ In hugo, the `/root/data` directory is used to store any data that we might need
 
 Restart our gulp task and now you should see the hash files being generated. If we open up the hash files, you should see something along the lines of:
 
-``` css
+```css
 {"site.css":"site-da39a3ee.css","site.js":"site-da39a3ee.js"}
 ```
 
 All that's left to do is to use these hashes inside of our layouts. Luckily, GO has a built in function called `index` which accepts a map and an index and returns the value of the map with the given index. So in our templates, we simply need to ask for the right files. Let's first change our stylesheet in `/layouts/partials/styles.html` to:
 
-``` html
+```html
 <link rel="stylesheet" href="/css/{{ index .Site.Data.hash "site.css" }}" />
 ```
 
 Finally, let's change our script template to do the same (`/layouts/partials/body/scripts`):
 
-``` html
+```html
 <script src="/js/{{ index .Site.Data.hash "site.js"}}" async></script>
 ```
 
 Now we have a fully functional pipeline for frontend work. To start up the pipeline, you need to run two commands from different command line windows:
 
-``` powershell
+```powershell
 yarn gulp
 hugo server -D
 ```

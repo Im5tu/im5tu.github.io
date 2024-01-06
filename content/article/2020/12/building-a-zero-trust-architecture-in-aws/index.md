@@ -53,7 +53,7 @@ AWS supports permissions boundaries for IAM entities (users or roles). A permiss
 
 For organizations, you can investigate the use of a service control policy (SCP). Service control policies are a type of organization policy that you can use to manage permissions in your organization. SCP's offer central control over the maximum available permissions for all accounts in your organization. SCP's alone are not sufficient to granting permissions to the accounts in your organization. No permissions are granted by an SCP. An SCP defines a guardrail, or sets limits, on the actions that the account's administrator can delegate to the IAM users and roles in the affected accounts.
 
-Here is an example of a limited IAM policy: ![Limited IAM Policy for SNS](/img/zero-trust/iam-policy.png)
+Here is an example of a limited IAM policy: ![Limited IAM Policy for SNS](iam-policy.png)
 
 You can read more about [AWS IAM Policy Boundaries here](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html) and [Service Control Policies here](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html).
 
@@ -67,11 +67,11 @@ Encryption At Rest refers to the encryption that's applied to data when it is pe
 
 **SQS**
 
-In-transit encryption is provided, but you must opt-in to at-rest encryption: ![SQS Encryption](/img/zero-trust/sqs-encryption.png)
+In-transit encryption is provided, but you must opt-in to at-rest encryption: ![SQS Encryption](sqs-encryption.png)
 
 **SNS**
 
-In-transit encryption is provided, but you must opt-in to at-rest encryption: ![SNS Encryption](/img/zero-trust/sns-encryption.png)
+In-transit encryption is provided, but you must opt-in to at-rest encryption: ![SNS Encryption](sns-encryption.png)
 
 By performing end to end encryption both at rest and in-transit, we often meet any regulatory needs such as PCI and GDPR compliance. In the UK, the Information Commissioner's Office can now issue fines of up to 4% of a company's annual turnover, or 20 million (whichever is greater) for the worst data offences - so this is something that we should always be considering.
 
@@ -92,7 +92,7 @@ Even when inside of a VPC in AWS, it is a little known fact that your traffic to
 
 For serverless architectures, we may be utilizing Lambdas for the scaling capabilities it can provide. A Lambda may execute outside of a VPC entirely, as shown in the picture below. This means it would by-pass any protections that you have inside of your VPC. I would personally recommend that all functions are isolated into their own subnets inside of your VPC.
 
-![Lambda VPC](/img/zero-trust/lambda-vpc.png)
+![Lambda VPC](lambda-vpc.png)
 
 ### Use Transit Gateway to connect VPCs
 

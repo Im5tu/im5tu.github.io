@@ -14,7 +14,7 @@ Git aliases are used to create new git commands that can either invoke a functio
 
 <!--more-->
 
-# Creating a new git alias
+## Creating a new git alias
 
 We have two ways of creating git aliases: via the command line or directly in the `.gitconfig` file. You only need to use one of the approaches, so pick which best works for you.
 
@@ -33,7 +33,7 @@ If you are manually editing a `.gitconfig` file, you need to find/create a secti
         <name> = <command>
 ```
 
-# git undo
+## git undo
 
 `git undo` is for those times that you realise that you've messed up the commit and haven't pushed it to your remote yet. My common use case is because my muscle memory keeps writing `git commit -am` instead of `git commit -m`. This command undoes the last commit so that you can recommit however you see fit.
 
@@ -50,7 +50,7 @@ Or directly in the `.gitconfig`:
         undo = reset HEAD~1 --mixed
 ```
 
-# git reset-author
+## git reset-author
 
 Like I imagine a lot of people do, I run multiple git profiles on my machine. One for personal work and one for work. Occasionally, I mess up which profile I am using so I want to reset the commit author details. To do this, I run `git reset-author`. This does not make any other changes to the commit other than the author.
 
@@ -67,7 +67,7 @@ Or directly in the `.gitconfig`:
         reset-author = commit --amend --reset-author --no-edit
 ```
 
-# git sync
+## git sync
 
 When working on different machines, or working with another person on the same branch, you may need to update your local branch to be inline with the remote branch. `git sync` does this for us by fetching, pulling then pushing our working branch. This command uses a function to run multiple git commands in one. To make your own custom function, the syntax is `!f() { <YOUR COMMANDS HERE>; };f`.
 
@@ -84,7 +84,7 @@ Or directly in the `.gitconfig`:
         sync = "!f() { git fetch --tags && git pull && git push; };f"
 ```
 
-# git refresh
+## git refresh
 
 Much like the aforementioned `git sync`, `git refresh` also brings a branch up to date but with a different branch. This is useful for updating say `task/my-task` with the latest version of `main`. To run the alias, the syntax is `git refresh <current branch> <base branch>`.
 
@@ -101,7 +101,7 @@ Or directly in the `.gitconfig`:
         refresh = "!f() { git switch $2 && git fetch && git pull && git switch $1 && git merge $2; };f"
 ```
 
-# git history
+## git history
 
 On occasion I need to view the current status of my remote branch to see the names of the recent commits. Enter `git history` which provides you with a list of commits on a single, eg:
 

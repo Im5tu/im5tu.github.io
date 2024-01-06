@@ -42,11 +42,14 @@
     p {
         @apply py-4 text-base leading-7 text-gray-600;
     }
-    p code {
+    p code, li code {
         @apply text-orange-500 font-bold;
     }
+    p a:link, p a:visited {
+        @apply text-orange-600 hover:text-orange-800 italic;
+    }
     pre > code {
-        @apply block p-6 font-normal;
+        @apply block p-6 font-normal overflow-auto;
     }
     .mc-field-group {
         @apply p-2;
@@ -56,6 +59,9 @@
     }
     ul {
         @apply space-y-1 list-disc list-inside;
+    }
+    section ul ul, section ul ol, section ol ul {
+        @apply ml-4;
     }
     ol {
         @apply space-y-1 list-decimal list-inside;

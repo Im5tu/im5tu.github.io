@@ -222,7 +222,7 @@ Under the `aws-seed-data` directory, create a new file called `init.sh` ensuring
 
 Next under the scripts sub-directory, create a new script called `dynamodb.sh`. In here we are going to create a new dynamo db table using the `awslocal` command. This command is essentially a fully fledged AWS CLI but you never have to set the endpoint, which makes it super handy for scripting. In my example here, I’m just creating a dynamo table as I would normally, just switch `aws` for `awslocal`. Although I’m not doing it here, you can do a lot of fancy things like pre-seeding the dynamo table with a set amount of data for example.
 
-![Desired Folder Structure](/img/pro-xunit-localstack/folder-structure.png)
+![Desired Folder Structure](folder-structure.png)
 
 Inside of our init script, we need to have the following:
 

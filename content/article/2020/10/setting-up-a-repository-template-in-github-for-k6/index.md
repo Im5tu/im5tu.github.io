@@ -18,7 +18,7 @@ For our performance tests, I generally use [K6](https://k6.io) which if you're u
 
 Here is an overview of what the [repository template](https://github.com/Im5tu/template-k6) looks like at the time of writing:
 
-![Overview](/img/template-k6/overview.png)
+![Overview](overview.png)
 
 ## Folders
 

@@ -2,7 +2,7 @@
 title: "DevOps"
 description: I have recently been getting to grips with the build and deployment features of both Teamcity and Octopus Deploy. This has been making me think about the industry buzz word DevOps and exactly what that means.
 date: 2015-01-24T18:36:29Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet

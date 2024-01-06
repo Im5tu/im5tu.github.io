@@ -34,7 +34,7 @@ This will open up the Azure portal and download the file to disk. Remember the p
 
 Using the file downloading in the previous step, we can import the settings using the following commands, replacing `<pathToFile>` with the actual file:
 
-```powershell
+```ppowershells
 $settingsFile = "<pathToFile>"
 Import-AzurePublishSettingsFile -PublishSettingsFile $settingsFile
 ```

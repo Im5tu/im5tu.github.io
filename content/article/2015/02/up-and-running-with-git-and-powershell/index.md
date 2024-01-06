@@ -23,7 +23,7 @@ If i'm honest, i wish I made the change earlier. I no longer have a confusing UI
 
 First of all, you need to download the latest version of git from [here](http://git-scm.com/download/win). At the time of writing, the version is: 1.9.5 released 2 months ago. When you start the setup program, everything is down to personal preference (eg: where you install, windows explorer integration) until you see the following screen:
 
-![Select the middle option](/img/up-and-running-with-git/Git-install-command-prompt.png "Select the middle option")
+![Select the middle option](Git-install-command-prompt.png "Select the middle option")
 
 It is important that you do not pick the top option here unless you are comfortable editing environment variables. The second option is the best for most windows users as this does the environment variables for you.
 
@@ -31,10 +31,13 @@ Following this, it is another case of common sense rules with choosing the style
 
 When this is done, verify by heading into powershell/command prompt and typing:
 
+```bash
     git
+```
 
 This should produce something similar to the following output:
 
+```bash
     usage: git [--version] [--help] [-C <path>] [-c name=value]
                [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
                [-p|--paginate|--no-pager] [--no-replace-objects] [--bare]
@@ -67,6 +70,7 @@ This should produce something similar to the following output:
     'git help -a' and 'git help -g' lists available subcommands and some
     concept guides. See 'git help <command>' or 'git help <concept>'
     to read about a specific subcommand or concept.
+```
 
 If you get that, you're ready for the next step. Otherwise, you will need to add the path to your git installation to the environment variables.
 
@@ -88,23 +92,25 @@ This will do two different things:
 
 After the installation, you will see the following output in the console (highlighted in bright green, so its easier to see):
 
+```powershell
     PsGet is installed and ready to use
     ... omitted for brevity
     Module posh-git was successfully installed.
+```
 
 If you don't see that, refer to the installation guides of the various modules as listed above. Otherwise, we are technically done setting up powershell with git. Now we can do awesome things such as download new powershell modules from the ps-get directory, view the current status of a git repo and much much more.
 
 *A repository will now show something along the lines of the following if you feel the need to verify:*
 
 ```powershell
-C:\Dev\sblackler.github.io [master +1 ~2 -0 !]>
+C:\Dev\im5tu.github.io [master +1 ~2 -0 !]>
 ```
 
 ## Creating better diffs with Out-Diff
 
 Some of the output that we get using the built in `git diff` command is a little horrid:
 
-![Sample output](/img/up-and-running-with-git/git-diff-powershell.PNG "Sample Output")
+![Sample output](git-diff-powershell.PNG "Sample Output")
 
 What [Out-Diff](http://psget.net/directory/out-diff/) does is create a unifed diff for you using the [Unified Diff Format](http://en.wikipedia.org/wiki/Diff_utility#Unified_format).
 

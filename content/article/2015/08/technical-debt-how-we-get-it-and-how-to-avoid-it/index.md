@@ -51,7 +51,7 @@ The key point to make is that if your future self (or colleague) will have troub
 
 ## Strategies to avoid high levels of technical debt
 
-Here at [4Com](http://www.4com.co.uk), we employ the following techniques to help us track how much technical debt we have and to help us mitigate it:
+At my work, we employ the following techniques to help us track how much technical debt we have and to help us mitigate it:
 
 - The rule of 3
 - The hallway test
@@ -70,6 +70,6 @@ With legacy projects, the primary focus should be getting unit tests in place (t
 
 ### Closing words
 
-In his post, Ralf mentions that tackling technical debt is an addiction with the basic argument the business will keep postponing doing the right thing. If left unmanaged this is entirely true until it becomes a point where it is too costly to implement a feature. The key is the business will decide this. At [4Com](http://www.4com.co.uk), we continuously flag items as technical debt for review at every sprint planning meeting. I firmly believe that if we didn't, we wouldn't have the same high standards in our code base as we do today.
+In his post, Ralf mentions that tackling technical debt is an addiction with the basic argument the business will keep postponing doing the right thing. If left unmanaged this is entirely true until it becomes a point where it is too costly to implement a feature. The key is the business will decide this. At work, we continuously flag items as technical debt for review at every sprint planning meeting. I firmly believe that if we didn't, we wouldn't have the same high standards in our code base as we do today.
 
 In short, we should always leave the code in a better place than when we found it - never worse and raise an issue if there is something that could be done better. That's what I believe the metaphor is for - something that we can do better within our code.

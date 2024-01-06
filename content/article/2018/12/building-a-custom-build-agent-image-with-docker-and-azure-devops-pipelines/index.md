@@ -13,7 +13,7 @@ In this article, we will learn how to use a custom dockerfile as the bases for a
 
 <!--more-->
 
-### TL;DR
+## TL;DR
 
 You need to this `Dockerfile` snippet:
 
@@ -71,7 +71,7 @@ If your repository is hosted on either Bitbucket or Github, you can get your doc
 
 Once that is complete, if you navigate to the page [https://cloud.docker.com/repository/create](https://cloud.docker.com/repository/create) you should see the following:
 
-![Docker - Create Repository Screen](/img/custom-docker-agent/Create-Repository.png)
+![Docker - Create Repository Screen](Create-Repository.png)
 
 From here we can create a link to our hosted repository and setup a build that is associated with the repository.
 
@@ -79,7 +79,7 @@ From here we can create a link to our hosted repository and setup a build that i
 
 If you need to edit an existing repository or build, you can do that from the following page: `https://cloud.docker.com/repository/docker/<user id>/<repo name>/builds`
 
-![Docker - Builds Screen](/img/custom-docker-agent/Build-Page.png)
+![Docker - Builds Screen](Build-Page.png)
 
 ## Using the Dockerfile in a Azure DevOps pipeline
 
@@ -107,7 +107,7 @@ container: octodns
 
 That's it, you should now have a functioning customised Azure DevOps build agent. After that you can play with any additional steps, triggers, variables or what ever your heart desires. Here's what it looks like when it's running instead of Azure DevOps (with the container initialization step highlighted):
 
-![Azure DevOps - Running Custom Containers](/img/custom-docker-agent/Running-Agent.png)
+![Azure DevOps - Running Custom Containers](Running-Agent.png)
 
 To view the Dockerfile that I am currently using as a custom agent, [go here](https://github.com/Im5tu/octodns-docker/blob/master/Dockerfile).
 

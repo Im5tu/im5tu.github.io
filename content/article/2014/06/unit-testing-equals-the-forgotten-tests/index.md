@@ -8,7 +8,6 @@ tags:
 - dotnet
 ---
 
-
 Today I wanted to cover something that is not often covered when unit testing an object. If an object has the `Equals` method overridden, then there are a number of tests that we should be running as a minimum:<!--more-->
 
 - Reflexive Tests
@@ -17,7 +16,7 @@ Today I wanted to cover something that is not often covered when unit testing an
 - Consistency Tests
 - Not-Null Tests
 
-### Reflexive Tests
+## Reflexive Tests
 
 A reflexive test is one where an object is equal to itself. In other words, the following expression should be true: `x.Equals(x)`.
 
@@ -31,7 +30,7 @@ public void ReflexiveTest()
 }
 ```
 
-### Symmetric Tests
+## Symmetric Tests
 
 A symmetric test is one where an object (`x`) is equal to another instance (`y`), only if the second instance (`y`) is also equal to the first instance (`x`). In essence, if `x.Equals(y)` then `y.Equals(x)` should also be true.
 
@@ -47,7 +46,7 @@ public void SymmetricTest()
 }
 ```
 
-### Transitive Tests
+## Transitive Tests
 
 A transitive tests is one where if object `x` is equal to `y`, and `y` is equal to `z`, then `x` should also be equal to `z`.
 
@@ -65,7 +64,7 @@ public void TransitiveTest()
 }
 ```
 
-### Consistency Tests
+## Consistency Tests
 
 A consistent test should ensure that regardless of how many invocations of the `Equals` method occurs, the result should remain the same. For example, both of the following tests should pass:
 
@@ -92,7 +91,7 @@ public void ConsistencyTest_3Invocations()
 }
 ```
 
-### Not-Null Tests
+## Not-Null Tests
 
 If the `Equals` method is called with a null argument, the result of the test should always be `false`. This is because an instance of an object is never equal to a null reference.
 
@@ -106,7 +105,7 @@ public void NullTest()
 }
 ```
 
-### Other notes about overriding Equals
+## Other notes about overriding Equals
 
 - If you override `Equals()`, ensure that you override `GetHashCode()` as well.
   - If two objects are equal, then they must return the same value for `GetHashCode()`

@@ -2,7 +2,7 @@
 title: Enabling HTTP Strict Transport Security HSTS via Web Config
 description: This post describes how to enable HTTP Strict Transport Security (HSTS) via a web configuration file
 date: 2014-06-10T18:19:47Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet
@@ -16,13 +16,13 @@ Below is a small sample configuration that enables a custom header called `Heade
 
 ```xml
 <configuration>
- <system.webServer>
- <httpProtocol>
-  <customHeaders>
-  <add name="Header Name" value="Header Value" />
-  </customHeaders>
- </httpProtocol>
- </system.webServer>
+  <system.webServer>
+    <httpProtocol>
+      <customHeaders>
+        <add name="Header Name" value="Header Value" />
+      </customHeaders>
+    </httpProtocol>
+   </system.webServer>
 </configuration>
 ```
 
@@ -32,13 +32,13 @@ The end result for enabling HSTS with a 300 second limit is:
 
 ```xml
 <configuration>
- <system.webServer>
- <httpProtocol>
-  <customHeaders>
-  <add name="Strict-Transport-Security" value="max-age=300" />
-  </customHeaders>
- </httpProtocol>
- </system.webServer>
+  <system.webServer>
+    <httpProtocol>
+       <customHeaders>
+         <add name="Strict-Transport-Security" value="max-age=300" />
+       </customHeaders>
+    </httpProtocol>
+  </system.webServer>
 </configuration>
 ```
 
@@ -46,12 +46,12 @@ Including the sub-domain protection:
 
 ```xml
 <configuration>
- <system.webServer>
- <httpProtocol>
-  <customHeaders>
-  <add name="Strict-Transport-Security" value="max-age=300; includeSubDomains" />
-  </customHeaders>
- </httpProtocol>
- </system.webServer>
+  <system.webServer>
+    <httpProtocol>
+      <customHeaders>
+        <add name="Strict-Transport-Security" value="max-age=300; includeSubDomains" />
+      </customHeaders>
+    </httpProtocol>
+  </system.webServer>
 </configuration>
 ```

@@ -2,7 +2,7 @@
 title: Semaphore vs SeamphoreSlim Micro Benchmark
 description: A micro-benchmark to demonstrate the performance difference between the Semaphore and SemaphoreSlim classes in C#
 date: 2013-03-11T18:06:28Z
-toc: true
+toc: false
 includeInSitemap: true
 tags:
 - dotnet

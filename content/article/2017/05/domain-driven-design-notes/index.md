@@ -50,9 +50,9 @@ Within a given business domain, you may often find that the same term is used bu
 
 ### Context Maps
 
-The overall layout of bounded contexts within a business domain can be represented on a context map, as shown below (credit: [InfoQ](https://infoq.com)):
+The overall layout of bounded contexts within a business domain can be represented on a context map, as shown below:
 
-![Example DDD Context Map](https://www.infoq.com/resource/articles/ddd-contextmapping/en/resources/ddd-contextmapping-figure11.jpg)
+![Example DDD Context Map](https://miro.medium.com/v2/resize:fit:1103/0*Dig5eOh00vMkqOiw.jpg)
 
 On the image above, there are a few new terms to understand:
 
@@ -86,5 +86,3 @@ Usually, a long whiteboard is used to note down the observable events on the tim
 The number of people in the meeting, should ideally not break the two pizza rule. The meeting should be kept on track through the presence of a facilitator, whos job it is to prevent long running discussions and guides the modeling effort. The facilitator doesn't necessarily have to be a domain expert but this might be useful to get the meeting started.
 
 > **Two pizza rule**: Never have a meeting where two pizzas couldn't feed the entire group
-
-*In a future post I will go through various architectural patterns and their usages.*
