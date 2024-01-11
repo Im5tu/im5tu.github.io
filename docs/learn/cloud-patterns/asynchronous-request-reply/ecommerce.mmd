@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant Customer
+    participant Message Queue
+    participant Order Processing System
+    Customer->>Message Queue: Place order
+    Message Queue->>Order Processing System: Process order
+    Order Processing System-->>Customer:Asynchronous Notification When Complete
+    Note right of Order Processing System: Handle high volume orders
