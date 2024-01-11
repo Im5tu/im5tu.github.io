@@ -28,7 +28,7 @@ Implementing the bulkhead pattern involves partitioning service instances based 
 
 {{<image "example-policy.png" "Example Bulkhead Workflow">}}
 
-Consider a typical web application that relies on multiple services, such as product and rating services. If the rating service experiences a heavy load and becomes unresponsive, all the requests to the product service that depend on the rating service could be blocked, resulting in a cascading failure. Utilizing the bulkhead pattern can prevent this scenario. The application can be designed so that even if the rating service becomes unresponsive, the product service can continue to function by using a default or cached rating.
+Consider a typical web application that relies on multiple backend services, such as product and rating services. If the rating service experiences a heavy load and becomes unresponsive, all the requests to the product service that depend on the rating service could be blocked, resulting in a cascading failure. Utilizing the bulkhead pattern can prevent this scenario. The application can be designed so that even if the rating service becomes unresponsive, the product service can continue to function by using a default or cached rating.
 
 {{<image "webapp-flow.png" "Example of a web app flow">}}
 
@@ -36,9 +36,9 @@ Besides limiting concurrent calls, effective resource allocation for each segreg
 
 ## When to use the bulkhead pattern
 
-The bulkhead pattern's main responsibility is to ensure high availability in distributed systems by ensuring that multiple concurrent requests from multiple clients do not end up in service failure. In such systems, the interconnected nature of components means that a failure in one service can rapidly propagate to other services, jeopardizing the entire system's stability. By implementing the bulkhead pattern, distinct sections of the system are isolated. This isolation acts as a barrier.
+The bulkhead pattern's main responsibility is to ensure high availability in distributed systems by ensuring that multiple concurrent requests originating from multiple clients do not end up in service failure. In such systems, the interconnected nature of components means that a failure in one service can rapidly propagate to other services, jeopardizing the entire system's stability. By implementing the bulkhead pattern, distinct sections of the system are isolated. This isolation acts as a barrier.
 
-In environments where performance predictability is crucial, the bulkhead pattern is pivotal. Segregating system components allows for more controlled and predictable performance metrics.  It facilitates easier monitoring and management of each component's performance, leading to quicker issue identification and resolution.
+In environments where performance predictability is crucial, the bulkhead pattern is pivotal. Segregating system components into bulkhead design patterns allows for more controlled and predictable performance metrics. It facilitates easier monitoring and management of each component's performance, leading to quicker issue identification and resolution.
 
 ## When not to use the bulkhead pattern
 
