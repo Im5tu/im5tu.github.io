@@ -1,0 +1,11 @@
+{{ if not .Site.IsServer }}
+<script defer data-domain="im5tu.io" src="https://plausible.io/js/script.js"></script>
+{{ end }}
+
+{{ if .Page.Store.Get "hasYoutube" }}
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link rel="preconnect" href="https://gstatic.com/" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com/" crossorigin>
+<link rel="preconnect" href="https://play.google.com/" crossorigin>
+<link rel="preconnect" href="https://www.youtube-nocookie.com/" crossorigin>
+{{ end }}

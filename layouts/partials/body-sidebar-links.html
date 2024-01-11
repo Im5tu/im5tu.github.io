@@ -1,0 +1,17 @@
+<a href="{{ .RelPermalink }}"><h5 class="font-semibold tracking-tight text-slate-900">{{ .Title }}</h5></a>
+<ul role="list" class="pl-3 my-3 space-y-2">
+    {{ range .Pages }}
+    {{ if eq .Parent .CurrentSection}}
+    <li class="mb-2 list-none">
+        <a href="{{ .RelPermalink }}" class="text-slate-600 hover:text-slate-800">
+            {{- .Title -}}
+        </a>
+    </li>
+    {{ end }}
+    {{ end }}
+    {{ range .Sections }}
+    <li class="list-none">
+        {{- partial "body-sidebar-links" . }}
+    </li>
+    {{ end }}
+</ul>

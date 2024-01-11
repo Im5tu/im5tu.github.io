@@ -1,0 +1,33 @@
+{{ define "main" }}
+<div class="bg-white px-6 py-8 lg:px-8">
+  <div class="mx-auto max-w-5xl text-base leading-7 text-gray-700">
+    {{- partial "breadcrumb" . -}}
+    {{ $currentSection := .CurrentSection.Section }}
+    {{ if or (eq .CurrentSection.Parent.Title .Site.Title) (eq .Title (title (.Type | pluralize))) }}
+    <h1>{{ .Title | title }}</h1>
+    {{ else}}
+    <h1>{{ .Title | title }} {{ title (.Type | pluralize) }}</h1>
+    {{ end }}
+    {{ $currentSection := .Section }}
+    {{ if .IsSection }}{{ $currentSection = .File.Dir }}{{ end }}
+    {{ range .Site.RegularPages }}
+    {{ if or (eq .Section $currentSection) (in .File.Dir $currentSection) }}
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      {{ partial "microdata" . }}
+      <a href="{{ .Permalink }}" itemprop="url">
+        <h2 itemprop="name headline" class="mb-1">{{ .Title }}</h2>
+      </a>
+      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0" >Posted by <a itemprop="url" href="/about">Stuart Blackler</a>
+        on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.
+        Last Updated on <time itemprop="dateModified" datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z0700" }}">{{ .Lastmod.Format "January 2, 2006"
+          }}</time></p>
+      <div itemprop="abstract">
+        {{ .Summary }}
+      </div>
+    </article>
+    {{ end }}
+    {{ end }}
+    {{ partial "body-author" . }}
+  </div>
+</div>
+{{ end }}

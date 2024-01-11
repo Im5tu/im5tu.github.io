@@ -1,94 +1,34 @@
 baseurl = "https://im5tu.io/"
 title = "CodeWithStu's Blog"
-languageCode = "en-us"
-theme = "hello-friend-ng"
-metaDataFormat = "json"
-enableRobotsTXT = true
-pygmentsuseclasses = true
-ignorefiles = [ "content/draft/.*" ]
+languageCode = "en-gb"
 canonifyURLs = true
-
-[Author]
-  name = "Stuart Blackler"
-
-[permalinks]
-  article = "article/:year/:month/:title/"
-
-[params]
-  dateform        = "Jan 2, 2006"
-  dateformShort   = "Jan 2"
-  dateformNum     = "2006-01-02"
-  dateformNumTime = "2006-01-02"
-
-  # Subtitle for home
-  homeSubtitle = "Hey, I'm Stu! I help .NET & DevOps engineers expand their knowledge with tips, tricks and tutorials"
-  DisableReadOtherPosts = true
-
-  # Logo
-  [params.Logo]
-    logoText = "CodeWithStu"
-
-  # Social icons
-  [params.portrait]
-    path = "/img/profile.jpg"
-    alt = "Portrait"
-
-  [[params.social]]
-    name = "twitter"
-    url  = "https://twitter.com/CodeWithStu"
-
-  [[params.social]]
-    name = "github"
-    url  = "https://bit.ly/im5tu-gh"
-
-  [[params.social]]
-    name = "linkedin"
-    url  = "https://bit.ly/im5tu-li"
-
-  [[params.social]]
-    name = "youtube"
-    url  = "https://codewithstu.tv"
+enableRobotsTXT = true
+cleanDestinationDir = true
+disableHugoGeneratorInject = true
+disableKinds = ["taxonomy"]
+enableGitInfo = true
 
 [markup]
-  [markup.highlight]
-    codeFences = false  # Disable Hugo's code highlighter as it conflicts with Academic's highligher.
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+    unsafe = true
 
 [minify]
+  disableML = true
   minifyOutput = true
   [minify.tdewolff.html]
     keepQuotes = true
 
-[taxonomies]
-  category = "categories"
-  tag = "tags"
-  series = "series"
+[sitemap]
+  priority = 0.5
+  changeFreq = "monthly"
 
-[menu]
-  [[menu.main]]
-    identifier = "blog"
-    name       = "Blog"
-    url        = "article/"
-
-  [[menu.main]]
-    identifier = "patreon"
-    name       = "Patreon"
-    url        = "https://www.patreon.com/CodeWithStu"
-
-  [[menu.main]]
-    identifier = "newsletter"
-    name       = "Newsletter"
-    url        = "https://news.codewithstu.tv"
-
-  [[menu.main]]
-    identifier = "twitter"
-    name       = "Twitter"
-    url        = "https://twitter.com/CodeWithStu"
-
-  [[menu.main]]
-    identifier = "youtube"
-    name       = "YouTube"
-    url        = "https://codewithstu.tv"
+[frontmatter]
+date = ["date", "publishDate", "lastmod"]
+lastmod = ["lastmod", ":git", "date", "publishDate"]
+publishDate = ["publishDate", "date"]
+expiryDate = ["expiryDate"]
 
 [outputs]
   home = ["HTML"]
-  page = ["HTML"]
+  taxonomy = ["HTML", "RSS"]

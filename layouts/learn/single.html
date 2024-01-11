@@ -1,0 +1,54 @@
+{{ define "main" }}
+<div class="bg-white">
+  <article itemscope itemtype="https://schema.org/Article" itemref="codewithstu" class="text-base leading-7 text-gray-700">
+    <meta itemprop="wordCount" content="{{ .Content | countwords }}">
+    <meta itemprop="abstract" content="{{ .Summary }}">
+    <meta itemprop="headline" content="{{ .Title }}">
+    {{- partial "microdata" . -}}
+    <h1 itemprop="name headline" class="mt-2 mb-0 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ .Title }}</h1>
+    <div>
+      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Last Updated:
+        <time itemprop="datePublished" datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z0700" }}">
+        {{ .Lastmod.Format "January 2, 2006" }}
+        </time>.
+      </p>
+    </div>
+    <nav class="mb-2 bg-slate-50 p-6 w-fit rounded-lg">
+      <h4 class="mt-0">Table of Contents</h4>
+      {{- range .Fragments.Headings }}
+      <ul class="space-y-1 pl-1 list-disc">
+        {{- range .Headings }}
+        <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+        {{- if .Headings }}
+        <ul class="space-y-1 pl-4 list-disc">
+          {{- range .Headings }}
+          <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title }}</a></li>
+          {{- end }}
+        </ul>
+        {{- end }}
+        {{- end }}
+      </ul>
+      {{- end }}
+    </nav>
+    <article itemprop="articleBody">
+      {{ .Content }}
+      {{ if and .Params.faq (gt (len .Params.faq) 0) }}
+      <section itemscope itemtype="http://schema.org/FAQPage">
+        <h2>Frequently Asked Questions</h2>
+        {{ range .Params.faq }}
+        <div itemscope itemprop="mainEntity" itemtype="http://schema.org/Question">
+          <h3 itemprop="name">{{ .question }}</h3>
+          <div itemscope itemprop="acceptedAnswer" itemtype="http://schema.org/Answer">
+            <div itemprop="text">
+              {{ .answer }}
+            </div>
+          </div>
+        </div>
+        {{ end }}
+      </section>
+      {{ end }}
+    {{ partial "body-author" . }}
+    </article>
+</div>
+
+{{ end }}
