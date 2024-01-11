@@ -789,6 +789,10 @@ ol > :not([hidden]) ~ :not([hidden]) {
   visibility: visible;
 }
 
+.collapse {
+  visibility: collapse;
+}
+
 .static {
   position: static;
 }
@@ -1072,12 +1076,12 @@ ol > :not([hidden]) ~ :not([hidden]) {
   min-width: 7rem;
 }
 
-.max-w-2xl {
-  max-width: 42rem;
-}
-
 .max-w-5xl {
   max-width: 64rem;
+}
+
+.max-w-\[1600px\] {
+  max-width: 1600px;
 }
 
 .max-w-\[30\%\] {
@@ -1086,6 +1090,10 @@ ol > :not([hidden]) ~ :not([hidden]) {
 
 .max-w-screen-xl {
   max-width: 1280px;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
 }
 
 .flex-auto {
@@ -1477,11 +1485,6 @@ ol > :not([hidden]) ~ :not([hidden]) {
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
-.text-indigo-600 {
-  --tw-text-opacity: 1;
-  color: rgb(79 70 229 / var(--tw-text-opacity));
-}
-
 .text-orange-500 {
   --tw-text-opacity: 1;
   color: rgb(249 115 22 / var(--tw-text-opacity));
@@ -1696,6 +1699,10 @@ ol > :not([hidden]) ~ :not([hidden]) {
     max-width: none;
   }
 
+  .lg\:max-w-\[1600px\] {
+    max-width: 1600px;
+  }
+
   .lg\:flex-1 {
     flex: 1 1 0%;
   }
@@ -1708,8 +1715,8 @@ ol > :not([hidden]) ~ :not([hidden]) {
     flex-direction: row;
   }
 
-  .lg\:justify-end {
-    justify-content: flex-end;
+  .lg\:justify-center {
+    justify-content: center;
   }
 
   .lg\:bg-slate-50 {

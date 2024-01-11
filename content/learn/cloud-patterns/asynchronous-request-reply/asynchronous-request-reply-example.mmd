@@ -1,0 +1,10 @@
+---
+title: Example of Asynchronous Request Reply
+---
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Sends Request
+    Note right of Server: Server processes request asynchronously
+    Server-->>Client: Sends Reply when ready
+    Note left of Client: Client handles other tasks in the meantime

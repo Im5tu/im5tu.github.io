@@ -6,21 +6,20 @@
     <meta itemprop="wordCount" content="{{ .Content | countwords }}">
     <meta itemprop="abstract" content="{{ .Summary }}">
     {{- partial "breadcrumb" . -}}
-    {{/* <p class="text-base font-semibold leading-7 text-indigo-600">Introducing</p> */}}
-    <h1 itemprop="name" class="mt-2 mb-0 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ .Title }}</h1>
+    <h1 itemprop="name headline" class="mt-2 mb-0 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ .Title }}</h1>
     <div>
-      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Posted by <span itemprop="author" itemscope
-          itemtype="https://schema.org/Person">
-          <span itemprop="name">
-            <a itemprop="url" href="/about">Stuart Blackler</a>
-          </span>
-        </span> on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>. Last Updated on <time itemprop="dateModified" datetime="{{ .Lastmod }}">{{ .Lastmod.Format "January 2, 2006" }}</time>.
+      {{- partial "microdata" . -}}
+      <p class="font-normal text-gray-400 text-xs md:text-base italic m-0">Posted by <a itemprop="url" href="/about">Stuart Blackler</a>
+        on <time itemprop="datePublished" datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>.
+        Last Updated on <time itemprop="dateModified" datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z0700" }}">{{ .Lastmod.Format "January 2, 2006"
+          }}</time>.
 
         {{- with .Params.tags }}
-          Tagged:
-          {{- range . -}}
-          <span class="inline mx-2 font-small"><a href="{{ "tags/" | absLangURL }}{{ . | urlize }}/" title="{{.}}" class="hover:text-orange-500">{{.}}</a></span>
-          {{- end }}
+        Tagged:
+        {{- range . -}}
+        <span class="inline mx-2 font-small"><a href="{{ " tags/" | absLangURL }}{{ . | urlize }}/" title="{{.}}"
+            class="hover:text-orange-500">{{.}}</a></span>
+        {{- end }}
         {{- end }}
       </p>
     </div>
@@ -34,7 +33,7 @@
         {{- if .Headings }}
         <ul class="space-y-1 pl-4 list-disc">
           {{- range .Headings }}
-          <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title  | safeHTML }}</a></li>
+          <li><a class="hover:text-orange-600" href="#{{ anchorize .ID }}">{{ .Title | safeHTML }}</a></li>
           {{- end }}
         </ul>
         {{- end }}

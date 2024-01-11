@@ -4,6 +4,7 @@
         {{- partial "breadcrumb" . -}}
         <h1>{{.Title}}</h1>
         {{ .Content }}
+        {{ partial "microdata" . }}
     </div>
 </div>
 {{end}}

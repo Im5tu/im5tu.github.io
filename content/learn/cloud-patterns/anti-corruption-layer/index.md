@@ -1,5 +1,5 @@
 ---
-title: Anti-corruption Layer
+title: Anti-Corruption Layer
 ---
 
 The Anti-Corruption Layer is a design pattern that prevents incompatible systems from affecting each other. It acts as a translator, ensuring that the receiving system converts data and requests for services into an understandable and usable format. This layer safeguards the integrity of both systems, enabling smooth interaction without compromising their respective designs.

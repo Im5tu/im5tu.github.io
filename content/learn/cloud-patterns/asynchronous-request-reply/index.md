@@ -17,6 +17,8 @@ Asynchronous Request-Reply is a communication pattern in cloud computing where a
 
 <!--more-->
 
+{{<image "asynchronous-request-reply-example.png" "Example of Asynchronous Request Reply">}}
+
 Visualize being at a lively café. You order at the counter and instead of standing around for your coffee, you receive a buzzer. You find a seat, chat with a friend, or scroll through your phone, and when your coffee is ready, the buzzer alerts you. This is similar to the asynchronous request-reply pattern. Within a digital system, the client (akin to you in the café) submits a request (like an order) to the server (the equivalent of the barista) and doesn’t wait for the request response (comparable to the coffee), but engages in other tasks instead. The server processes the request and sends a response when ready. This decoupling of request and response allows both the client and server to operate efficiently, without having to wait for each other.
 
 ## How to implement the asynchronous request response pattern
@@ -99,6 +101,16 @@ Several industries, ranging from video processing pipelines to e-commerce order 
 
 Take into account a video processing pipeline where sequential steps such as capturing the video stream, implementing video compression, and delivering the video online are performed. Implementing the asynchronous request-reply pattern in this pipeline is like having a relay team where each runner performs a specific part of the race. Each runner (task) takes their turn, passing on the baton (video data) to the next, without blocking the other runners.
 
+```mermaid
+sequenceDiagram
+    participant Video Capture
+    participant Video Compression
+    participant Video Delivery
+    Video Capture->>Video Compression: Pass video data
+    Video Compression->>Video Delivery: Compressed video
+    Note right of Video Delivery: Deliver video online
+```
+
 ### E-commerce Order Processing
 
 Within an e-commerce order processing system, the asynchronous request-reply pattern assists in managing high volumes of orders. When a customer places an order, the order information is sent to a message queue, much like a relay runner passing the baton to the next runner. The order processing system, like the next runner, then takes over and processes the order.
@@ -108,3 +120,14 @@ The pattern allows the system to:
 - Process multiple orders simultaneously
 - Avoid blockages or slowdowns
 - Handle multiple race segments simultaneously, much like a well-coordinated relay team.
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Message Queue
+    participant Order Processing System
+    Customer->>Message Queue: Place order
+    Message Queue->>Order Processing System: Process order
+    Order Processing System-->>Customer:Asynchronous Notification When Complete
+    Note right of Order Processing System: Handle high volume orders
+```
