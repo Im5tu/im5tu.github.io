@@ -1,5 +1,16 @@
 ---
 title: Anti-Corruption Layer
+faq:
+- question: What is an Anti-Corruption Layer?
+  answer: An Anti-Corruption Layer is a design pattern used in software architecture to prevent incompatible systems from negatively impacting each other. It acts as a translator or a buffer, ensuring that data and requests are converted into a format that is understandable and usable by the receiving system.
+- question: What are the main components of an Anti-Corruption Layer?
+  answer: The main components include interface adapters for communication, translation logic for converting data and requests, and testing mechanisms to ensure compatibility and integrity.
+- question: Can an Anti-Corruption Layer affect system performance?
+  answer: Yes, an ACL can introduce additional processing overhead, which might be significant in high-performance systems. It's important to balance the need for integration with the impact on performance.
+- question: Is an Anti-Corruption Layer always necessary in system integration?
+  answer: No, it's not always necessary. In cases where systems have compatible interfaces and domain models, implementing an ACL might introduce unwanted complexity without significant benefits.
+- question: Can an Anti-Corruption Layer be used for small-scale applications?
+  answer: While it can be used for small-scale applications, it's important to assess whether the complexity it adds is justified by the benefits it provides, especially in terms of system integration and data integrity.
 ---
 
 The Anti-Corruption Layer is a design pattern that prevents incompatible systems from affecting each other. It acts as a translator, ensuring that the receiving system converts data and requests for services into an understandable and usable format. This layer safeguards the integrity of both systems, enabling smooth interaction without compromising their respective designs.

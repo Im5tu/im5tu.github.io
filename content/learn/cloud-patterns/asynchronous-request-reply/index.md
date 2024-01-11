@@ -101,15 +101,7 @@ Several industries, ranging from video processing pipelines to e-commerce order 
 
 Take into account a video processing pipeline where sequential steps such as capturing the video stream, implementing video compression, and delivering the video online are performed. Implementing the asynchronous request-reply pattern in this pipeline is like having a relay team where each runner performs a specific part of the race. Each runner (task) takes their turn, passing on the baton (video data) to the next, without blocking the other runners.
 
-```mermaid
-sequenceDiagram
-    participant Video Capture
-    participant Video Compression
-    participant Video Delivery
-    Video Capture->>Video Compression: Pass video data
-    Video Compression->>Video Delivery: Compressed video
-    Note right of Video Delivery: Deliver video online
-```
+{{<image "video-processing.png" "Example of Video Processing Pipeline">}}
 
 ### E-commerce Order Processing
 
@@ -121,13 +113,4 @@ The pattern allows the system to:
 - Avoid blockages or slowdowns
 - Handle multiple race segments simultaneously, much like a well-coordinated relay team.
 
-```mermaid
-sequenceDiagram
-    participant Customer
-    participant Message Queue
-    participant Order Processing System
-    Customer->>Message Queue: Place order
-    Message Queue->>Order Processing System: Process order
-    Order Processing System-->>Customer:Asynchronous Notification When Complete
-    Note right of Order Processing System: Handle high volume orders
-```
+{{<image "ecommerce.png" "Example of ECommerce Asynchronous Request Reply Pattern">}}
