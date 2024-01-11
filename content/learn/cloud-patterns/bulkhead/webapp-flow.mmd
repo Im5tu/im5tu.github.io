@@ -1,0 +1,13 @@
+flowchart LR
+    A[Client Request for Product Info] --> B{Product Service}
+    B --> C{Check Rating Service}
+    C -- Available --> D[Fetch Rating]
+    D --> E[Combine Product & Rating Info]
+    C -- Unavailable --> F[Use Default/Cached Rating]
+    F --> E
+    E --> G[Return Product Info to Client]
+
+    C --> H{Bulkhead Pattern}
+    H -- Isolate Failure --> F
+    H -- Prevent Cascading Failure --> I[Product Service Continues]
+    I --> G

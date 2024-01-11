@@ -1,0 +1,15 @@
+flowchart LR
+    A[Client Request] --> B{Bulkhead Pattern}
+    B -- Success --> C[Service Response]
+    B -- Failure --> D{Circuit Breaker Pattern}
+    D -- Open --> E[Return Error]
+    D -- Closed --> F{Retry Strategy}
+    F -- Retry Success --> C
+    F -- Retry Limit Exceeded --> G[Fallback Strategy]
+    G --> H[Alternative Response]
+    F -- Retry Failure --> I[Exponential Backoff]
+    I --> F
+    E --> J[Prevent Resource Exhaustion]
+    J --> K[System Stability]
+    H --> L[Preserve Functionality]
+    C --> M[System Efficiency]

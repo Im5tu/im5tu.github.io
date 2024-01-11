@@ -1,0 +1,1 @@
+- `find content -name "*.mmd" -exec sh -c 'mmdc -s 3 -i "$0" -o "${0%.mmd}.png"' {} \;`
