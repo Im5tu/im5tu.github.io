@@ -1,1 +1,339 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>November on CodeWithStu's Blog</title><link>https://im5tu.io/article/2016/11/</link><description>Recent content in November on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2016/11/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog Building - Part 4 - Frontend</title><link>https://im5tu.io/article/2016/11/blog-building-part-4-frontend/</link><pubDate>Sat, 19 Nov 2016 08:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-4-frontend/</guid><description>&lt;p>So far we have built a very basic site and got a basic understanding of how to configure and override the theme. Next up we are going to configure our frontend workflow using yarn and gulp.&lt;/p></description></item><item><title>Blog Building - Part 3 - Theming</title><link>https://im5tu.io/article/2016/11/blog-building-part-3-theming/</link><pubDate>Fri, 18 Nov 2016 19:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-3-theming/</guid><description>&lt;p>In this article, I will show you how the theme has been constructed and show you how the overrides work. So far we have created a site, setup most of our workflow and posted our first article.&lt;/p></description></item><item><title>Blog Building - Part 2 - My First Post</title><link>https://im5tu.io/article/2016/11/blog-building-part-2-my-first-post/</link><pubDate>Thu, 17 Nov 2016 23:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-2-my-first-post/</guid><description>&lt;p>In &lt;a href="https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/">the last article&lt;/a>, we setup our workflow and all the pieces that you will need to create a new site. Now we need to install a theme and begin publishing. Prior to writing this series, I began evaluating the extensibility of hugo themes and started work on something I call bones - a no thrills template with no styling, just structure. As I improve the template it will become more useful, maybe. It will remain the template behind mysite as I continue to improve it.&lt;/p></description></item><item><title>Blog Building - Part 1 - Hello Hugo</title><link>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</link><pubDate>Thu, 17 Nov 2016 20:23:00 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</guid><description>&lt;p>As promised in this first mini-series, I am going to guide you through the steps that I have taken to get my blog up and running on Github pages and Cloudflare with SSL. As these the steps that I have taken to get this blog up and running, your milage may vary with this as different versions get released. That said, you should be fine.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>November on CodeWithStu's Blog</title><link>https://im5tu.io/article/2016/11/</link><description>Recent content in November on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2016/11/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog Building - Part 4 - Frontend</title><link>https://im5tu.io/article/2016/11/blog-building-part-4-frontend/</link><pubDate>Sat, 19 Nov 2016 08:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-4-frontend/</guid><description>&lt;p>So far we have built a very basic site and got a basic understanding of how to configure and override the theme. Next up we are going to configure our frontend workflow using yarn and gulp.&lt;/p>
+&lt;h2 id="yarn">Yarn&lt;/h2>
+&lt;p>Yarn is a frontend package manager. It replaces the traditional workflow of npm whilst remaining compatible with the npm registry. This means that we can get all of the speed and security improvements whilst having all the packages that are currently available on the npm registry.&lt;/p>
+&lt;h3 id="installing-nodejs">Installing node.js&lt;/h3>
+&lt;p>Unfortunately, it still runs on node, so we need to get that setup first. Head to &lt;a href="https://nodejs.org/en">the node website&lt;/a> and install the correct version for your environment. You can verify node is setup correctly post-installation by running the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>C:\&lt;span style="color:#75715e">&amp;gt;node --version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>v7.1.0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="installing-yarn">Installing yarn&lt;/h3>
+&lt;p>Once node is setup, we can install yarn:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>C:\&amp;gt;npm install yarn -g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This will install yarn so that it is available for all projects, not just our new blog. Once the installation is complete, we can verify yarn is installed by running the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>C:\&amp;gt;yarn --version
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">0.17&lt;/span>.6
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="yarning-our-project">Yarn&amp;rsquo;ing our project&lt;/h2>
+&lt;p>Before we begin installing packages inside of our project, I am going to add a &lt;code>.gitignore&lt;/code> file as we will generate a lot of files that we don&amp;rsquo;t want inside of our git respository. Here is what I added to start off with:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>node_modules/
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>data/**/hash.*
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>static/css/*.css
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>static/js/*.js
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>public/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now we can setup our project to use yarn:&lt;/p>
+&lt;pre>&lt;code>E:\im5tu-hugo&amp;gt;yarn init
+&lt;/code>&lt;/pre>
+&lt;p>This will ask you a series of questions such as:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&amp;gt;yarn init
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>yarn init v0.17.6
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question name (im5tu-hugo)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span> im5tu
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question version (&lt;span style="color:#ae81ff">1.0&lt;/span>.&lt;span style="color:#ae81ff">0&lt;/span>)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span> &lt;span style="color:#ae81ff">0.0&lt;/span>.1
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question description&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span> Stuart Blackler&lt;span style="color:#960050;background-color:#1e0010">&amp;#39;&lt;/span>s Tech Blog
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question entry point (index.js)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question git repository (https&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span>//github.com/Im5tu/im5tu-hugo.git)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question author (Stuart Blackler (@im5tu) &amp;lt;im5tu@users.noreply.github.com&amp;gt;)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>question license (MIT)&lt;span style="color:#960050;background-color:#1e0010">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>success Saved package.json
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Done &lt;span style="color:#66d9ef">in&lt;/span> &lt;span style="color:#ae81ff">42&lt;/span>.93s.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once this is completed, we will have a &lt;code>package.json&lt;/code> file in our root and we can start adding the dependencies that we need. If you don&amp;rsquo;t specify an answer, the default will be taken for you (the default is shown in brackets).&lt;/p>
+&lt;h2 id="gulp">gulp&lt;/h2>
+&lt;p>At this point, I assume that you are fairly familiar with &lt;code>gulp&lt;/code> or at least know what it is. We are going to setup gulp and our initial set of dependencies to do things like minification of files etc. We will add these files as development dependencies:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>yarn add gulp -D
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>yarn add gulp-sass -D
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>yarn add gulp-autoprefixer -D
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now we need to tell gulp what to do by adding a &lt;code>gulpfile.js&lt;/code>. Create this in the website root:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&amp;gt;echo &lt;span style="color:#e6db74">&amp;#34;&amp;#34;&lt;/span> &amp;gt; gulpfile.js
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As you may remember from my previous post, anything that gets placed inside of static folder will get copied across to the main website. As I have chosen to use a css preprocessor (scss), we only want the output from the preprocessor to be in the static folder. Inside of the &lt;code>.gitignore&lt;/code> file, I have already put the main css/js files as these should be generated and not a part of main source code.&lt;/p>
+&lt;p>Now we can configure &lt;code>gulp&lt;/code> to watch our source directory, process the files and copy the output into the static folder. At the very top of the file we need to require our dependencies, followed by a few configuration variables:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">gulp&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">sass&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp-sass&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">autoprefixer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp-autoprefixer&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">srcRootDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;src/&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">destRootDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;static/&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">srcCssDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">srcRootDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;css/&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">srcJsDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">srcRootDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;js/&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">srcCss&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">srcCssDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;**/*.scss&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">srcJs&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">srcJsDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;**/*.js&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">destCssDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">destRootDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;css&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">destJsDir&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">destRootDir&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#34;js&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>I have choosen to have a folder structure like the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>/root
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /static
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /css
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /js
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /src
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /css
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /js
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Next inside of our gulp file, we can configure two tasks. One to process any javascript files that we have and another for any scss files that we have:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;js&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">gulp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">src&lt;/span>(&lt;span style="color:#a6e22e">srcJs&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#a6e22e">destJsDir&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>});
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;css&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">gulp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">src&lt;/span>(&lt;span style="color:#a6e22e">srcCss&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">sass&lt;/span>({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">outputStyle&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#e6db74">&amp;#34;compressed&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">autoprefixer&lt;/span>({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">browsers&lt;/span>&lt;span style="color:#f92672">:&lt;/span> [&lt;span style="color:#e6db74">&amp;#34;last 20 versions&amp;#34;&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#a6e22e">destCssDir&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>});
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Lastly, we need to setup a watch task so that as files are changed they are copied to the static folder. When we combine this with hugo&amp;rsquo;s watch ability we have a dynamically changing site that reloads with the changes as we hit save. We also want to setup a default task, so that we can just run &lt;code>gulp&lt;/code> from inside of the root directory on the command line. The watch/default tasks look like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;watch&amp;#34;&lt;/span>, [&lt;span style="color:#e6db74">&amp;#34;css&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;js&amp;#34;&lt;/span>], &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">watch&lt;/span>([&lt;span style="color:#a6e22e">srcCss&lt;/span>, &lt;span style="color:#a6e22e">srcJs&lt;/span>], [&lt;span style="color:#e6db74">&amp;#34;css&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;js&amp;#34;&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>});
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;default&amp;#34;&lt;/span>, [&lt;span style="color:#e6db74">&amp;#34;watch&amp;#34;&lt;/span>]);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In terms of our gulpfile we are all setup and ready to go. At the time of writing there are problems running gulp directly from the command line. In order to work around this, I needed to add the following to the package.json file in our root directory:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">&amp;#34;scripts&amp;#34;&lt;/span>&lt;span style="color:#f92672">:&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;gulp&amp;#34;&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#e6db74">&amp;#34;gulp&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And then I can run gulp as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>yarn gulp
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="setting-up-our-site-for-cssjs">Setting up our site for css/js&lt;/h2>
+&lt;p>Now that we have our frontend pipeline setup and both the watch commands running, we can begin to change our site to include the files that we want. If you are using the bones theme, you need to create the following two files:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>/root
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /layouts
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /partials
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /body
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scripts.html
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /header
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> styles.html
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Inside of the scripts file add:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">script&lt;/span> &lt;span style="color:#a6e22e">src&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/js/site.js&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">async&lt;/span>&amp;gt;&amp;lt;/&lt;span style="color:#f92672">script&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Inside of the styles file add:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">link&lt;/span> &lt;span style="color:#a6e22e">rel&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;stylesheet&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">href&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/css/site.css&amp;#34;&lt;/span> /&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now you should be able to add the file &lt;code>/root/src/css/site.scss&lt;/code> with the following content:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-css" data-lang="css">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">body&lt;/span> { &lt;span style="color:#66d9ef">background&lt;/span>: &lt;span style="color:#ae81ff">#ababab&lt;/span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>All being well you should have both files renderd as part of your output.&lt;/p>
+&lt;h2 id="cache-busting">Cache busting&lt;/h2>
+&lt;h3 id="creating-the-hash">Creating the hash&lt;/h3>
+&lt;p>For our cache busting mechanism, we are going to append the hash of the file to the file. As a new file will be created everytime that our file changes, we will need to clear out the destination css folder. To start, we need to add two more packages, using yarn:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>yarn add gulp-hash -D
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>yarn add del -D
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And then add them to our gulpfile:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">gulp&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">sass&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp-sass&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">autoprefixer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp-autoprefixer&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">hash&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;gulp-hash&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">del&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;del&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now lets create a task to clean out some directories that we are using:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;clean&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">del&lt;/span>([&lt;span style="color:#a6e22e">destCssDir&lt;/span>, &lt;span style="color:#a6e22e">destJsDir&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;data&amp;#34;&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>});
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now we can easily clean the directories that we need to at will. This could come in handy at a later date. Next we can change our task definitions to clean up their respective directories:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;js&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">del&lt;/span>.&lt;span style="color:#a6e22e">sync&lt;/span>([&lt;span style="color:#a6e22e">destJsDir&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">task&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;css&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">del&lt;/span>.&lt;span style="color:#a6e22e">sync&lt;/span>([&lt;span style="color:#a6e22e">destCssDir&lt;/span>]);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Finally, we can add the hash of the file prior to writing it to its destination in each task:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">hash&lt;/span>())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(...)); &lt;span style="color:#75715e">// change ... to the relevant destination eg: destCssDir
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="using-the-hashed-file">Using the hashed file&lt;/h3>
+&lt;p>In hugo, the &lt;code>/root/data&lt;/code> directory is used to store any data that we might need. Anything placed in here is accessible through the variable &lt;code>.Site.Data&lt;/code>. So using some more gulp magic, we can store the hahes of the files in here and update our template accordingly.&lt;/p>
+&lt;p>&lt;code>gulp-hash&lt;/code> has a built in manifest method that will generate a json file containing the hash for us. We can change our gulp tasks to leverage this functionality and place it inside of the &lt;code>/root/data&lt;/code> directory:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// js gulp task
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#a6e22e">destJsDir&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">hash&lt;/span>.&lt;span style="color:#a6e22e">manifest&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;hash.json&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;data/&amp;#34;&lt;/span>));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// css gulp task
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#a6e22e">destCssDir&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">hash&lt;/span>.&lt;span style="color:#a6e22e">manifest&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;hash.json&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.&lt;span style="color:#a6e22e">pipe&lt;/span>(&lt;span style="color:#a6e22e">gulp&lt;/span>.&lt;span style="color:#a6e22e">dest&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;data/&amp;#34;&lt;/span>));
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Restart our gulp task and now you should see the hash files being generated. If we open up the hash files, you should see something along the lines of:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-css" data-lang="css">&lt;span style="display:flex;">&lt;span>{&lt;span style="color:#960050;background-color:#1e0010">&amp;#34;site.css&amp;#34;:&amp;#34;site-da39a3ee.css&amp;#34;,&amp;#34;site.js&amp;#34;:&amp;#34;site-da39a3ee.js&amp;#34;&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>All that&amp;rsquo;s left to do is to use these hashes inside of our layouts. Luckily, GO has a built in function called &lt;code>index&lt;/code> which accepts a map and an index and returns the value of the map with the given index. So in our templates, we simply need to ask for the right files. Let&amp;rsquo;s first change our stylesheet in &lt;code>/layouts/partials/styles.html&lt;/code> to:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">link&lt;/span> &lt;span style="color:#a6e22e">rel&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;stylesheet&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">href&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/css/{{ index .Site.Data.hash &amp;#34;&lt;/span>&lt;span style="color:#a6e22e">site&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">.&lt;/span>&lt;span style="color:#a6e22e">css&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">&amp;#34;&lt;/span> &lt;span style="color:#960050;background-color:#1e0010">}}&amp;#34;&lt;/span> /&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Finally, let&amp;rsquo;s change our script template to do the same (&lt;code>/layouts/partials/body/scripts&lt;/code>):&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">script&lt;/span> &lt;span style="color:#a6e22e">src&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/js/{{ index .Site.Data.hash &amp;#34;&lt;/span>&lt;span style="color:#a6e22e">site&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">.&lt;/span>&lt;span style="color:#a6e22e">js&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">&amp;#34;}}&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">async&lt;/span>&amp;gt;&amp;lt;/&lt;span style="color:#f92672">script&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now we have a fully functional pipeline for frontend work. To start up the pipeline, you need to run two commands from different command line windows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>yarn gulp
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo server -D
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And then you can make changes to your files at will. Happy FED&amp;rsquo;ing.&lt;/p></description></item><item><title>Blog Building - Part 3 - Theming</title><link>https://im5tu.io/article/2016/11/blog-building-part-3-theming/</link><pubDate>Fri, 18 Nov 2016 19:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-3-theming/</guid><description>&lt;p>In this article, I will show you how the theme has been constructed and show you how the overrides work. So far we have created a site, setup most of our workflow and posted our first article.&lt;/p>
+&lt;p>When we installed the theme in the previous post, a series of conventions took over and began the process of rending our pages for us. Because hugo is convention based, we can override the defaults by placing files in the correct place, but first we need to understand the layout. Below you can see the parts of the website that we care about the most:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>/root
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /archetypes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /content
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /layouts
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /static
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /themes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /themeA
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /archetypes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /layouts
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /_default
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /indexes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /partials
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /taxonomy
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> index.html
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> /themeB
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;as above&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="defaults">Defaults&lt;/h2>
+&lt;p>When hugo begins to render a site, the configuration is checked to see if there is a theme configured. If a theme is configured, it looks for that theme under the &lt;code>themes&lt;/code> directory by checking for a &lt;code>theme.toml&lt;/code> file under each sub-directory. If one of the &lt;code>theme.toml&lt;/code> files contains the correct theme name, that theme is loaded and the used as the default for the rest of the rending.&lt;/p>
+&lt;p>From the directory listing above, you will notice that there are two &lt;code>layouts&lt;/code> folders. One under the site root and one under themeA. As far as I am aware, the layout of each &lt;code>layouts&lt;/code> folder is identical. This means that if your theme defines something under &lt;code>/root/themes/themeA/layouts/_default/list.html&lt;/code> we can override it by placing a file in &lt;code>/root/layouts/_default/list.html&lt;/code>.&lt;/p>
+&lt;p>Now that we know this, we can customise the theme how we see fit.&lt;/p>
+&lt;h2 id="rendering">Rendering&lt;/h2>
+&lt;p>Before continuing, I strongly recommend that you read the &lt;a href="http://gohugo.io/templates/go-templates/">Go Template Primer&lt;/a> created by the hugo team. Don&amp;rsquo;t worry, i&amp;rsquo;ll wait.&lt;/p>
+&lt;h3 id="baseof">baseOf&lt;/h3>
+&lt;p>A theme creator may decide, like I have for bones, to create a &lt;code>baseOf&lt;/code> file under the &lt;code>/root/themes/&amp;lt;theme name&amp;gt;/_default/&lt;/code> folder. This special file allows you to create a master layout, keeping your theme nice and clean. Inside of file, you can define blocks which another page can also define and implement. What happens here is that the &lt;code>baseOf&lt;/code> file says &amp;ldquo;You can configure this section called ABC&amp;rdquo;. Then inside of another file, eg: article/full.html, we can say &amp;ldquo;I want to configure section called ABC and here is what it should contain&amp;rdquo;. In hugo speak, this is called &lt;a href="http://gohugo.io/templates/blocks/">Block Templates&lt;/a> and is how the whole of the bones theme is configured.&lt;/p>
+&lt;p>You can see an example of this &lt;a href="https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html">here&lt;/a>.&lt;/p>
+&lt;h3 id="render">.Render&lt;/h3>
+&lt;p>The &lt;a href="http://gohugo.io/templates/functions/#render">.Render&lt;/a> function is a special kind of function that you can call when rendering a list. It&amp;rsquo;s like rendering a partial view but for the current item in an enumeration.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>{{ &lt;span style="color:#66d9ef">range&lt;/span> .&lt;span style="color:#a6e22e">Data&lt;/span>.&lt;span style="color:#a6e22e">Pages&lt;/span> }}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {{ .&lt;span style="color:#a6e22e">Render&lt;/span> &lt;span style="color:#e6db74">&amp;#34;summary&amp;#34;&lt;/span>}}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{{ &lt;span style="color:#a6e22e">end&lt;/span> }}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The above sample will inspect the page data and enumerate all the available pages associated with the current page before calling render on each item. C#/Java would look something like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c#" data-lang="c#">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">foreach&lt;/span>(&lt;span style="color:#66d9ef">var&lt;/span> page &lt;span style="color:#66d9ef">in&lt;/span> &lt;span style="color:#66d9ef">this&lt;/span>.Data.Pages)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Render(&lt;span style="color:#e6db74">&amp;#34;summary&amp;#34;&lt;/span>, currentItem);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can see an example of this &lt;a href="https://github.com/Im5tu/hugo-bones/blob/master/layouts/article/list.html#L4">here&lt;/a>.&lt;/p>
+&lt;h3 id="partial">partial&lt;/h3>
+&lt;p>&lt;a href="http://gohugo.io/templates/partials/">Partial templates&lt;/a> are often used to separate out sections of a site into reusable components. The main difference between &lt;code>partial&lt;/code> and &lt;code>.Render&lt;/code> is that partial can be used to render whole sections of a site with a specific context where is &lt;code>.Render&lt;/code> is limited to the current item in an enumeration.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#a6e22e">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{{ &lt;span style="color:#a6e22e">block&lt;/span> &lt;span style="color:#e6db74">&amp;#34;content&amp;#34;&lt;/span> . &lt;span style="color:#f92672">-&lt;/span>}} {{&lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#a6e22e">end&lt;/span> }}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{{&lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#a6e22e">partial&lt;/span> &lt;span style="color:#e6db74">&amp;#34;header/scripts&amp;#34;&lt;/span> . &lt;span style="color:#f92672">-&lt;/span>}}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">/&lt;/span>&lt;span style="color:#a6e22e">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The above &lt;a href="https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html">example from the baseOf file from bones&lt;/a> does the following:&lt;/p>
+&lt;ul>
+&lt;li>Says to the theming engine that it wants to declare an overridable section content, passing in the current page context&lt;/li>
+&lt;li>Render the partial called &lt;code>scripts&lt;/code>, located under the &lt;code>header&lt;/code> folder, inside of the &lt;code>partials&lt;/code> folder, supplying the current page context&lt;/li>
+&lt;/ul>
+&lt;p>All partials are located under &lt;code>&amp;lt;root/theme&amp;gt;/layouts/partials/&amp;lt;path&amp;gt;&lt;/code>. Where &lt;code>&amp;lt;path&amp;gt;&lt;/code> is the folder structure to the file.&lt;/p>
+&lt;p>You can see an example of this &lt;a href="https://github.com/Im5tu/hugo-bones/blob/master/layouts/_default/baseof.html">here&lt;/a>.&lt;/p>
+&lt;h2 id="archetypes">Archetypes&lt;/h2>
+&lt;p>Archetypes are really just a fancy way of saying content types. A theme can define them for you, or you can define your own like I have for the bones theme.&lt;/p>
+&lt;p>You can see an example of that &lt;a href="https://github.com/Im5tu/hugo-bones/blob/master/archetypes/article.md">here&lt;/a>&lt;/p>
+&lt;h2 id="the-static">The Static&lt;/h2>
+&lt;p>Anything under the static folder, will get copied across to the main site when it gets rendered. This behaved slightly differently than I expected when I first tried this out. I had a file located under &lt;code>/root/static/img/img1.jpg&lt;/code>. When I attempted to render an image tag on the page with the src set to &lt;code>/static/img/img1.jpg&lt;/code> it didn&amp;rsquo;t work. When I rendered the files to disk by calling &lt;code>hugo&lt;/code> and checking the public folder, I could see that it rendered the image under &lt;code>/img/img1.jpg&lt;/code>. Slightly different that what I was expecting, but it still worked nevertheless.&lt;/p>
+&lt;p>Hopefully you will now have a basic understanding of how a theme is constructed so that you can roll your own and override portions of the theme you have selecting. Next up, I will setup my frontend pipeline of choice so that I can start applying styling to my site.&lt;/p></description></item><item><title>Blog Building - Part 2 - My First Post</title><link>https://im5tu.io/article/2016/11/blog-building-part-2-my-first-post/</link><pubDate>Thu, 17 Nov 2016 23:01:38 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-2-my-first-post/</guid><description>&lt;p>In &lt;a href="https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/">the last article&lt;/a>, we setup our workflow and all the pieces that you will need to create a new site. Now we need to install a theme and begin publishing. Prior to writing this series, I began evaluating the extensibility of hugo themes and started work on something I call bones - a no thrills template with no styling, just structure. As I improve the template it will become more useful, maybe. It will remain the template behind mysite as I continue to improve it.&lt;/p>
+&lt;h2 id="installing-a-theme">Installing a theme&lt;/h2>
+&lt;p>To install a theme, you need to know the repositories git url. You can see additional themes at &lt;a href="http://themes.gohugo.io/">http://themes.gohugo.io/&lt;/a>. I will be using my &lt;a href="https://github.com/Im5tu/hugo-bones.git">bones theme&lt;/a> as the base.&lt;/p>
+&lt;p>Once you have the themes git url:&lt;/p>
+&lt;ul>
+&lt;li>Open the command line to repository that has our generation files in it&lt;/li>
+&lt;li>Change directories to the themes folder&lt;/li>
+&lt;li>Clone the git repo to this location, eg: &lt;code>git clone https://github.com/Im5tu/hugo-bones.git&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>Once the repository is cloned, we need to tell hugo how to use our new theme. To do this we need to open the &lt;code>config.toml&lt;/code> file inside of the root directory and create an entry called theme. When this is done, your config file should look something along the lines of the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c#" data-lang="c#">&lt;span style="display:flex;">&lt;span>baseurl = &lt;span style="color:#e6db74">&amp;#34;http://example.org/&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title = &lt;span style="color:#e6db74">&amp;#34;My New Hugo Site&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>languageCode = &lt;span style="color:#e6db74">&amp;#34;en-us&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>theme = &lt;span style="color:#e6db74">&amp;#34;hugo-bones&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Whilst I am here, I am going to change the other properties accordingly:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c#" data-lang="c#">&lt;span style="display:flex;">&lt;span>baseurl = &lt;span style="color:#e6db74">&amp;#34;https://im5tu.io/&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title = &lt;span style="color:#e6db74">&amp;#34;Stuart Blackler&amp;#39;s Tech Blog&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>languageCode = &lt;span style="color:#e6db74">&amp;#34;en-us&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>theme = &lt;span style="color:#e6db74">&amp;#34;hugo-bones&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Don&amp;rsquo;t forget to save the file. It&amp;rsquo;s also probably a good idea to commit your progress as you go.&lt;/p>
+&lt;h2 id="creating-our-first-post">Creating our first post&lt;/h2>
+&lt;p>Now that we have our theme all setup, we should probably create a hello world post. Assuming that you are using the bones theme like me, we can go back the root of our repository and run this command to generate a new post: &lt;code>hugo new article\hello-world.md&lt;/code>. This creates a file under the &lt;code>content\article&lt;/code> directory.&lt;/p>
+&lt;p>We can preview this site by running the command: &lt;code>hugo server -D&lt;/code> and navigating to &lt;code>http://localhost:1313/&lt;/code>. All being well you should see the following:&lt;/p>
+&lt;p>&lt;img src="first-post.JPG" alt="First Post Image">&lt;/p>
+&lt;p>One of the great things about hugo is that it has live reload capabilities built in. This means that we can navigate to the page that we want to edit in the browser and everytime we make a change to the file, it will be synced to the screen. Try it! This magic happens because we called &lt;code>hugo server&lt;/code> which, in a way, breaks down to mean:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>hugo&lt;/code>: build my site please&lt;/li>
+&lt;li>&lt;code>server&lt;/code>: load a simple http server with my content&lt;/li>
+&lt;/ul>
+&lt;p>Additionally, I added the flag &lt;code>-D&lt;/code> which means that I want to build draft posts. In the template that I created, I wanted to create everything as a draft so that I could work on it in isolation and be safe in the knowledge that I wouldn&amp;rsquo;t accidently post something that wasn&amp;rsquo;t ready.&lt;/p>
+&lt;h2 id="additional-configuration">Additional configuration&lt;/h2>
+&lt;p>Before I finish up this post and write more, I want to change a few of the configuration options. Personally, I like working with json rather than yaml/toml inside of the markdown files, it feels more natural to me. Other changes that I wish to make include: changing permalink styles, output verbosity and enabling the robots.txt file.&lt;/p>
+&lt;p>In order to make these changes, we need to once more open the &lt;code>config.toml&lt;/code> file and add the properties as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c#" data-lang="c#">&lt;span style="display:flex;">&lt;span>baseurl = &lt;span style="color:#e6db74">&amp;#34;https://im5tu.io/&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title = &lt;span style="color:#e6db74">&amp;#34;Stuart Blackler&amp;#39;s Tech Blog&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>languageCode = &lt;span style="color:#e6db74">&amp;#34;en-us&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>theme = &lt;span style="color:#e6db74">&amp;#34;hugo-bones&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>metaDataFormat = &lt;span style="color:#e6db74">&amp;#34;json&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>enableRobotsTXT = &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[permalinks]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> article = &lt;span style="color:#e6db74">&amp;#34;article/:year/:month/:title/&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="next-steps">Next steps&lt;/h2>
+&lt;p>One of the next things that I will be doing is working with the template to ensure that everything is setup in terms of category/tag pages, rss feeds etc. This, although unstyled, will be enough to begin pushing to the live site.&lt;/p>
+&lt;p>After that is complete, I will be setting up gulp to build, clean and minify my javascript and css files. From there I can start working on the visual styling of the site. I will blog the entire process, but this may take some time as I figure out exactly what I want.&lt;/p>
+&lt;p>Finally, it&amp;rsquo;s setting up Github and Cloudflare so that everyone can enjoy an SSL enabled site around the world at blazing speeds.&lt;/p></description></item><item><title>Blog Building - Part 1 - Hello Hugo</title><link>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</link><pubDate>Thu, 17 Nov 2016 20:23:00 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</guid><description>&lt;p>As promised in this first mini-series, I am going to guide you through the steps that I have taken to get my blog up and running on Github pages and Cloudflare with SSL. As these the steps that I have taken to get this blog up and running, your milage may vary with this as different versions get released. That said, you should be fine.&lt;/p>
+&lt;p>&lt;em>NB: I had already pushed a hello world up into my hosted repository with an index file containing hello world before I decided to write this guide.&lt;/em>&lt;/p>
+&lt;h2 id="prerequisite-installing-git">Prerequisite: Installing Git&lt;/h2>
+&lt;p>The likelyhood is that you&amp;rsquo;ve already installed git, but if you haven&amp;rsquo;t download and install the latest version of git from &lt;a href="https://git-scm.com/">the git website&lt;/a>.&lt;/p>
+&lt;h2 id="installing-hugo">Installing Hugo&lt;/h2>
+&lt;p>Now that we have git installed, we are ready and raring to go. I&amp;rsquo;m going to make the assumption that you are on Windows with the instructions. We are going to install go, then use go to install hugo from source, installing all the updates as we go.&lt;/p>
+&lt;ol>
+&lt;li>Navigate in your favourite browser to: &lt;a href="https://golang.org/dl/">https://golang.org/dl/&lt;/a>&lt;/li>
+&lt;li>Download the installer of choice and follow the instructions in the installer, making a note of installation directory (eg: &lt;code>E:\GoLang\&lt;/code>)&lt;/li>
+&lt;li>Open a new command prompt and enter: &lt;code>echo %GOROOT%&lt;/code>. You should see the installation directory echo&amp;rsquo;d out to the console window. Close the command prompt for the next step&lt;/li>
+&lt;li>Next, we need to ensure that &lt;code>GOPATH&lt;/code> is set on your path
+&lt;ul>
+&lt;li>Right click on the start button&lt;/li>
+&lt;li>Click on System&lt;/li>
+&lt;li>Click on Advanced System Settings on the left&lt;/li>
+&lt;li>Click on the Environment Variables&amp;rsquo; button on the bottom&lt;/li>
+&lt;li>In the User variables section, click the New&amp;rsquo; button&lt;/li>
+&lt;li>Type the name &lt;code>GOPATH&lt;/code> for the variable name&lt;/li>
+&lt;li>In the value textbox, type in the folder where you wish to extract hugo to. Eg: &lt;code>E:\GoLang\&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>With the Environment Variables window open still, edit the PATH variable under user to include `%GOPATH%\bin&lt;/li>
+&lt;li>Re-open any command prompt windows so that the variables take effect&lt;/li>
+&lt;li>Now we are ready to install hugo by running the following command: &lt;code>go get -u -v github.com/spf13/hugo&lt;/code>
+&lt;ul>
+&lt;li>This will download hugo, update its dependencies and build hugo. Expect this process to take 5 minutes or so.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Verify that hugo has downloaded successfully by running &lt;code>hugo --help&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;h2 id="configuring-git">Configuring Git&lt;/h2>
+&lt;p>Typically you can host on Github pages for two scenarios: Project pages or User/Organisation pages. When you are hosting the former, you will have a branch named &lt;code>gh-pages&lt;/code> which hosts the site within the project. The latter is what we are going to setup which requires the site to be present on the master branch. For this, we are going to use git submodules. This will mean that we actually have two repositories created, one for the hosted site and one for the structure code. This is actually quiet a nice way around an otherwise awkward branching model.&lt;/p>
+&lt;ol>
+&lt;li>Create repository &lt;code>&amp;lt;github-handle&amp;gt;.github.io&lt;/code>, eg: &lt;code>im5tu.github.io&lt;/code>
+&lt;ul>
+&lt;li>This repository will contain the finished site&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Create repository &lt;code>&amp;lt;github-handle&amp;gt;-hugo&lt;/code>, eg: &lt;code>im5tu-hugo&lt;/code>
+&lt;ul>
+&lt;li>This repository will contain all of the generation code and templates etc&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Create a location on disk where you will store the generation files and navigate to that directory on the command line
+&lt;ul>
+&lt;li>Eg: &lt;code>mkdir E:\im5tu-hugo &amp;amp;&amp;amp; cd E:\im5tu-hugo&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Next run the following command to make a new site in the new directory: &lt;code>hugo new site .&lt;/code>&lt;/li>
+&lt;li>It&amp;rsquo;s probably a good time to create the git respository and commit the code we have currently
+&lt;ul>
+&lt;li>To initialize the git repository: &lt;code>git init&lt;/code>&lt;/li>
+&lt;li>Add all the current files: &lt;code>git add -A&lt;/code>&lt;/li>
+&lt;li>Commit all of the files: &lt;code>git commit -am &amp;quot;Initial Commit&lt;/code>&lt;/li>
+&lt;li>Add the remote url of your Github repository: &lt;code>git remote add origin https://github.com/Im5tu/im5tu-hugo.git&lt;/code>&lt;/li>
+&lt;li>Push the code to your new repository: &lt;code>git push -u origin master&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Next we are going to create a sub-module in the public directory. This folder is where the generated output goes.
+&lt;ul>
+&lt;li>I used GitKraken to do this, but you could do it from the command line also:&lt;/li>
+&lt;li>&lt;code>git submodule add -b master git@github.com:&amp;lt;github-handle&amp;gt;/&amp;lt;github-handle&amp;gt;.github.io.git public&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Now we have that setup, commit everything again
+&lt;ul>
+&lt;li>Commit all of the files: &lt;code>git commit -am &amp;quot;Initialized submodules&lt;/code>&lt;/li>
+&lt;li>Push the code to Github: &lt;code>git push&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;p>From now on, when we generate our site with &lt;code>hugo&lt;/code> (the way we will generate our site) the files will be generated inside of the public directory. Then its a case of either committing the files in the main repository or changing to the public folder and committing the changes in that repository to push it to our live site.&lt;/p>
+&lt;p>Out of curiosity, I tested to make sure that they have different git histories:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&lt;span style="color:#75715e">&amp;gt;git log --oneline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>f3c2595 Initialized submodules
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>e60426b Initial commit
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&lt;span style="color:#75715e">&amp;gt;cd public &amp;amp;&amp;amp; git log --oneline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ef81fbc Create CNAME
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>3043605 Hello World
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>So far we have created our git repositories, installed both Go Lang and hugo and setup our workflow ready to begin work on our site. In the next article, I will begin adding a theme so that we can start publishing the posts that we are writing.&lt;/p></description></item></channel></rss>

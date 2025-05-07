@@ -1,1 +1,82 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>go on CodeWithStu's Blog</title><link>https://im5tu.io/tags/go/</link><description>Recent content in go on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Thu, 17 Nov 2016 20:23:00 +0000</lastBuildDate><atom:link href="https://im5tu.io/tags/go/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog Building - Part 1 - Hello Hugo</title><link>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</link><pubDate>Thu, 17 Nov 2016 20:23:00 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</guid><description>&lt;p>As promised in this first mini-series, I am going to guide you through the steps that I have taken to get my blog up and running on Github pages and Cloudflare with SSL. As these the steps that I have taken to get this blog up and running, your milage may vary with this as different versions get released. That said, you should be fine.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>go on CodeWithStu's Blog</title><link>https://im5tu.io/tags/go/</link><description>Recent content in go on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Thu, 17 Nov 2016 20:23:00 +0000</lastBuildDate><atom:link href="https://im5tu.io/tags/go/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog Building - Part 1 - Hello Hugo</title><link>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</link><pubDate>Thu, 17 Nov 2016 20:23:00 +0000</pubDate><guid>https://im5tu.io/article/2016/11/blog-building-part-1-hello-hugo/</guid><description>&lt;p>As promised in this first mini-series, I am going to guide you through the steps that I have taken to get my blog up and running on Github pages and Cloudflare with SSL. As these the steps that I have taken to get this blog up and running, your milage may vary with this as different versions get released. That said, you should be fine.&lt;/p>
+&lt;p>&lt;em>NB: I had already pushed a hello world up into my hosted repository with an index file containing hello world before I decided to write this guide.&lt;/em>&lt;/p>
+&lt;h2 id="prerequisite-installing-git">Prerequisite: Installing Git&lt;/h2>
+&lt;p>The likelyhood is that you&amp;rsquo;ve already installed git, but if you haven&amp;rsquo;t download and install the latest version of git from &lt;a href="https://git-scm.com/">the git website&lt;/a>.&lt;/p>
+&lt;h2 id="installing-hugo">Installing Hugo&lt;/h2>
+&lt;p>Now that we have git installed, we are ready and raring to go. I&amp;rsquo;m going to make the assumption that you are on Windows with the instructions. We are going to install go, then use go to install hugo from source, installing all the updates as we go.&lt;/p>
+&lt;ol>
+&lt;li>Navigate in your favourite browser to: &lt;a href="https://golang.org/dl/">https://golang.org/dl/&lt;/a>&lt;/li>
+&lt;li>Download the installer of choice and follow the instructions in the installer, making a note of installation directory (eg: &lt;code>E:\GoLang\&lt;/code>)&lt;/li>
+&lt;li>Open a new command prompt and enter: &lt;code>echo %GOROOT%&lt;/code>. You should see the installation directory echo&amp;rsquo;d out to the console window. Close the command prompt for the next step&lt;/li>
+&lt;li>Next, we need to ensure that &lt;code>GOPATH&lt;/code> is set on your path
+&lt;ul>
+&lt;li>Right click on the start button&lt;/li>
+&lt;li>Click on System&lt;/li>
+&lt;li>Click on Advanced System Settings on the left&lt;/li>
+&lt;li>Click on the Environment Variables&amp;rsquo; button on the bottom&lt;/li>
+&lt;li>In the User variables section, click the New&amp;rsquo; button&lt;/li>
+&lt;li>Type the name &lt;code>GOPATH&lt;/code> for the variable name&lt;/li>
+&lt;li>In the value textbox, type in the folder where you wish to extract hugo to. Eg: &lt;code>E:\GoLang\&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>With the Environment Variables window open still, edit the PATH variable under user to include `%GOPATH%\bin&lt;/li>
+&lt;li>Re-open any command prompt windows so that the variables take effect&lt;/li>
+&lt;li>Now we are ready to install hugo by running the following command: &lt;code>go get -u -v github.com/spf13/hugo&lt;/code>
+&lt;ul>
+&lt;li>This will download hugo, update its dependencies and build hugo. Expect this process to take 5 minutes or so.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Verify that hugo has downloaded successfully by running &lt;code>hugo --help&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;h2 id="configuring-git">Configuring Git&lt;/h2>
+&lt;p>Typically you can host on Github pages for two scenarios: Project pages or User/Organisation pages. When you are hosting the former, you will have a branch named &lt;code>gh-pages&lt;/code> which hosts the site within the project. The latter is what we are going to setup which requires the site to be present on the master branch. For this, we are going to use git submodules. This will mean that we actually have two repositories created, one for the hosted site and one for the structure code. This is actually quiet a nice way around an otherwise awkward branching model.&lt;/p>
+&lt;ol>
+&lt;li>Create repository &lt;code>&amp;lt;github-handle&amp;gt;.github.io&lt;/code>, eg: &lt;code>im5tu.github.io&lt;/code>
+&lt;ul>
+&lt;li>This repository will contain the finished site&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Create repository &lt;code>&amp;lt;github-handle&amp;gt;-hugo&lt;/code>, eg: &lt;code>im5tu-hugo&lt;/code>
+&lt;ul>
+&lt;li>This repository will contain all of the generation code and templates etc&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Create a location on disk where you will store the generation files and navigate to that directory on the command line
+&lt;ul>
+&lt;li>Eg: &lt;code>mkdir E:\im5tu-hugo &amp;amp;&amp;amp; cd E:\im5tu-hugo&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Next run the following command to make a new site in the new directory: &lt;code>hugo new site .&lt;/code>&lt;/li>
+&lt;li>It&amp;rsquo;s probably a good time to create the git respository and commit the code we have currently
+&lt;ul>
+&lt;li>To initialize the git repository: &lt;code>git init&lt;/code>&lt;/li>
+&lt;li>Add all the current files: &lt;code>git add -A&lt;/code>&lt;/li>
+&lt;li>Commit all of the files: &lt;code>git commit -am &amp;quot;Initial Commit&lt;/code>&lt;/li>
+&lt;li>Add the remote url of your Github repository: &lt;code>git remote add origin https://github.com/Im5tu/im5tu-hugo.git&lt;/code>&lt;/li>
+&lt;li>Push the code to your new repository: &lt;code>git push -u origin master&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Next we are going to create a sub-module in the public directory. This folder is where the generated output goes.
+&lt;ul>
+&lt;li>I used GitKraken to do this, but you could do it from the command line also:&lt;/li>
+&lt;li>&lt;code>git submodule add -b master git@github.com:&amp;lt;github-handle&amp;gt;/&amp;lt;github-handle&amp;gt;.github.io.git public&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Now we have that setup, commit everything again
+&lt;ul>
+&lt;li>Commit all of the files: &lt;code>git commit -am &amp;quot;Initialized submodules&lt;/code>&lt;/li>
+&lt;li>Push the code to Github: &lt;code>git push&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;p>From now on, when we generate our site with &lt;code>hugo&lt;/code> (the way we will generate our site) the files will be generated inside of the public directory. Then its a case of either committing the files in the main repository or changing to the public folder and committing the changes in that repository to push it to our live site.&lt;/p>
+&lt;p>Out of curiosity, I tested to make sure that they have different git histories:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&lt;span style="color:#75715e">&amp;gt;git log --oneline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>f3c2595 Initialized submodules
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>e60426b Initial commit
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>E:\im5tu-hugo&lt;span style="color:#75715e">&amp;gt;cd public &amp;amp;&amp;amp; git log --oneline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ef81fbc Create CNAME
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>3043605 Hello World
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>So far we have created our git repositories, installed both Go Lang and hugo and setup our workflow ready to begin work on our site. In the next article, I will begin adding a theme so that we can start publishing the posts that we are writing.&lt;/p></description></item></channel></rss>

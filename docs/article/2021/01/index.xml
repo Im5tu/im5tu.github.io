@@ -1,1 +1,183 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>January on CodeWithStu's Blog</title><link>https://im5tu.io/article/2021/01/</link><description>Recent content in January on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2021/01/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Certificates From AWS Private Certificate Authority in .NET</title><link>https://im5tu.io/article/2021/01/using-certificates-from-aws-private-certificate-authority-in-.net/</link><pubDate>Sun, 17 Jan 2021 11:43:01 +0000</pubDate><guid>https://im5tu.io/article/2021/01/using-certificates-from-aws-private-certificate-authority-in-.net/</guid><description>&lt;p>As more and more companies get hacked, there is a strong resurgence in the community for the desire to have TLS for everything, everywhere. There are many valuable projects, tools and resources, such as &lt;a href="https://letsencrypt.org/">LetsEncrypt&lt;/a> available to help both individuals &amp;amp; companies secure their resources. One of those tools is AWS Private Certificate Authority.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>January on CodeWithStu's Blog</title><link>https://im5tu.io/article/2021/01/</link><description>Recent content in January on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2021/01/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Certificates From AWS Private Certificate Authority in .NET</title><link>https://im5tu.io/article/2021/01/using-certificates-from-aws-private-certificate-authority-in-.net/</link><pubDate>Sun, 17 Jan 2021 11:43:01 +0000</pubDate><guid>https://im5tu.io/article/2021/01/using-certificates-from-aws-private-certificate-authority-in-.net/</guid><description>&lt;p>As more and more companies get hacked, there is a strong resurgence in the community for the desire to have TLS for everything, everywhere. There are many valuable projects, tools and resources, such as &lt;a href="https://letsencrypt.org/">LetsEncrypt&lt;/a> available to help both individuals &amp;amp; companies secure their resources. One of those tools is AWS Private Certificate Authority.&lt;/p>
+&lt;p>Traditionally, running a private certificate authority has been costly but this paradigm has changed with the advent of free certificate authorities and cloud-based offerings. But why would we want to run our own still? One of the main reasons is that some networks are private in nature, much like the majority of banking networks, and clouds like AWS will not issue certificates for private networks unless you have your own AWS Private Certificate Authority instance.&lt;/p>
+&lt;h2 id="what-is-aws-private-certificate-authority">What is AWS Private Certificate Authority?&lt;/h2>
+&lt;p>AWS Private Certificate Authority provides you a highly-available private Certificate Authority service without the ongoing maintenance costs of operating your own private Certificate Authority. It extends ACM’s certificate management capabilities to both public and private certificates. AWS Private Certificate Authority allows developers to be more agile by providing them APIs to create and deploy private certificates programmatically. You also have the flexibility to create private certificates for applications that require custom certificate lifetimes or resource names. With ACM Private Certificate Authority, you can create and manage private certificates for your connected resources in one place with a secure, pay as you go, managed private Certificate Authority service. &lt;em>&lt;a href="https://aws.amazon.com/certificate-manager/private-certificate-authority/">Source&lt;/a>.&lt;/em>&lt;/p>
+&lt;h2 id="exporting-a-certificate-from-aws-private-certificate-authority">Exporting a certificate from AWS Private Certificate Authority&lt;/h2>
+&lt;p>This article assumes that you already have a certificate issued from your Private Certificate Authority and you have the ARN available. There are a few different that we need to implement to our certificate loader:&lt;/p>
+&lt;ol>
+&lt;li>A class that&amp;rsquo;s going to load certificates from AWS PCA ACM;&lt;/li>
+&lt;li>A instance of &lt;code>IPasswordFinder&lt;/code> so that BouncyCastle can read the exported PEM file;&lt;/li>
+&lt;li>A few handy &lt;a href="https://im5tu.io/article/2012/12/extension-methods-in-dotnet/">extension methods&lt;/a> for hooking up the exported certificate with Kestrel&lt;/li>
+&lt;/ol>
+&lt;p>In order to export and read the certificates, we are going to need to install the following packages:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-xml" data-lang="xml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;ItemGroup&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;PackageReference&lt;/span> &lt;span style="color:#a6e22e">Include=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;AWSSDK.CertificateManager&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">Version=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;3.3.101.48&amp;#34;&lt;/span> &lt;span style="color:#f92672">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;PackageReference&lt;/span> &lt;span style="color:#a6e22e">Include=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;Portable.BouncyCastle&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">Version=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;1.8.6&amp;#34;&lt;/span> &lt;span style="color:#f92672">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;/ItemGroup&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>We are going to be using &lt;code>AWSSDK.CertificateManager&lt;/code> to export the certificate from AWS Private Certificate Authority and &lt;code>Portable.BouncyCastle&lt;/code> to read the exported PEM file, turning it into a &lt;code>X509Certificate2&lt;/code> that we can push into the Kestrel webserver. First, we are going to create our interface which will allow us to swap out the implementation later for testing purposes, should that be desired:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">ICertificateAuthorityLoader&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Task&amp;lt;X509Certificate2&amp;gt; LoadCertificateAsync(&lt;span style="color:#66d9ef">string&lt;/span> certificateArn);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Next, we have the implementation itself:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DefaultCertificateAuthorityLoader&lt;/span> : ICertificateAuthorityLoader
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IAmazonCertificateManager _certificateManager;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> DefaultCertificateAuthorityLoader() : &lt;span style="color:#66d9ef">this&lt;/span>(&lt;span style="color:#66d9ef">new&lt;/span> AmazonCertificateManagerClient())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> DefaultCertificateAuthorityLoader(IAmazonCertificateManager certificateManager)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _certificateManager = certificateManager;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">async&lt;/span> Task&amp;lt;X509Certificate2&amp;gt; LoadCertificateAsync(&lt;span style="color:#66d9ef">string&lt;/span> certificateArn)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> pwd = Guid.NewGuid().ToString(&lt;span style="color:#e6db74">&amp;#34;N&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">using&lt;/span> var passphrase = &lt;span style="color:#66d9ef">new&lt;/span> MemoryStream(Encoding.UTF8.GetBytes(pwd));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Get the certificate from PCA&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> exportedCert = &lt;span style="color:#66d9ef">await&lt;/span> _certificateManager.ExportCertificateAsync(&lt;span style="color:#66d9ef">new&lt;/span> ExportCertificateRequest
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CertificateArn = certificateArn,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Passphrase = passphrase
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">byte&lt;/span>[] certBytes = Encoding.ASCII.GetBytes(exportedCert.Certificate);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> cert = &lt;span style="color:#66d9ef">new&lt;/span> X509Certificate2(certBytes, pwd);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Ensure that the private key is loaded&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> privateKey = DecodePrivateKey(exportedCert.PrivateKey, pwd);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cert = cert.CopyWithPrivateKey(DotNetUtilities.ToRSA(privateKey.rsaPrivatekey));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> cert;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> (AsymmetricCipherKeyPair keyPair, RsaPrivateCrtKeyParameters rsaPrivatekey) DecodePrivateKey(&lt;span style="color:#66d9ef">string&lt;/span> encryptedPrivateKey, &lt;span style="color:#66d9ef">string&lt;/span> password)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> TextReader textReader = &lt;span style="color:#66d9ef">new&lt;/span> StringReader(encryptedPrivateKey);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PemReader pemReader = &lt;span style="color:#66d9ef">new&lt;/span> PemReader(textReader, &lt;span style="color:#66d9ef">new&lt;/span> PasswordFinder(password));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">object&lt;/span> privateKeyObject = pemReader.ReadObject();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RsaPrivateCrtKeyParameters rsaPrivatekey = (RsaPrivateCrtKeyParameters)privateKeyObject;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RsaKeyParameters rsaPublicKey = &lt;span style="color:#66d9ef">new&lt;/span> RsaKeyParameters(&lt;span style="color:#66d9ef">false&lt;/span>, rsaPrivatekey.Modulus, rsaPrivatekey.PublicExponent);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> AsymmetricCipherKeyPair kp = &lt;span style="color:#66d9ef">new&lt;/span> AsymmetricCipherKeyPair(rsaPublicKey, rsaPrivatekey);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> (kp, rsaPrivatekey);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>LoadCertificateAsync&lt;/code> method is the primary workhorse for exporting the certificate. We generate a random GUID, which could be swapped out for a more secure method, as a temporary password as one will need to be supplied when we call the AWS Private Certificate Authority API. This password is then added to the &lt;code>ExportCertificateRequest&lt;/code> that we generate before we request that the certificate is exported. There are a couple of points where this could fail:&lt;/p>
+&lt;ul>
+&lt;li>We didn&amp;rsquo;t supply a password&lt;/li>
+&lt;li>The certificate is unavailable&lt;/li>
+&lt;li>The certificate was not issued by an AWS Private Certificate Authority. This is probably going to be the most common case in my experience. Only AWS Private Certificate Authority issued certificates can be exported with the private key, which is needed to load the certificate into Kestrel&lt;/li>
+&lt;/ul>
+&lt;p>Asuming that our request was successful, we have a property called &lt;code>Certificate&lt;/code> which we can pass straight into a new &lt;code>X509Certificate2&lt;/code> instance. This &lt;strong>does not&lt;/strong> contain the private key, so we need to use BouncyCastle to parse the private key from a secondary property on the response object, which is fortunately called &lt;code>PrivateKey&lt;/code>. As this primary key is secured, we need to use BouncyCastle&amp;rsquo;s &lt;code>PemReader&lt;/code> in order to read the private key, supplying the password via an instance of &lt;code>IPasswordFinder&lt;/code>, which you can see below. From here, it can then be converted to an &lt;code>AsymmetricCipherKeyPair&lt;/code>. Finally, we can use the &lt;code>CopyWithPrivateKey&lt;/code> to create a new instance of the &lt;code>X509Certificate2&lt;/code> certificate, but this time with the private key. This can then be loaded into Kestrel to secure web requests.&lt;/p>
+&lt;p>For completeness, here is the implementation of &lt;code>IPasswordFinder&lt;/code> that I used which simply converts the plaintext password into a char array:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">PasswordFinder&lt;/span> : IPasswordFinder
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">string&lt;/span> _password;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> PasswordFinder(&lt;span style="color:#66d9ef">string&lt;/span> password)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _password = password;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span>[] GetPassword()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> _password.ToCharArray();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Finally, we have a series of &lt;a href="https://im5tu.io/article/2012/12/extension-methods-in-dotnet/">extension methods&lt;/a> that allow us to hook up our application in various ways. There&amp;rsquo;s not too much to explain here, as this is hooking up our code above with the Kestrel webserver:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// Extensions for configuration of a Kestrel Web Server&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">HostingExtensions&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Loads a certificate from a Private Certificate Authority instance, based on ARN.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> IWebHostBuilder UseHttpsCertificateFromPCA(&lt;span style="color:#66d9ef">this&lt;/span> IWebHostBuilder builder, IConfiguration configuration, IAmazonCertificateManager? certificateManagerClient = &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> builder.ConfigureKestrel(server =&amp;gt; server.UseHttpsCertificateFromPCA(configuration, certificateManagerClient));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> builder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Loads a certificate from a Private Certificate Authority instance, based on ARN.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> IWebHostBuilder UseHttpsCertificateFromPCA(&lt;span style="color:#66d9ef">this&lt;/span> IWebHostBuilder builder, &lt;span style="color:#66d9ef">string&lt;/span> arnOrEnvironmentVar, IAmazonCertificateManager? certificateManagerClient = &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> builder.ConfigureKestrel(server =&amp;gt; server.UseHttpsCertificateFromPCA(arnOrEnvironmentVar, certificateManagerClient));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> builder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Loads a certificate from a Private Certificate Authority instance, based on ARN.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> KestrelServerOptions UseHttpsCertificateFromPCA(&lt;span style="color:#66d9ef">this&lt;/span> KestrelServerOptions options, IConfiguration configuration, IAmazonCertificateManager? certificateManagerClient = &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> options.UseHttpsCertificateFromPCA(configuration.GetValue&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>&amp;gt;(&lt;span style="color:#e6db74">&amp;#34;CertificateArn&amp;#34;&lt;/span>), certificateManagerClient);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Loads a certificate from a Private Certificate Authority instance, based on ARN.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> KestrelServerOptions UseHttpsCertificateFromPCA(&lt;span style="color:#66d9ef">this&lt;/span> KestrelServerOptions options, &lt;span style="color:#66d9ef">string&lt;/span> arnOrEnvironmentVar, IAmazonCertificateManager? certificateManagerClient = &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrWhiteSpace(arnOrEnvironmentVar))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentNullException(nameof(arnOrEnvironmentVar));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!arnOrEnvironmentVar.StartsWith(&lt;span style="color:#e6db74">&amp;#34;arn:&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> arn = Environment.GetEnvironmentVariable(arnOrEnvironmentVar);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrWhiteSpace(arnOrEnvironmentVar))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentException(&lt;span style="color:#e6db74">$&amp;#34;Cannot load the details of the arn from the environment variable &amp;#39;{arnOrEnvironmentVar}&amp;#39;. Please check the environment variable is set and is not null, empty or whitespace.&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (arn?.StartsWith(&lt;span style="color:#e6db74">&amp;#34;arn:&amp;#34;&lt;/span>) != &lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentException(&lt;span style="color:#e6db74">&amp;#34;The specified arn was loaded from the environment variable but does not meet the required format&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> arnOrEnvironmentVar = arn;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Yes async in sync method sucks, but the client only has a async method on it...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> certificate = (certificateManagerClient &lt;span style="color:#66d9ef">is&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span> ? &lt;span style="color:#66d9ef">new&lt;/span> DefaultCertificateAuthorityLoader() : &lt;span style="color:#66d9ef">new&lt;/span> DefaultCertificateAuthorityLoader(certificateManagerClient)).LoadCertificateAsync(arnOrEnvironmentVar).Result;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> options.UseHttpsCertificate(certificate);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Configures the kestrel web server with the specified certificate&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> IWebHostBuilder UseHttpsCertificate(&lt;span style="color:#66d9ef">this&lt;/span> IWebHostBuilder builder, X509Certificate2 certificate)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> builder.ConfigureKestrel(server =&amp;gt; server.UseHttpsCertificate(certificate));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> builder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// Configures the kestrel web server with the specified certificate&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> KestrelServerOptions UseHttpsCertificate(&lt;span style="color:#66d9ef">this&lt;/span> KestrelServerOptions options, X509Certificate2 certificate)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> options.ConfigureHttpsDefaults(o =&amp;gt; o.ServerCertificate = certificate);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> options;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Unfortunately, the configuration above does rely on the use of asynchronous invocation in a synchronous context, which we can&amp;rsquo;t do too much about because of the differences between the SDK and the way Kestrel is built. Our usage of the extensions is as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> IHostBuilder CreateHostBuilder(&lt;span style="color:#66d9ef">string&lt;/span>[] args) =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Host.CreateDefaultBuilder(args)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .ConfigureWebHostDefaults(webBuilder =&amp;gt; {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> webBuilder.UseStartup&amp;lt;Startup&amp;gt;()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .UseHttpsCertificateFromPCA(&lt;span style="color:#e6db74">&amp;#34;arn:aws:acm:eu-west-1:**************:certificate/**********&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>or:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> IHostBuilder CreateHostBuilderAlt(&lt;span style="color:#66d9ef">string&lt;/span>[] args) =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Host.CreateDefaultBuilder(args)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .ConfigureWebHostDefaults(webBuilder =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> webBuilder.ConfigureKestrel((context, options) =&amp;gt; options.UseHttpsCertificateFromPCA(context.Configuration))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .UseStartup&amp;lt;Startup&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>After this, you should be able to use a certificate from AWS Private Certificate Authority inside your application. Enjoy!&lt;/p></description></item></channel></rss>

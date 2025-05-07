@@ -1,1 +1,694 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>January on CodeWithStu's Blog</title><link>https://im5tu.io/article/2020/01/</link><description>Recent content in January on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2020/01/index.xml" rel="self" type="application/rss+xml"/><item><title>Diagnostics in .Net Core 3: Using dotnet-counters with Docker</title><link>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/</link><pubDate>Sat, 25 Jan 2020 13:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">previous post&lt;/a>, I described how we can leverage the new EventCounter diagnostics API to add custom event counters and listen for built in counters. In this article, I will walk through how we can leverage the &lt;code>dotnet-counters&lt;/code> tool with a running docker image.&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Event Counters</title><link>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/</link><pubDate>Sun, 05 Jan 2020 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/</guid><description>&lt;p>Recently, I&amp;rsquo;ve been playing with the new &lt;a href="https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/">diagnostic improvements in .Net Core 3&lt;/a>. Traditionally, I&amp;rsquo;ve always used the great &lt;a href="https://github.com/AppMetrics/AppMetrics">AppMetrics&lt;/a> package to capture the metrics from our applications and send scrape them with a &lt;a href="https://github.com/prometheus/prometheus">Prometheus&lt;/a> &amp;amp; &lt;a href="https://github.com/grafana/grafana">Grafana&lt;/a> setup. Whilst reading about the improvements, I wondered whether or not it would be possible to push metrics to &lt;a href="https://github.com/prometheus/prometheus">Prometheus&lt;/a>.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>January on CodeWithStu's Blog</title><link>https://im5tu.io/article/2020/01/</link><description>Recent content in January on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2020/01/index.xml" rel="self" type="application/rss+xml"/><item><title>Diagnostics in .Net Core 3: Using dotnet-counters with Docker</title><link>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/</link><pubDate>Sat, 25 Jan 2020 13:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">previous post&lt;/a>, I described how we can leverage the new EventCounter diagnostics API to add custom event counters and listen for built in counters. In this article, I will walk through how we can leverage the &lt;code>dotnet-counters&lt;/code> tool with a running docker image.&lt;/p>
+&lt;h2 id="creating-our-diagnostics-image">Creating our diagnostics image&lt;/h2>
+&lt;p>In order to connect to a docker image, we will create a diagnostics image which will host the same .Net SDK version as our application and will have the &lt;code>dotnet-counters&lt;/code> tool pre-installed:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/sdk:3.1&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> mkdir /root/.dotnet/tools&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENV&lt;/span> PATH&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/root/.dotnet/tools:&lt;/span>&lt;span style="color:#e6db74">${&lt;/span>PATH&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet tool install dotnet-counters --global&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /diagnostics&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENTRYPOINT&lt;/span> [ &lt;span style="color:#e6db74">&amp;#34;/bin/bash&amp;#34;&lt;/span> ]&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>A common mistake when creating docker images that contain .Net tools which are installed globally is not remembering to add the tool path, in this case &lt;code>/root/.dotnet/tools/&lt;/code> to the PATH so that it can be globally executed. Luckily, the .Net CLI will remind you in the build logs should you forget to do this.&lt;/p>
+&lt;p>Note: &lt;em>You can see the other tools that are available &lt;a href="https://github.com/dotnet/diagnostics/tree/master/src/Tools">here&lt;/a>.&lt;/em>&lt;/p>
+&lt;p>Now that we have our docker image ready, we can build with the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker build -f diagnostics.Dockerfile -t dotnetdiag:3.1 .
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="setting-up-the-host-image">Setting up the host image&lt;/h3>
+&lt;p>For the purposes of this article, we will setup our application using a brand new application within a dockerfile, created by &lt;code>dotnet new&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/sdk:3.1&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">EXPOSE&lt;/span>&lt;span style="color:#e6db74"> 5000&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">EXPOSE&lt;/span>&lt;span style="color:#e6db74"> 5001&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet new webapp -n BlogApp&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app/BlogApp&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENTRYPOINT&lt;/span> dotnet run -c Release&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And we will build our application with the following command line:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker build -f app.Dockerfile --name app -t dotnetapp:latest .
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once you have you&amp;rsquo;re application built we are ready to start our docker image with debugging enabled.&lt;/p>
+&lt;h2 id="connecting-from-the-diagnostics-image-to-the-host-image">Connecting from the diagnostics image to the host image&lt;/h2>
+&lt;p>Normally we would start our applications with a command line similar to this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker run --rm --name app dotnetapp:latest
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>However, in order to be able to connect to the running application we need to mount a volume to the temporary directory on the application container. We can do this by appending &lt;code>-v dotnetdiag:/tmp&lt;/code>, which instructs docker to mount a named volume &lt;code>dotnetdiag&lt;/code> to the path &lt;code>/tmp&lt;/code>. Docker will create the named volume during startup if it does not exist.&lt;/p>
+&lt;p>We mount the volume because as the .Net runtime starts up, it places a load of temporary files into the &lt;code>/tmp&lt;/code> directory such as the following:&lt;/p>
+&lt;pre tabindex="0">&lt;code>root@379211a5012a:/# ls /tmp
+CoreFxPipe_root.b5he0_wwfcD_lH7g471Brpw4X VBCSCompiler
+jiksomfd.ri0 NuGetScratch
+hn2K8eq8bHUcTVSgvuckPlSK9tw9_ORiMDm_Vn4ylfI system-commandline-sentinel-files
+&lt;/code>&lt;/pre>&lt;p>&lt;em>Note the inclusion of the file beginning with &lt;code>CoreFxPipe_root&lt;/code>, which is the EventPipe that we will connect to.&lt;/em>&lt;/p>
+&lt;p>Once the application is running, we are now able to start connecting to our application. Normally we would run the following command line to start the diagnostics image: &lt;code>docker run --rm -it --pid=container:app --net=container:app -v dotnetdiag:/tmp --cap-add ALL --privileged dotnetdiag:3.1&lt;/code>. Before we execute this command, we need to modify it by add arguments for:&lt;/p>
+&lt;ul>
+&lt;li>Mounting to the same volume as the running application&lt;/li>
+&lt;li>Be able to inspect the process list of the running application,&lt;/li>
+&lt;li>Be able to share the same networking as the running application,&lt;/li>
+&lt;li>Elevate execution for the new container&lt;/li>
+&lt;/ul>
+&lt;p>Without completing the steps listed above we will be unable to connect to the running application. For mounting the volume we can use the exact same argument as before (&lt;code>-v dotnetdiag:/tmp&lt;/code>).&lt;/p>
+&lt;p>In order to get the process id, we need to join the same process namespace through the use of the &lt;a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">&amp;ndash;pid&lt;/a> argument. The &lt;code>--pid&lt;/code> offers two modes, container or host. For this article, we will connect to a specific container by name, though you can also connect to the container by id as well.&lt;/p>
+&lt;p>Like the process argument, we also need to join the same networking space as the running container. So we will use &lt;a href="https://docs.docker.com/engine/reference/run/#network-settings">&amp;ndash;net&lt;/a> which can also be run in multiple modes. For this article, we will connect to the application via the container name.&lt;/p>
+&lt;p>Lastly, by default, Docker containers restrict a lot of what you can do with running processes, like run docker in docker. So we need to tell docker to run in privileged mode and what capabilities we require to have from our diagnostics container. For this we will use the &lt;code>--cap-add&lt;/code> and the &lt;code>--privileged&lt;/code> arguments. Click &lt;a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities">here&lt;/a> to read more about runtime privilege and docker capabilities.&lt;/p>
+&lt;p>After putting it all together, here is the full command line that we will run:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker run --rm -it --pid&lt;span style="color:#f92672">=&lt;/span>container:app --net&lt;span style="color:#f92672">=&lt;/span>container:app -v dotnetdiag:/tmp --cap-add ALL --privileged dotnetdiag:3.1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now you should have an empty command line to run, so if we execute &lt;code>dotnet-counters ps&lt;/code> you should see something similar to the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>root@9663cbb4e1fe:/diagnostics# dotnet-counters ps
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">103&lt;/span> BlogApp /app/BlogApp/bin/Release/netcoreapp3.1/BlogApp
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">6&lt;/span> dotnet /usr/share/dotnet/dotnet
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">42&lt;/span> dotnet /usr/share/dotnet/dotnet
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">61&lt;/span> dotnet /usr/share/dotnet/dotnet
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">247&lt;/span> dotnet-counters /root/.dotnet/tools/dotnet-counters
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Assuming that your application is running under process id &lt;strong>103&lt;/strong> then we would execute the following command to view the counters:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>root@9663cbb4e1fe:/diagnostics# dotnet-counters monitor -p &lt;span style="color:#ae81ff">103&lt;/span> System.Runtime Microsoft.AspNetCore.Hosting
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="recap">Recap&lt;/h2>
+&lt;p>In order to diagnose a running docker image from another docker image, you need to:&lt;/p>
+&lt;ul>
+&lt;li>Mount the &lt;code>/tmp&lt;/code> on the application image prior to starting the application&lt;/li>
+&lt;li>Create a diagnostic image with your diagnostics tools&lt;/li>
+&lt;li>Run your diagnostics image with the following arguments:
+&lt;ul>
+&lt;li>&lt;code>-v&lt;/code> for mounting to the same volume as the application image&lt;/li>
+&lt;li>&lt;code>--pid&lt;/code> for joining the same process space&lt;/li>
+&lt;li>&lt;code>--net&lt;/code> for joining the same network&lt;/li>
+&lt;li>&lt;code>--privileged&lt;/code> for requesting additional permissions to cross container boundaries, and&lt;/li>
+&lt;li>&lt;code>--cap-add ALL&lt;/code> for adding the ability to list processes etc.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>Happy diagnostics!&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Event Counters</title><link>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/</link><pubDate>Sun, 05 Jan 2020 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/</guid><description>&lt;p>Recently, I&amp;rsquo;ve been playing with the new &lt;a href="https://devblogs.microsoft.com/dotnet/introducing-diagnostics-improvements-in-net-core-3-0/">diagnostic improvements in .Net Core 3&lt;/a>. Traditionally, I&amp;rsquo;ve always used the great &lt;a href="https://github.com/AppMetrics/AppMetrics">AppMetrics&lt;/a> package to capture the metrics from our applications and send scrape them with a &lt;a href="https://github.com/prometheus/prometheus">Prometheus&lt;/a> &amp;amp; &lt;a href="https://github.com/grafana/grafana">Grafana&lt;/a> setup. Whilst reading about the improvements, I wondered whether or not it would be possible to push metrics to &lt;a href="https://github.com/prometheus/prometheus">Prometheus&lt;/a>.&lt;/p>
+&lt;p>Ultimately, I decided that pushing to &lt;a href="https://github.com/prometheus/prometheus">Prometheus&lt;/a> wasn&amp;rsquo;t ideal for my use case. However, I have successfully used the approach described in the rest of the article to push the metrics to another platform, using a new .Net API - EventCounters.&lt;/p>
+&lt;p>EventCounters are the .NET Core replacement for Windows performance counters, which are now cross platform. EventCounters are based on the EventPipe that was originally introduced in .Net Core 2.2, but .Net Core 3.0+ adds a lot of additional functionality that we can use going forward to create cross platform monitoring tools for our applications including:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>dotnet-dump&lt;/code> takes memory snapshot and allow analysis based on most SOS commands;&lt;/li>
+&lt;li>&lt;code>dotnet-trace&lt;/code> collects events emitted by the Core CLR and generate trace file to be analyzed with PerfView;&lt;/li>
+&lt;li>&lt;code>dotnet-counters&lt;/code> collects the metrics corresponding to some performance counters that used to be exposed by the .NET Framework.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;em>Please note that this article is correct at the time of writing based on the &lt;a href="https://source.dot.net">sources&lt;/a> available. I do describe some of the internal workings of the API, which may change overtime.&lt;/em>&lt;/p>
+&lt;h2 id="application-flow">Application Flow&lt;/h2>
+&lt;p>In order to use the new EventCounters API, you first need to create an inherited class that derives from EventSource because every type of counter needs to be registered against an EventSource. Let&amp;rsquo;s start off with the simplist possible EventSource that records metrics dynamically:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[EventSource(Name = &amp;#34;MyApplication&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MyApplicationEventSource&lt;/span> : EventSource
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> MyApplicationEventSource Instance = &lt;span style="color:#66d9ef">new&lt;/span> MyApplicationEventSource();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, EventCounter&amp;gt; _dynamicCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, EventCounter&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> MyApplicationEventSource() {}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> RecordMetric(&lt;span style="color:#66d9ef">string&lt;/span> name, &lt;span style="color:#66d9ef">float&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrWhiteSpace(name)) &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> counter = _dynamicCounters.GetOrAdd(name, key =&amp;gt; &lt;span style="color:#66d9ef">new&lt;/span> EventCounter(key, &lt;span style="color:#66d9ef">this&lt;/span>));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter.WriteMetric(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In order to initialize a new EventCounter instance, we need to give a name and the EventSource that it should be associated with. Whilst this is okay for simple EventCounters, we often need to do more with our applications, such as tracking the start/stopping of certain events, or tracking activities using PerfView. To do this, we can leverage more of the EventSource&amp;rsquo;s infrastructure.&lt;/p>
+&lt;h3 id="using-eventcounters-and-eventsource-events">Using EventCounters And EventSource Events&lt;/h3>
+&lt;p>Let&amp;rsquo;s breakdown the following example, which I&amp;rsquo;ve taken from my &lt;a href="https://github.com/Im5tu/OpenMessage/blob/dev/src/OpenMessage/OpenMessageEventSource.cs">OpenMessage project&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[EventSource(Name = &amp;#34;OpenMessage&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">OpenMessageEventSource&lt;/span> : EventSource
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> OpenMessageEventSource Instance = &lt;span style="color:#66d9ef">new&lt;/span> OpenMessageEventSource();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> _inflightMessages = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> _processedCount = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IncrementingPollingCounter _inflightMessagesCounter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> EventCounter _messageDurationCounter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IncrementingPollingCounter _processedCountCounter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> OpenMessageEventSource() { }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e"> [NonEvent]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> ValueStopwatch? ProcessMessageStart()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!IsEnabled()) &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MessageStart();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> ValueStopwatch.StartNew();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e"> [Event(1, Level = EventLevel.Informational, Message = &amp;#34;Consumed Message&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> MessageStart()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Increment(&lt;span style="color:#66d9ef">ref&lt;/span> _inflightMessages);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Increment(&lt;span style="color:#66d9ef">ref&lt;/span> _processedCount);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e"> [NonEvent]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> ProcessMessageStop(ValueStopwatch stopwatch)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!IsEnabled()) &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MessageStop(stopwatch.IsActive ? stopwatch.GetElapsedTime().TotalMilliseconds : &lt;span style="color:#ae81ff">0.0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e"> [Event(2, Level = EventLevel.Informational, Message = &amp;#34;Message Completed&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> MessageStop(&lt;span style="color:#66d9ef">double&lt;/span> duration)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Decrement(&lt;span style="color:#66d9ef">ref&lt;/span> _inflightMessages);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _messageDurationCounter.WriteMetric(duration);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventCommand(EventCommandEventArgs command)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (command.Command == EventCommand.Enable)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _inflightMessagesCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> IncrementingPollingCounter(&lt;span style="color:#e6db74">&amp;#34;inflight-messages&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>, () =&amp;gt; _inflightMessages)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Inflight Messages&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;Messages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _messageDurationCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> EventCounter(&lt;span style="color:#e6db74">&amp;#34;message-duration&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Average Message Duration&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;ms&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _processedCountCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> IncrementingPollingCounter(&lt;span style="color:#e6db74">&amp;#34;processed-count&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>, () =&amp;gt; _processedCount)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Messages Processed&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayRateTimeScale = TimeSpan.FromSeconds(&lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// ... code omitted for brevity&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The example above is designed to track the number of messages processed by our system, and how long on average they took to process. The event source is also designed to be lazily initialized, so we only track information when the EventSource is enabled. Let&amp;rsquo;s take a look at how we&amp;rsquo;ve accomplished this by looking at &lt;code>OnEventCommand&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventCommand(EventCommandEventArgs command)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (command.Command == EventCommand.Enable)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _inflightMessagesCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> IncrementingPollingCounter(&lt;span style="color:#e6db74">&amp;#34;inflight-messages&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>, () =&amp;gt; _inflightMessages)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Inflight Messages&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;Messages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _messageDurationCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> EventCounter(&lt;span style="color:#e6db74">&amp;#34;message-duration&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Average Message Duration&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;ms&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _processedCountCounter ??= &lt;span style="color:#66d9ef">new&lt;/span> IncrementingPollingCounter(&lt;span style="color:#e6db74">&amp;#34;processed-count&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>, () =&amp;gt; _processedCount)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;Messages Processed&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayRateTimeScale = TimeSpan.FromSeconds(&lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This is where we register the event counters that we are interested in tracking. EventSource&amp;rsquo;s can receive commands from external sources, so that they can enable the EventCounter API etc. We can receive this message from applications multiple times, so it&amp;rsquo;s important to to make sure that we defensively programme. In the sample above, I use the new null-assignment expression to ensure that only when the field is null, do we perform the expression on the right hand side - which in our case is creating the counters.&lt;/p>
+&lt;p>There are four available types of counters available for us to use, which I will cover later on:&lt;/p>
+&lt;ul>
+&lt;li>EventCounter&lt;/li>
+&lt;li>IncrementingEventCounter&lt;/li>
+&lt;li>PollingCounter&lt;/li>
+&lt;li>IncrementingPollingCounter&lt;/li>
+&lt;/ul>
+&lt;p>Next, we need to look how we can actually record the metrics. In order to do this, I&amp;rsquo;ve combined it with using EventSource Event&amp;rsquo;s so that I can also get the information that I want inside of other tools like PerfView should I want to:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[NonEvent]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> ValueStopwatch? ProcessMessageStart()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!IsEnabled()) &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MessageStart();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> ValueStopwatch.StartNew();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Event(1, Level = EventLevel.Informational, Message = &amp;#34;Consumed Message&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> MessageStart()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Increment(&lt;span style="color:#66d9ef">ref&lt;/span> _inflightMessages);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Increment(&lt;span style="color:#66d9ef">ref&lt;/span> _processedCount);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[NonEvent]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> ProcessMessageStop(ValueStopwatch stopwatch)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!IsEnabled()) &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MessageStop(stopwatch.IsActive ? stopwatch.GetElapsedTime().TotalMilliseconds : &lt;span style="color:#ae81ff">0.0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Event(2, Level = EventLevel.Informational, Message = &amp;#34;Message Completed&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> MessageStop(&lt;span style="color:#66d9ef">double&lt;/span> duration)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Interlocked.Decrement(&lt;span style="color:#66d9ef">ref&lt;/span> _inflightMessages);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _messageDurationCounter.WriteMetric(duration);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>We have two operations that we are really interested in Start &amp;amp; Stop. In the example above, each of the operations is split out into a &lt;code>[NonEvent]&lt;/code> and a corresponding &lt;code>[Event]&lt;/code>. The &lt;code>[Event]&lt;/code> is what the EventSource system uses to write the events to the underlying stream so that it can be picked up by tools such as PerfView. The entry point is always the &lt;code>[NonEvent]&lt;/code> so that we can check to see if anyone is listening to the EventSource before we do anything, this helps ensure that it does not emit the Event unnecessarily. This is the same pattern that is used throughout the .Net Code base from what I can tell.&lt;/p>
+&lt;p>For the &lt;code>[Event]&lt;/code>&amp;rsquo;s, you will notice that the Start/Stop is EventId 1/2 respectively and the also end with Start/Stop. This allows some magic to happen such as automatically figuring out the duration inside of PerfView. For more information on some of the magic that occurs, I strongly recommend reading &lt;a href="https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/">Vance Morrison&amp;rsquo;s Excellent Blog Post&lt;/a> instead of me duplicating the knowledge here.&lt;/p>
+&lt;p>Once you have your EventSource configured, and you know which metrics you wish to track, then all that&amp;rsquo;s left is to start recording your metrics (eg: &lt;code>OpenMessageEventSource.ProcessMessageStart()&lt;/code>) and the runtime will take care of the rest.&lt;/p>
+&lt;h3 id="other-eventsource-examples">Other EventSource Examples&lt;/h3>
+&lt;p>For some inspiration of how to configure your EventSource&amp;rsquo;s, here are a few examples from Microsoft:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/aspnet/AspNetCore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs">HostingEventSource&lt;/a>: Used to track the current number of requests including: failed/total/requests per second.&lt;/li>
+&lt;li>&lt;a href="https://github.com/aspnet/AspNetCore/blob/master/src/Servers/Kestrel/Core/src/Internal/Infrastructure/KestrelEventSource.cs">KestrelEventSource&lt;/a>: Used to track details of connections to the Kestrel WebServer - including when connections and requests Start/Stop.&lt;/li>
+&lt;li>&lt;a href="https://github.com/aspnet/AspNetCore/blob/master/src/Middleware/ConcurrencyLimiter/src/ConcurrencyLimiterEventSource.cs">ConcurrencyLimiterEventSource&lt;/a>: Used to track the number of queued requests and the duration in the queue.&lt;/li>
+&lt;/ul>
+&lt;h2 id="types-of-diagnosticcounters">Types of DiagnosticCounters&lt;/h2>
+&lt;p>The &lt;code>DiagnosticCounter&lt;/code> class is the abstract base class that all of the event counters types inherit from. Currently, there are four implementations registered in the &lt;a href="https://source.dot.net/#Microsoft.Diagnostics.Tracing.EventSource/DiagnosticCounter.cs,28677f9e15895cc9,references">source&lt;/a>: &lt;code>EventCounter&lt;/code>, &lt;code>IncrementingEventCounter&lt;/code>, &lt;code>PollingCounter&lt;/code> and &lt;code>IncrementingPollingCounter&lt;/code>. Although abstract, we can&amp;rsquo;t really inherit from &lt;code>DiagnosticCounter&lt;/code> as the internal components that we need, which are described below, are protected from external use. The four implementations that I mentioned, appear to cover pretty much every use case that I can think of anyway.&lt;/p>
+&lt;h3 id="eventcounter">EventCounter&lt;/h3>
+&lt;p>This type of event counter is typically used for tracking latency of requests to external parties due to the aggregated stats that this type provides. An EventCounter instance tracks the following about the metrics that it&amp;rsquo;s recorded:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Type&lt;/th>
+&lt;th>Notes&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Name&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayName&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mean&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>The average of all values recorded&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>StandardDeviation&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Count&lt;/td>
+&lt;td>int&lt;/td>
+&lt;td>How many metric entries were recorded in this iteration&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Min&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Max&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>IntervalSec&lt;/td>
+&lt;td>float&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>CounterType&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Always &amp;ldquo;Mean&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Metadata&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Any associated metadata for this specific counter&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayUnits&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Series&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Format is: $&amp;ldquo;IntervalSec={IntervalSec}&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>In order to write data, you need to call &lt;code>&amp;lt;counter&amp;gt;.WriteMetric(value)&lt;/code>.&lt;/p>
+&lt;h3 id="incrementingeventcounter">IncrementingEventCounter&lt;/h3>
+&lt;p>An IncrementingEventCounter is typically used to track ever increasing numbers such as the total number of requests. Unlike it&amp;rsquo;s namesake, EventCounter, this class does not provide any statistics about the data. In other words, it is a pure counter, so only the following information is tracked:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Type&lt;/th>
+&lt;th>Notes&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Name&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayName&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayRateTimeScale&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>The unit of measure that the metric should be shown in, eg: per-second&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Increment&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>The value of the this is: currentValue - previousValue&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>IntervalSec&lt;/td>
+&lt;td>float&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Metadata&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Series&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Format is: $&amp;ldquo;IntervalSec={IntervalSec}&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>CounterType&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Always &amp;ldquo;Sum&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayUnits&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>In order to write data, you need to call &lt;code>&amp;lt;counter&amp;gt;.Increment(value)&lt;/code>. The &lt;code>Increment&lt;/code> that you receive is always &lt;code>currentValue - previousValue&lt;/code>.&lt;/p>
+&lt;h3 id="pollingcounter">PollingCounter&lt;/h3>
+&lt;p>A PollingCounter is very much like a standard EventCounter, but instead of the metric being written to it, a function is invoked which retrieves the value from your source of choice. An PollingCounter instance tracks the following about the metrics that it&amp;rsquo;s recorded:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Type&lt;/th>
+&lt;th>Notes&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Name&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayName&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mean&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>The average of all values recorded&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>StandardDeviation&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Count&lt;/td>
+&lt;td>int&lt;/td>
+&lt;td>How many metric entries were recorded in this iteration&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Min&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Max&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>IntervalSec&lt;/td>
+&lt;td>float&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>CounterType&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Always &amp;ldquo;Mean&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Metadata&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Any associated metadata for this specific counter&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayUnits&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Series&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Format is: $&amp;ldquo;IntervalSec={IntervalSec}&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="incrementingpollingcounter">IncrementingPollingCounter&lt;/h3>
+&lt;p>A IncrementingPollingCounter is very much like a standard IncrementingEventCounter, but instead of the metric being written to it, a function is invoked which retrieves the value from your source of choice. An IncrementingPollingCounter instance tracks the following about the metrics that it&amp;rsquo;s recorded:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Type&lt;/th>
+&lt;th>Notes&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Name&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayName&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayRateTimeScale&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>The unit of measure that the metric should be shown in, eg: per-second&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Increment&lt;/td>
+&lt;td>double&lt;/td>
+&lt;td>The value of the this is: currentValue - previousValue&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>IntervalSec&lt;/td>
+&lt;td>float&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Metadata&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Series&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Format is: $&amp;ldquo;IntervalSec={IntervalSec}&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>CounterType&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>Always &amp;ldquo;Sum&amp;rdquo;&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>DisplayUnits&lt;/td>
+&lt;td>string&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="under-the-hood">Under the hood&lt;/h2>
+&lt;p>Now that we&amp;rsquo;ve taken a look at how we construct the EvenSource so that we can create our application level metrics, we should also take a look at what happens under the hood so we can begin to complete the circle. Once you start creating any of the listed DiagnosticCounters in your application - the counter calls a method which ensures that the counter gets added to a &lt;code>CounterGroup&lt;/code> associated with the specified EventSource. When a DiagnosticCounter is disposed, then it is removed from the CounterGroup and no longer tracked.&lt;/p>
+&lt;p>The &lt;code>CounterGroup&lt;/code> is responsible for maintaining a thread that polls the DiagnosticCounters on the specified interval and updates their values. The thread isn&amp;rsquo;t created until such time as an application calls &lt;code>EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, new Dictionary&amp;lt;string, string&amp;gt;{{&amp;quot;EventCounterIntervalSec&amp;quot;, &amp;quot;1&amp;quot;}});&lt;/code> on an EventSource. Lastly, when the value of each DiagnosticCounter is updated, an event is raised against the EventSource that was passed to the counter which means that we can listen to this in the same way that we listen to other events on EventSource&amp;rsquo;s - eg: PerfView/EventListener.&lt;/p>
+&lt;p>The whole EventSource system is very lightweight and designed for scalability in systems that generate millions of events - so we should not be too concerned about the performance of this. Naturally, the more that you listen to, the more impact this will have. I think it&amp;rsquo;s safe to say, the code that we write in the listeners will likely be the slowest part of this system.&lt;/p>
+&lt;h2 id="listening-for-event-counters">Listening for event counters&lt;/h2>
+&lt;p>Lastly, in order to complete our circle, we need to be able to listen to the counters that we&amp;rsquo;ve created in our applications. There are two common approaches that we can use: the CLI tool &lt;code>dotnet-counters&lt;/code> or from within our applications using an &lt;code>EventListener&lt;/code>.&lt;/p>
+&lt;h3 id="consuming-eventcounters-using-dotnet-counters">Consuming EventCounters using dotnet-counters&lt;/h3>
+&lt;p>As part of the diagnostic improvements in .Net Core 3, the .Net team introduced a new diagnostics tool called &lt;code>dotnet-counters&lt;/code>. This is a stand-alone tool that can be installed using the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet tool install dotnet-counters --global
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or updated to the latest version if you already have it installed:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet tool update dotnet-counters --global
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>After the tool has been installed, you can see the processes that are eligible for attaching to, using:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet-counters ps
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> 10416 dotnet C:\Program Files\dotnet\dotnet.exe
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> 20660 dotnet C:\Program Files\dotnet\dotnet.exe
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> 21172 dotnet C:\Program Files\dotnet\dotnet.exe
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once you know the process that you want to attach to, you can start monitoring with the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet-counters monitor -p 21172
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you are interested in specific EventSources, then you can supply a space separated list of EventSources like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet-counters monitor -p 21172 System.Runtime MyEventSource
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default, when you ask to monitor an EventSource, it will capture and display all the counters for you. If no EventSources are specified then a default list is used, including: &lt;code>System.Runtime&lt;/code>. If you only wish to track a few counters from each EventSource, then you specify them in square brackets directly after the EventSource name:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet-counters monitor -p 21172 System.Runtime[cpu-usage] MyEventSource[test]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>All of the monitor commands will output something similar to the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>Press p to pause, r to resume, q to quit.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Status: Running
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[System.Runtime]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CPU Usage (%) 0
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[MyEventSource]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> test 335
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Lastly, should you wish to control the rate that the counters are refreshed, supply the &lt;code>--refresh-interval&lt;/code> parameter:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-cmd" data-lang="cmd">&lt;span style="display:flex;">&lt;span>dotnet-counters monitor -p 21172 --refresh-interval 5 System.Runtime[cpu-usage] MyEventSource[test]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="consuming-eventcounters-within-our-applications">Consuming EventCounters within our applications&lt;/h3>
+&lt;p>In order to enable tracing from within a .Net application you need three core parts:&lt;/p>
+&lt;ol>
+&lt;li>Class inheriting from EventListener&lt;/li>
+&lt;li>Detecting of EventSource&amp;rsquo;s&lt;/li>
+&lt;li>Processing of Events&lt;/li>
+&lt;/ol>
+&lt;h4 id="creating-our-eventlistener">Creating our EventListener&lt;/h4>
+&lt;p>For our new EventListener, I will create a simple background service as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MetricsCollectionService&lt;/span> : EventListener, IHostedService
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StartAsync(CancellationToken cancellationToken)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StopAsync(CancellationToken cancellationToken) =&amp;gt; Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This will live for the lifetime of the application and host the task that will detect lazily initiated EventSources, such as the OpenMessage one I showed earlier in this article.&lt;/p>
+&lt;h4 id="detecting-eventsources">Detecting EventSources&lt;/h4>
+&lt;p>In order to detect the lazily initiated EventSources, we need to periodically call the method &lt;code>EventSource.GetSources()&lt;/code> which lists all of the currently available sources. we can do this from a simple task that lives against the service:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MetricsCollectionService&lt;/span> : EventListener, IHostedService
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> List&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>&amp;gt; RegisteredEventSources = &lt;span style="color:#66d9ef">new&lt;/span> List&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> Task _newDataSourceTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StartAsync(CancellationToken cancellationToken)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _newDataSourceTask = Task.Run(&lt;span style="color:#66d9ef">async&lt;/span> () =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">while&lt;/span> (&lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> GetNewSources();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> Task.Delay(&lt;span style="color:#ae81ff">1000&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StopAsync(CancellationToken cancellationToken) =&amp;gt; Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventSourceCreated(EventSource eventSource)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!RegisteredEventSources.Contains(eventSource.Name))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RegisteredEventSources.Add(eventSource.Name);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, &lt;span style="color:#66d9ef">new&lt;/span> Dictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {&lt;span style="color:#e6db74">&amp;#34;EventCounterIntervalSec&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;1&amp;#34;&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> GetNewSources()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> eventSource &lt;span style="color:#66d9ef">in&lt;/span> EventSource.GetSources())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> OnEventSourceCreated(eventSource);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>We&amp;rsquo;ve got a list of the EventSources that we have already asked to be enabled so that we don&amp;rsquo;t continually ask them to enable themselves. This helps guard against any slightly mis-constructed EventSources, though not strictly necessary.&lt;/p>
+&lt;h4 id="processing-events">Processing Events&lt;/h4>
+&lt;p>The last bit for us to do is to override the &lt;code>OnEventWritten&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventWritten(EventWrittenEventArgs eventData)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (eventData.EventName != &lt;span style="color:#e6db74">&amp;#34;EventCounters&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || eventData.Payload.Count &amp;lt;= &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !(eventData.Payload[&lt;span style="color:#ae81ff">0&lt;/span>] &lt;span style="color:#66d9ef">is&lt;/span> IDictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; data)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;CounterType&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> counterType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Name&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> name))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> metricType = counterType.ToString();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">float&lt;/span> metricValue = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#e6db74">&amp;#34;Sum&amp;#34;&lt;/span>.Equals(metricType) &amp;amp;&amp;amp; data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Increment&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> increment))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> metricValue = Convert.ToSingle(increment);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#e6db74">&amp;#34;Mean&amp;#34;&lt;/span>.Equals(metricType) &amp;amp;&amp;amp; data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Mean&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> mean))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> metricValue = Convert.ToSingle(mean);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// do something with your metric here...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This method gets called for each EventSource that you have asked to receive the data from. It will be up to you to decide your own filtering policy. For each &lt;code>EventWrittenEventArgs&lt;/code> that you receive, you need to double check that you have received an EventCounter before proceeding. Next, you need to check the payload that you received is indeed a &lt;code>IDictionary&amp;lt;string, object&amp;gt;&lt;/code>, so that you can process the contents in a quick and efficient manner. Although in the implementations, there is a strongly typed class for the payload for each of the built in counters, it is internal so we are unable to consume it here. The last piece of the puzzle is for you to process the metric however you wish, ie: sending to DataDog.&lt;/p>
+&lt;p>Putting all of the above code together, we get something like the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MetricsCollectionService&lt;/span> : EventListener, IHostedService
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> List&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>&amp;gt; RegisteredEventSources = &lt;span style="color:#66d9ef">new&lt;/span> List&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> Task _newDataSourceTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StartAsync(CancellationToken cancellationToken)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _newDataSourceTask = Task.Run(&lt;span style="color:#66d9ef">async&lt;/span> () =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">while&lt;/span> (&lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> GetNewSources();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">await&lt;/span> Task.Delay(&lt;span style="color:#ae81ff">1000&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StopAsync(CancellationToken cancellationToken) =&amp;gt; Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventSourceCreated(EventSource eventSource)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!RegisteredEventSources.Contains(eventSource.Name))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RegisteredEventSources.Add(eventSource.Name);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All, &lt;span style="color:#66d9ef">new&lt;/span> Dictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {&lt;span style="color:#e6db74">&amp;#34;EventCounterIntervalSec&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;1&amp;#34;&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnEventWritten(EventWrittenEventArgs eventData)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (eventData.EventName != &lt;span style="color:#e6db74">&amp;#34;EventCounters&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || eventData.Payload.Count &amp;lt;= &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !(eventData.Payload[&lt;span style="color:#ae81ff">0&lt;/span>] &lt;span style="color:#66d9ef">is&lt;/span> IDictionary&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; data)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;CounterType&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> counterType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> || !data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Name&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> name))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> metricType = counterType.ToString();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">float&lt;/span> metricValue = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#e6db74">&amp;#34;Sum&amp;#34;&lt;/span>.Equals(metricType) &amp;amp;&amp;amp; data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Increment&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> increment))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> metricValue = Convert.ToSingle(increment);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#e6db74">&amp;#34;Mean&amp;#34;&lt;/span>.Equals(metricType) &amp;amp;&amp;amp; data.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;Mean&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> mean))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> metricValue = Convert.ToSingle(mean);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// do something with your metric here...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> GetNewSources()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> eventSource &lt;span style="color:#66d9ef">in&lt;/span> EventSource.GetSources())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> OnEventSourceCreated(eventSource);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Hopefully at this point, you have enough information on how to use the built in counters and creating your own metrics. Let me know on &lt;a href="https://twitter.com/im5tu">Twitter&lt;/a> if you have any thoughts or comments on the contents of this post.&lt;/p>
+&lt;p>Thanks for reading, happy counting! :)&lt;/p></description></item></channel></rss>

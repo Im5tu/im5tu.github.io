@@ -1,1 +1,708 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2020/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2020/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Diagnostics in .Net Core 3: An alternative approach to using dotnet-counters with Docker</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/</link><pubDate>Thu, 25 Jun 2020 22:56:00 +0100</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/</guid><description>&lt;p>In a &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/">previous article&lt;/a>, we took a look at a way to use &lt;code>dotnet-counters&lt;/code> with an external image. This article takes a look at how we can embed the tooling that we require into the image so that we extract the counter/memory information as required. This approach does not require elevated permissions as before.&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Listening to inbound HTTP requests</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/</link><pubDate>Fri, 19 Jun 2020 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/">previous article&lt;/a> we took a look at how to monitor outbound HTTP requests using a &lt;code>DiagnosticListener&lt;/code>. In this article, we will re-use some of the same components to monitor inbound HTTP requests. We could use middleware to do as most approaches do, but this approach is highly dependent on the middleware that you have and the duration of this, so we will re-use some of the code from last time.&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Listening to outbound HTTP requests</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/</link><pubDate>Thu, 18 Jun 2020 01:34:00 +0000</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/</guid><description>&lt;p>Throughout the course of my Diagnostics in .Net Core series, we&amp;rsquo;ve taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2020/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2020/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Diagnostics in .Net Core 3: An alternative approach to using dotnet-counters with Docker</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/</link><pubDate>Thu, 25 Jun 2020 22:56:00 +0100</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-an-alternative-approach-to-using-dotnet-counters-with-docker/</guid><description>&lt;p>In a &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-using-dotnet-counters-with-docker/">previous article&lt;/a>, we took a look at a way to use &lt;code>dotnet-counters&lt;/code> with an external image. This article takes a look at how we can embed the tooling that we require into the image so that we extract the counter/memory information as required. This approach does not require elevated permissions as before.&lt;/p>
+&lt;p>Let&amp;rsquo;s assume that we are starting with the following dockerfile:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Publish the application using the SDK&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet new webapp -n BlogApp&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet publish /app/BlogApp/BlogApp.csproj -c Release -o /out /p:GenerateDocumentationFile&lt;span style="color:#f92672">=&lt;/span>false&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># Build the smaller runtime image&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">COPY&lt;/span> --from&lt;span style="color:#f92672">=&lt;/span>build /out ./&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">EXPOSE&lt;/span>&lt;span style="color:#e6db74"> 5000&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENTRYPOINT&lt;/span> [&lt;span style="color:#e6db74">&amp;#34;dotnet&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;BlogApp.dll&amp;#34;&lt;/span>]&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here we use a docker multi-stage build to publish our application (which is also created inline for the purposes of this article). Once the code has been published, we can then make the a runtime image which has a lot less dependencies, thus a smaller image size, to host the published version of the application.&lt;/p>
+&lt;p>&lt;strong>Note:&lt;/strong> &lt;em>If you don&amp;rsquo;t use the same OS, like Alpine, on both steps, then you should specify the &lt;code>-r&lt;/code> flag with the runtime identifier for the runtime image.&lt;/em>&lt;/p>
+&lt;h2 id="installing-the-net-tools">Installing the .Net tools&lt;/h2>
+&lt;p>In order to embed the tooling inside of the runtime image, we first need to adapt our build image:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Publish the application using the SDK&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet new webapp -n BlogApp&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet publish /app/BlogApp/BlogApp.csproj -c Release -o /out /p:GenerateDocumentationFile&lt;span style="color:#f92672">=&lt;/span>false&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># NEW CODE&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet tool install dotnet-dump --tool-path /tools&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet tool install dotnet-counters --tool-path /tools&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">RUN&lt;/span> dotnet tool install dotnet-trace --tool-path /tools&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># END OF NEW CODE&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here we leverage the dotnet tools ability to restore tooling to a specific directory, in this case &lt;code>/tools&lt;/code>. Once the tools have been installed, we can copy them into the runtime image:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Build the smaller runtime image&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">WORKDIR&lt;/span>&lt;span style="color:#e6db74"> /app&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">COPY&lt;/span> --from&lt;span style="color:#f92672">=&lt;/span>build /out ./&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">EXPOSE&lt;/span>&lt;span style="color:#e6db74"> 5000&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># NEW CODE&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">COPY&lt;/span> --from&lt;span style="color:#f92672">=&lt;/span>build /tools /tools&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENV&lt;/span> PATH&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;/tools:&lt;/span>&lt;span style="color:#e6db74">${&lt;/span>PATH&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># END OF NEW CODE&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">ENTRYPOINT&lt;/span> [&lt;span style="color:#e6db74">&amp;#34;dotnet&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;BlogApp.dll&amp;#34;&lt;/span>]&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="accessing-the-tools-at-runtime">Accessing the tools at runtime&lt;/h2>
+&lt;p>In order to access these tools at runtime, we need to be able to access the container at runtime. An example of this is being able to SSH into the running EC2 instance on AWS. Assuming that we have access, we can run the following command to get the running containers:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker ps
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Which results in output similar to the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>fac2377f3e87 myContainerImage &lt;span style="color:#e6db74">&amp;#34;./usr/src/app/init.…&amp;#34;&lt;/span> &lt;span style="color:#ae81ff">30&lt;/span> hours ago Up &lt;span style="color:#ae81ff">55&lt;/span> seconds &lt;span style="color:#f92672">(&lt;/span>healthy&lt;span style="color:#f92672">)&lt;/span> 0.0.0.0:80-&amp;gt;80/tcp myContainerImage
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>From here, we can use the &lt;a href="https://docs.docker.com/engine/reference/commandline/exec/">docker exec&lt;/a> command to launch a shell in the new container, using the container ID from above:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker exec -it -w /tools &amp;lt;ID&amp;gt; /bin/sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>docker exec -it -w /tools fac2377f3e87 /bin/sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>-it&lt;/code> tells docker that we want the shell to be interactive and to keep the shell open for us even when there is no immediate input, ie: we can type into it and get a response. &lt;code>-w&lt;/code> means start in the working directory &lt;code>/tools&lt;/code>. Next, replace &lt;code>&amp;lt;ID&amp;gt;&lt;/code> with the container ID from the selection above. Finally, we pass in the command that we want to execute in the shell - which we open a shell so that we can run different commands.&lt;/p>
+&lt;p>Now you should be able to run &lt;code>dotnet-counters&lt;/code>, &lt;code>dotnet-dump&lt;/code> &amp;amp; &lt;code>dotnet-trace&lt;/code> as normal. If you need to copy any files from the container then you need to run the following from the host machine:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>docker cp &amp;lt;ID&amp;gt;:&amp;lt;path-to-file-in-container&amp;gt; &amp;lt;copy-to-path-on-host&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#Example:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>docker cp fac2377f3e87:/tools/output/trace.nettrace ./output/trace.nettrace
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;a href="https://docs.docker.com/engine/reference/commandline/cp/">docker cp&lt;/a> command allows us to copy a file from/to the running container (specified by &lt;code>&amp;lt;ID&amp;gt;&lt;/code>). The only other thing that you need is the path of the file that you wish to copy from the container, and the destination path on the host machine.&lt;/p>
+&lt;p>Now you&amp;rsquo;ll have the diagnostic tools embedded within your runtime images, at the correct version. Naturally, the more tools that you install, the larger the final size of the image will be. It does also take a little bit of prep work, but this can pay off massively for unexpected memory/cpu issues. Happy diagnosing.&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Listening to inbound HTTP requests</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/</link><pubDate>Fri, 19 Jun 2020 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-inbound-http-requests/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/">previous article&lt;/a> we took a look at how to monitor outbound HTTP requests using a &lt;code>DiagnosticListener&lt;/code>. In this article, we will re-use some of the same components to monitor inbound HTTP requests. We could use middleware to do as most approaches do, but this approach is highly dependent on the middleware that you have and the duration of this, so we will re-use some of the code from last time.&lt;/p>
+&lt;p>A lot of this article relies on the infrastructure that we built out previously, so if something is missing here, it will likely be in that article. We will need to implement the following components:&lt;/p>
+&lt;ol>
+&lt;li>A new DiagnosticListener&lt;/li>
+&lt;li>A observer that looks at incoming requests&lt;/li>
+&lt;li>A observer that looks at the response&lt;/li>
+&lt;li>A metric builder that builds our diagnostic counters&lt;/li>
+&lt;/ol>
+&lt;h2 id="implementing-the-diagnosticlistener">Implementing the DiagnosticListener&lt;/h2>
+&lt;p>In order to hook into the infrastructure that we built in the previous article, we need a new implementation of &lt;code>DiagnosticListenerBase&lt;/code> that listens on the &lt;code>Microsoft.AspNetCore DiagnosticSource&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">InboundHttpRequestDiagnosticListener&lt;/span> : DiagnosticListenerBase
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> List&amp;lt;IInboundHttpObserver&amp;gt; _observers;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> &lt;span style="color:#66d9ef">string&lt;/span> _name = &lt;span style="color:#e6db74">&amp;#34;Microsoft.AspNetCore&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> InboundHttpRequestDiagnosticListener(IEnumerable&amp;lt;IInboundHttpObserver&amp;gt; observers)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _observers = observers.ToList();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> TryObserve(DiagnosticListener diagnosticListener)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (diagnosticListener &lt;span style="color:#66d9ef">is&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span> || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> observer &lt;span style="color:#66d9ef">in&lt;/span> _observers)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Subscribe(diagnosticListener, observer);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The intention here is that we only subscribe specific observers when we encounter a &lt;code>DiagnosticListener&lt;/code> that’s named &lt;code>Microsoft.AspNetCore&lt;/code>. This listener has two specific events that we need to listen for:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Microsoft.AspNetCore.Hosting.BeginRequest&lt;/code> - Contains the following properties: httpContext, timestamp&lt;/li>
+&lt;li>&lt;code>Microsoft.AspNetCore.Hosting.EndRequest&lt;/code> - Contains the following properties: httpContext, timestamp&lt;/li>
+&lt;/ul>
+&lt;p>We will bind all of our observers into our IoC container again so that we can take advantage of injecting dependencies easily should we want/need to. The code is near identical to the outbound version otherwise.&lt;/p>
+&lt;h2 id="implementing-the-observers">Implementing the observers&lt;/h2>
+&lt;p>The approach we are going to take is largely the same as the outbound HTTP requests. The &lt;code>DiagnosticListener&lt;/code> that we subscribe to is different, as are the payloads, but we get a near identical set of information that we can use to generate out metrics. As per the previous article, we use a marker interface for all of our inbound observers, which is declared as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IInboundHttpObserver&lt;/span> : IObserver&amp;lt;KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt;&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="implementing-the-request-observer">Implementing the request observer&lt;/h3>
+&lt;p>The purpose of the &lt;code>InboundHttpRequestObserver&lt;/code> is to extract the timestamp property that’s contained in the &lt;code>Microsoft.AspNetCore.Hosting.BeginRequest&lt;/code> event, which indicates the ticks that the request started, and attach this as a property in the &lt;code>HttpContext&lt;/code> so that we can access it later on.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">InboundHttpRequestObserver&lt;/span> : SimpleDiagnosticListenerObserver, IInboundHttpObserver
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">value&lt;/span>.Key == &lt;span style="color:#e6db74">&amp;#34;Microsoft.AspNetCore.Hosting.BeginRequest&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> data = GetValueAs&amp;lt;TypedData&amp;gt;(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (data?.httpContext?.Items &lt;span style="color:#66d9ef">is&lt;/span> {})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data.httpContext.Items[&lt;span style="color:#e6db74">&amp;#34;RequestTimestamp&amp;#34;&lt;/span>] = data.timestamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">TypedData&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> HttpContext? httpContext;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> timestamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Like our outbound implementation, I&amp;rsquo;ve generated a typed class so that we can access the data within the events payload as these are internal classes. I’ve nested a class inside of the observer to help with this, containing only the properties that I need.&lt;/p>
+&lt;h3 id="implementing-the-response-observer">Implementing the response observer&lt;/h3>
+&lt;p>The purpose of the &lt;code>InboundHttpResponseObserver&lt;/code> is to extract the timestamp property that’s contained in the &lt;code>Microsoft.AspNetCore.Hosting.EndRequest&lt;/code> event, which indicates the ticks that the request finished, and calculate the duration using the request timestamp that we previously stored in the &lt;code>HttpContext&lt;/code> properties.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">InboundHttpResponseObserver&lt;/span> : SimpleDiagnosticListenerObserver, IInboundHttpObserver
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> IInboundHttpMetricBuilder _metricBuilder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> InboundHttpResponseObserver(IInboundHttpMetricBuilder metricBuilder)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _metricBuilder = metricBuilder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">value&lt;/span>.Key == &lt;span style="color:#e6db74">&amp;#34;Microsoft.AspNetCore.Hosting.EndRequest&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> data = GetValueAs&amp;lt;TypedData&amp;gt;(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">object?&lt;/span> requestTimestamp = &lt;span style="color:#66d9ef">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (data.httpContext?.Items?.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;RequestTimestamp&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> requestTimestamp) == &lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (requestTimestamp &lt;span style="color:#66d9ef">is&lt;/span> {} &amp;amp;&amp;amp; &lt;span style="color:#66d9ef">long&lt;/span>.TryParse(requestTimestamp?.ToString(), &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> startTimestamp))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> response = data.httpContext.Response;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> request = data.httpContext.Request;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// For all HTTP requests we should:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// - Track the success (&amp;lt;400 status code response) or failure of the API call&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// - Capture the latency of the request&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> resultCounter = (&lt;span style="color:#66d9ef">int&lt;/span>)response.StatusCode &amp;lt; &lt;span style="color:#ae81ff">400&lt;/span> ? _metricBuilder.GetSuccessCounter(request, response) : _metricBuilder.GetErrorCounter(request, response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> resultCounter?.Increment();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _metricBuilder.GetLatencyCounter(request, response)?.WriteMetric(GetDuration(startTimestamp, data.timestamp).TotalMilliseconds);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">TypedData&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> HttpContext? httpContext;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> timestamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As mentioned in a previous section, I&amp;rsquo;ve generated a typed class so that we can access the data within the events payload. I’ve nested a class inside of the observer to help with this, containing only the properties that I need. Now that we have all of the data we need to generate some metrics, we can use the injected &lt;code>IInboundHttpMetricBuilder&lt;/code> to create the metrics that we want to track dynamically.&lt;/p>
+&lt;h2 id="creating-metrics-from-the-context-of-the-request">Creating metrics from the context of the request&lt;/h2>
+&lt;p>In our services, there are a few bits of information that I want to capture about the context of the request:&lt;/p>
+&lt;ol>
+&lt;li>Whether the request was successful or not (based on the HTTP Status code)&lt;/li>
+&lt;li>The duration of the request, in milliseconds&lt;/li>
+&lt;/ol>
+&lt;p>With this information, we want to add metadata to the DiagnosticCounters that we generate so that we can use it as dimensions in our monitoring applications like DataDog/Prometheus. We want to track the following properties:&lt;/p>
+&lt;ul>
+&lt;li>HTTP method: GET/POST/PUT/PATCH/DELETE etc&lt;/li>
+&lt;li>HTTP version: 1.0/1.1/2.0 etc&lt;/li>
+&lt;li>HTTP scheme: HTTP/HTTPS&lt;/li>
+&lt;li>HTTP request type: outbound (previous article)/inbound (this article)&lt;/li>
+&lt;li>HTTP status code: 200/201/202/204/400 etc&lt;/li>
+&lt;li>Request Path: /search&lt;/li>
+&lt;li>Host: &amp;lt;www.google.com&amp;gt;&lt;/li>
+&lt;/ul>
+&lt;p>With this information, we should have more than enough to filter out specific flows easily, whilst being able to aggregate the results where needed. Each one of the properties is added to each one of the diagnostic counters that we generate:&lt;/p>
+&lt;ul>
+&lt;li>Success Counter&lt;/li>
+&lt;li>Error Counter&lt;/li>
+&lt;li>Latency Counter&lt;/li>
+&lt;/ul>
+&lt;p>To allow us to override the implementation later on, we can use the following interface:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IInboundHttpMetricBuilder&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> IncrementingEventCounter? GetSuccessCounter(HttpRequest request, HttpResponse response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> IncrementingEventCounter? GetErrorCounter(HttpRequest request, HttpResponse response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> EventCounter? GetLatencyCounter(HttpRequest request, HttpResponse response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note:&lt;/strong> &lt;em>For a summary of the different types of event counters, please see &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">this article&lt;/a>.&lt;/em>&lt;/p>
+&lt;p>In order to generate the same tags that we want, we can start of with the exact same code from the previous article. We can re-use most of the same code from the previous article, renaming anything that says &lt;code>outbound&lt;/code> to &lt;code>inbound&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DefaultInboundHttpMetricBuilder&lt;/span> : IInboundHttpMetricBuilder
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; _successCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; _errorCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, EventCounter&amp;gt; _latencyCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, EventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> IncrementingEventCounter GetSuccessCounter(HttpRequest request, HttpResponse response) =&amp;gt; GetCoreHttpRequestCounter(_successCounters, request, response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> IncrementingEventCounter GetErrorCounter(HttpRequest request, HttpResponse response) =&amp;gt; GetCoreHttpRequestCounter(_errorCounters, request, response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> EventCounter GetLatencyCounter(HttpRequest request, HttpResponse response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> _latencyCounters.GetOrAdd(GetCoreTags(request, response), key =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> counter = &lt;span style="color:#66d9ef">new&lt;/span> EventCounter(&lt;span style="color:#e6db74">&amp;#34;http-request-latency&amp;#34;&lt;/span>, CheckoutEventSource.Instance)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;HTTP Request Latency&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;ms&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> dimension &lt;span style="color:#66d9ef">in&lt;/span> key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter.AddMetadata(dimension.key, dimension.&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CheckoutEventSource.Instance.AddDiagnosticCounter(counter);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IncrementingEventCounter GetCoreHttpRequestCounter(ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; collection, HttpRequest request, HttpResponse response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> collection.GetOrAdd(GetCoreTags(request, response), key =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Debug.WriteLine(&lt;span style="color:#e6db74">&amp;#34;CREATED NEW COUNTER: &amp;#34;&lt;/span> + &lt;span style="color:#66d9ef">string&lt;/span>.Join(&lt;span style="color:#e6db74">&amp;#34;,&amp;#34;&lt;/span>, key.Select(x =&amp;gt; &lt;span style="color:#e6db74">$&amp;#34;{x.key}:{x.value}&amp;#34;&lt;/span>)));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> counter = &lt;span style="color:#66d9ef">new&lt;/span> IncrementingEventCounter(&lt;span style="color:#e6db74">&amp;#34;http-request&amp;#34;&lt;/span>, CheckoutEventSource.Instance)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;HTTP Request Count&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;requests&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> dimension &lt;span style="color:#66d9ef">in&lt;/span> key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter.AddMetadata(dimension.key, dimension.&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CheckoutEventSource.Instance.AddDiagnosticCounter(counter);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt; GetCoreTags(HttpRequest request, HttpResponse response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> path = request.Path.Value;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrWhiteSpace(path))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (path.Length &amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> initialPartIndex = path.IndexOf(&lt;span style="color:#e6db74">&amp;#39;/&amp;#39;&lt;/span>, &lt;span style="color:#ae81ff">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (initialPartIndex &amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = path.Substring(&lt;span style="color:#ae81ff">0&lt;/span>, initialPartIndex);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> queryIndex = path.IndexOf(&lt;span style="color:#e6db74">&amp;#39;?&amp;#39;&lt;/span>, &lt;span style="color:#ae81ff">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (queryIndex &amp;gt;= &lt;span style="color:#ae81ff">0&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = path.Substring(&lt;span style="color:#ae81ff">0&lt;/span>, queryIndex);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> tags = &lt;span style="color:#66d9ef">new&lt;/span> List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-method&amp;#34;&lt;/span>, request.Method),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-scheme&amp;#34;&lt;/span>, request.Scheme),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-request-type&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;inbound&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-status-code&amp;#34;&lt;/span>, response.StatusCode.ToString()),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;host&amp;#34;&lt;/span>, request.Host.Host), &lt;span style="color:#75715e">// host without the port value&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;request-path&amp;#34;&lt;/span>, path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (request.Protocol.StartsWith(&lt;span style="color:#e6db74">&amp;#34;HTTP/&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tags.Add((&lt;span style="color:#e6db74">&amp;#34;http-version&amp;#34;&lt;/span>, request.Protocol.Substring(&lt;span style="color:#ae81ff">5&lt;/span>)));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> tags;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ListOfTupleEqualityComparer&lt;/span> : EqualityComparer&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">bool&lt;/span> Equals(List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;? left, List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;? right)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (left &lt;span style="color:#66d9ef">is&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span> || right &lt;span style="color:#66d9ef">is&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> ReferenceEquals(left, right);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (left.Count != right.Count)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (left.Count == &lt;span style="color:#ae81ff">0&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span>; &lt;span style="color:#75715e">// Both are 0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">using&lt;/span> var iterator2 = right.GetEnumerator();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> element &lt;span style="color:#66d9ef">in&lt;/span> left)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// second is shorter than first&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!iterator2.MoveNext())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!(element.Item1.Equals(iterator2.Current.Item1) &amp;amp;&amp;amp; element.Item2.Equals(iterator2.Current.Item2)))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// If we can get to the next element, first was shorter than second.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Otherwise, the sequences are equal.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> !iterator2.MoveNext();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> GetHashCode(List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt; obj)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> code = &lt;span style="color:#ae81ff">17&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> element &lt;span style="color:#66d9ef">in&lt;/span> obj)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> code = HashCode.Combine(code, element.Item1.GetHashCode(), element.Item2.GetHashCode());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> code;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Although I&amp;rsquo;ve copied the full code here for completeness, the only portion that&amp;rsquo;s really changed is the &lt;code>GetCoreTags&lt;/code> method. We needed to change this because the request/response classes that are used on the inbound request flow are different to what we used on the outbound flow. The logic, however, is largely unchanged.&lt;/p>
+&lt;p>Hopefully, once everything has been bound to your IoC container, you now have all the bits that you would need to build this out in your own applications. Happy request tracking!&lt;/p></description></item><item><title>Diagnostics in .Net Core 3: Listening to outbound HTTP requests</title><link>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/</link><pubDate>Thu, 18 Jun 2020 01:34:00 +0000</pubDate><guid>https://im5tu.io/article/2020/06/diagnostics-in-.net-core-3-listening-to-outbound-http-requests/</guid><description>&lt;p>Throughout the course of my Diagnostics in .Net Core series, we&amp;rsquo;ve taken a look at the basics of how to use the Event Counters API. In this article, we will take a look at how we can capture all outbound HTTP requests automatically as they occur.&lt;/p>
+&lt;p>Our implementation is going to use a number of technologies combined to get the information that we require about the web request. Here are the steps that we need to complete:&lt;/p>
+&lt;ol>
+&lt;li>Create a service that hooks onto DiagnosticListeners as they get created&lt;/li>
+&lt;li>Create a observer to listen for the start of an outbound request&lt;/li>
+&lt;li>Create a observer to listen for the end of an outbound request&lt;/li>
+&lt;li>Create metrics from the context of the request/response&lt;/li>
+&lt;/ol>
+&lt;p>The classes that I&amp;rsquo;ve added to this article are designed to give you the most flexiblity around how you extend your applications in future, including the next article. Another aim is to give the classes a single purpose to add with testability. If you do not need this level of extensiblity or testability, it should be relatively easy to merge some of the classes together. As this is already a lengthy article, I&amp;rsquo;ve not included the tests here.&lt;/p>
+&lt;h2 id="creating-the-diagnostics-hosted-service">Creating the diagnostics hosted service&lt;/h2>
+&lt;p>Our &lt;code>DiagnosticsHostedService&lt;/code> will help us manage the lifetime of our observers. I&amp;rsquo;ve included here in the article for completeness, although this is an an optional step so log as you register your new &lt;code>DiagnosticListener&lt;/code> observer via &lt;code>DiagnosticListener.AllListeners&lt;/code> then you should be fine.&lt;/p>
+&lt;p>A DiagnosticListener allows us to listen for events that are published in our application, either by a third party or ourselves, for the purposes of diagnostics. The events are sent from a &lt;code>DiagnosticSource&lt;/code> that sends us a rich payload that&amp;rsquo;s designed for consumption within the current process. They are multi-cast in nature, meaning that multiple listeners can listen to the same event without any issues. For our use case, we will listen to a single &lt;code>DiagnosticSource&lt;/code> with multiple observers, for testability.&lt;/p>
+&lt;p>Read more: &lt;a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md#consuming-data-with-diagnosticlistener">Consuming Data with DiagnosticListeners&lt;/a> / &lt;a href="https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.diagnosticlistener?view=netcore-3.1">Microsoft Docs&lt;/a>&lt;/p>
+&lt;h3 id="the-diagnosticshostedservice">The DiagnosticsHostedService&lt;/h3>
+&lt;p>Now that we have a basic understanding of a &lt;code>DiagnosticListener&lt;/code> we can use this in a simple hosted service that uses a special property called &lt;code>AllListeners&lt;/code>. This property then exposes a &lt;code>Subscribe&lt;/code> method on which we can add our first type of observer:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DiagnosticsHostedService&lt;/span> : IHostedService
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> Observer _observer;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IDisposable? _subscription;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> DiagnosticsHostedService(Observer observer)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _observer = observer ?? &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentNullException(nameof(observer));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StartAsync(CancellationToken cancellationToken)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _subscription ??= DiagnosticListener.AllListeners.Subscribe(_observer);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Task StopAsync(CancellationToken cancellationToken)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _subscription?.Dispose();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> Task.CompletedTask;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The service above helps us with managing the life-cycle of the observer and keeps hold of the subscription to ensure that it doesn&amp;rsquo;t accidentally get cleaned up. It doesn&amp;rsquo;t matter at which point you call &lt;code>DiagnosticListener.AllListeners&lt;/code> because when you subscribe, you will always get all previously registered &lt;code>DiagnosticSource&lt;/code>s and any future sources that will be created.&lt;/p>
+&lt;p>I&amp;rsquo;m a fan of being able to easily extend applications by adding a new entry to our DI containers. This can be extremely helpful when doing assembly scanning. To keep with this pattern, I&amp;rsquo;ve created a simple wrapper that facilitates this, whilst adding some safety guarantees for graceful shutdown scenarios.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Observer&lt;/span> : IObserver&amp;lt;DiagnosticListener&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> List&amp;lt;IDiagnosticListener&amp;gt; _listeners;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">bool&lt;/span> _complete = &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Observer(IEnumerable&amp;lt;IDiagnosticListener&amp;gt; listeners)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _listeners = listeners?.ToList() ?? &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentNullException(nameof(listeners));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnCompleted()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lock&lt;/span> (_listeners)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _complete = &lt;span style="color:#66d9ef">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnError(Exception error)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(DiagnosticListener &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lock&lt;/span> (_listeners)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (_complete)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span>(&lt;span style="color:#66d9ef">var&lt;/span> listener &lt;span style="color:#66d9ef">in&lt;/span> _listeners)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> listener.TryObserve(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once we&amp;rsquo;ve hooked up the above services in DI, all that&amp;rsquo;s left for us to do is implement the &lt;code>IDiagnosticListener&lt;/code> interface and register some observers from within the implementation, binding the implementation of &lt;code>IDiagnosticListener&lt;/code> and any observers into our DI container of choice along the way.&lt;/p>
+&lt;h2 id="creating-the-observers">Creating the Observers&lt;/h2>
+&lt;h3 id="implementing-idiagnosticlistener">Implementing IDiagnosticListener&lt;/h3>
+&lt;p>In this article, we will implement some of this functionality again when we implement the inbound metrics, so i&amp;rsquo;ve moved the common functionality to base classes that can be re-used for other purposes. First of all, we have the &lt;code>DiagnosticListenerBase&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">abstract&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DiagnosticListenerBase&lt;/span> : IDiagnosticListener
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> List&amp;lt;IDisposable&amp;gt; _subscriptions = &lt;span style="color:#66d9ef">new&lt;/span> List&amp;lt;IDisposable&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">bool&lt;/span> _disposed = &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">abstract&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> TryObserve(DiagnosticListener diagnosticListener);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Subscribe(DiagnosticListener diagnosticListener, IObserver&amp;lt;KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt;&amp;gt; observer)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lock&lt;/span> (_subscriptions)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (_disposed)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> InvalidOperationException(&lt;span style="color:#e6db74">&amp;#34;Cannot subscribe when the diagnostic listener has been disposed.&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _subscriptions.Add(diagnosticListener.Subscribe(observer));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Dispose()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lock&lt;/span> (_subscriptions)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span>(&lt;span style="color:#66d9ef">var&lt;/span> subscription &lt;span style="color:#66d9ef">in&lt;/span> _subscriptions)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> subscription.Dispose();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _disposed = &lt;span style="color:#66d9ef">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> OnDispose();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnDispose()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This class is intended to make sure that we manage the subscriptions correctly, just like we did with the &lt;code>DiagnosticsHostedService&lt;/code>. We need to make sure that we have some extensibility so I&amp;rsquo;ve added the following interface so that we can re-use it in the next article:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IDiagnosticListener&lt;/span> : IDisposable
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">void&lt;/span> TryObserve(DiagnosticListener diagnosticListener);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>DiagnosticListenerBase&lt;/code> also abstractly implements the interfaces &lt;code>TryObserve&lt;/code> method, which our &lt;code>OutboundHttpDiagnosticListener&lt;/code> can override and subscribe the observers that we need:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">OutboundHttpRequestDiagnosticListener&lt;/span> : DiagnosticListenerBase
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> List&amp;lt;IOutboundHttpObserver&amp;gt; _observers;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> &lt;span style="color:#66d9ef">string&lt;/span> _name = &lt;span style="color:#e6db74">&amp;#34;HttpHandlerDiagnosticListener&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> OutboundHttpRequestDiagnosticListener(IEnumerable&amp;lt;IOutboundHttpObserver&amp;gt; observers)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _observers = observers.ToList();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> TryObserve(DiagnosticListener diagnosticListener)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (diagnosticListener &lt;span style="color:#66d9ef">is&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span> || !diagnosticListener.Name.Equals(_name, StringComparison.OrdinalIgnoreCase))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> observer &lt;span style="color:#66d9ef">in&lt;/span> _observers)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Subscribe(diagnosticListener, observer);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The intention here is that we only subscribe specific observers when we encounter a DiagnosticListener that&amp;rsquo;s named &lt;code>HttpHandlerDiagnosticListener&lt;/code>. This listener has two specific events that we need to listen for:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>System.Net.Http.Request&lt;/code> - Contains the following properties: Request, LoggingRequestId, TimeStamp&lt;/li>
+&lt;li>&lt;code>System.Net.Http.Response&lt;/code> - Contains the following properties: Response, LoggingRequestId, ResponseTaskStatus, TimeStamp&lt;/li>
+&lt;/ul>
+&lt;p>Each of the observers that we create will have a marker interface attached to them called &lt;code>IOutboundHttpObserver&lt;/code> so that we can plug them into our IoC container. It&amp;rsquo;s simply defined as:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IOutboundHttpObserver&lt;/span> : IObserver&amp;lt;KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt;&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="simplediagnosticlistenerobserver">SimpleDiagnosticListenerObserver&lt;/h3>
+&lt;p>When you deal with &lt;code>DiagnosticListener&lt;/code>s, we are dealing with the Observer pattern in C#, which means that we always need to implement the following methods: &lt;code>OnCompleted&lt;/code>, &lt;code>OnError&lt;/code>, &lt;code>OnNext&lt;/code>. For our use case, we don&amp;rsquo;t need the &lt;code>OnCompleted&lt;/code> or &lt;code>OnError&lt;/code> methods in any of our observers, so we can move this functionality into a base class with some additional helper methods: &lt;code>GetDuration&lt;/code> and &lt;code>GetValueAs&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">abstract&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">SimpleDiagnosticListenerObserver&lt;/span> : IObserver&amp;lt;KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt;&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Gets the conversion factor that&amp;#39;s used to go from ticks to a real world time. Inspiration: https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> &lt;span style="color:#66d9ef">double&lt;/span> TimestampToTicks = TimeSpan.TicksPerSecond / (&lt;span style="color:#66d9ef">double&lt;/span>)Stopwatch.Frequency;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnCompleted()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnError(Exception error)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">abstract&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> TimeSpan GetDuration(&lt;span style="color:#66d9ef">long&lt;/span> startTimestampInTicks, &lt;span style="color:#66d9ef">long&lt;/span> endTimestampInTicks)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> timestampDelta = endTimestampInTicks - startTimestampInTicks;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> ticks = (&lt;span style="color:#66d9ef">long&lt;/span>)(TimestampToTicks * timestampDelta);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> TimeSpan(ticks);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> T GetValueAs&amp;lt;T&amp;gt;(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">where&lt;/span> T : &lt;span style="color:#66d9ef">class&lt;/span> =&amp;gt; Unsafe.As&amp;lt;T&amp;gt;(&lt;span style="color:#66d9ef">value&lt;/span>.Value);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Each event that we receive in the is typed to be a &lt;code>KeyValuePair&amp;lt;string, object&amp;gt;&lt;/code>. The key property will always represent the name of the event, while the value property will be the rich payload that&amp;rsquo;s send by the &lt;code>DiagnosticSource&lt;/code>.&lt;/p>
+&lt;p>The &lt;code>GetDuration&lt;/code> method is inspired by the &lt;a href="https://github.com/aspnet/Extensions/blob/34204b6bc41de865f5310f5f237781a57a83976c/src/Shared/src/ValueStopwatch/ValueStopwatch.cs">ValueStopwatch&lt;/a> code that AspNetCore has internally. This allows us to calculate the wall-clock time duration of two ticks. Incidentally, this is the same calculation method that appears to be used in the logging of inbound HTTP requests from what I can tell so far.&lt;/p>
+&lt;p>The &lt;code>GetValueAs&amp;lt;T&amp;gt;&lt;/code> method use some &lt;a href="https://mattwarren.org/2016/09/14/Subverting-.NET-Type-Safety-with-System.Runtime.CompilerServices.Unsafe/">CLR magic&lt;/a> to forcefully convert the type for us, ie: it does not perform type checking. We need this because the objects that come along with the events that we listen to are internal to the .Net code base, so we have to mimic the same type/properties and then cast to it so that we can access the information. A &amp;ldquo;safer&amp;rdquo; approach would be to use cached reflection calls, but to me, I understand that this might break in the future no matter what I do so I&amp;rsquo;ve opted for a more performant approach.&lt;/p>
+&lt;h3 id="creating-the-outboundhttprequestobserver">Creating the OutboundHttpRequestObserver&lt;/h3>
+&lt;p>The purpose of the &lt;code>OutboundHttpRequestObserver&lt;/code> is to extract the timestamp property that&amp;rsquo;s contained in the &lt;code>System.Net.Http.Request&lt;/code> event, which indicates the ticks that the request started, and attach this as a request property so that we can access it later on.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">OutboundHttpRequestObserver&lt;/span> : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">value&lt;/span>.Key == &lt;span style="color:#e6db74">&amp;#34;System.Net.Http.Request&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> data = GetValueAs&amp;lt;TypedData&amp;gt;(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (data?.Request?.Properties &lt;span style="color:#66d9ef">is&lt;/span> {})
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data.Request.Properties[&lt;span style="color:#e6db74">&amp;#34;RequestTimestamp&amp;#34;&lt;/span>] = data.Timestamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">TypedData&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> HttpRequestMessage? Request;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> Timestamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As mentioned in the previous section, we generated a typed class so that we can access the data within the events payload. I&amp;rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need.&lt;/p>
+&lt;h3 id="creating-the-outboundhttpresponseobserver">Creating the OutboundHttpResponseObserver&lt;/h3>
+&lt;p>The purpose of the &lt;code>OutboundHttpResponseObserver&lt;/code> is to extract the timestamp property that&amp;rsquo;s contained in the &lt;code>System.Net.Http.Response&lt;/code> event, which indicates the ticks that the request finished, and calculate the duration using the request timestamp that we previously stored in the request properties.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">OutboundHttpResponseObserver&lt;/span> : SimpleDiagnosticListenerObserver, IOutboundHttpObserver
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> IOutboundHttpMetricBuilder _metricBuilder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> OutboundHttpResponseObserver(IOutboundHttpMetricBuilder metricBuilder)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _metricBuilder = metricBuilder;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> OnNext(KeyValuePair&amp;lt;&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">object&lt;/span>&amp;gt; &lt;span style="color:#66d9ef">value&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">value&lt;/span>.Key == &lt;span style="color:#e6db74">&amp;#34;System.Net.Http.Response&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> data = GetValueAs&amp;lt;TypedData&amp;gt;(&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">object?&lt;/span> requestTimestamp = &lt;span style="color:#66d9ef">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (data?.Response?.RequestMessage?.Properties?.TryGetValue(&lt;span style="color:#e6db74">&amp;#34;RequestTimestamp&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">out&lt;/span> requestTimestamp) == &lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">long&lt;/span>.TryParse(requestTimestamp?.ToString(), &lt;span style="color:#66d9ef">out&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> startTimestamp) == &lt;span style="color:#66d9ef">true&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// For all HTTP requests we should:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// - Track the success (&amp;lt;400 status code response) or failure of the API call&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// - Capture the latency of the request&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> resultCounter = (&lt;span style="color:#66d9ef">int&lt;/span>)data.Response.StatusCode &amp;lt; &lt;span style="color:#ae81ff">400&lt;/span> ? _metricBuilder.GetSuccessCounter(data.Response.RequestMessage, data.Response) : _metricBuilder.GetErrorCounter(data.Response.RequestMessage, data.Response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> resultCounter?.Increment();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _metricBuilder.GetLatencyCounter(data.Response.RequestMessage, data.Response)?.WriteMetric(GetDuration(startTimestamp, data.TimeStamp).TotalMilliseconds);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">TypedData&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> HttpResponseMessage? Response;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">long&lt;/span> TimeStamp;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As mentioned in a previous section, we generated a typed class so that we can access the data within the events payload. I&amp;rsquo;ve nested a class inside of the observer to help with this, containing only the properties that I need. Now that we have all of the data we need to generate some metrics, we can use the injected &lt;code>IOutboundHttpMetricBuilder&lt;/code> to create the metrics that we want to track dynamically.&lt;/p>
+&lt;h2 id="creating-metrics-from-the-context-of-the-request">Creating metrics from the context of the request&lt;/h2>
+&lt;p>In our services, there are a few bits of information that I want to capture about the context of the request:&lt;/p>
+&lt;ol>
+&lt;li>Whether the request was successful or not (based on the HTTP Status code)&lt;/li>
+&lt;li>The duration of the request, in milliseconds&lt;/li>
+&lt;/ol>
+&lt;p>With this information, we want to add metadata to the DiagnosticCounters that we generate so that we can use it as dimensions in our monitoring applications like DataDog/Prometheus. The dimensions that we are interested in include:&lt;/p>
+&lt;ul>
+&lt;li>HTTP method: GET/POST/PUT/PATCH/DELETE etc&lt;/li>
+&lt;li>HTTP version: 1.0/1.1/2.0 etc&lt;/li>
+&lt;li>HTTP scheme: HTTP/HTTPS&lt;/li>
+&lt;li>HTTP request type: outbound (this article)/inbound (next article)&lt;/li>
+&lt;li>HTTP status code: 200/201/202/204/400 etc&lt;/li>
+&lt;li>Request Path: &lt;code>/search&lt;/code>&lt;/li>
+&lt;li>Host: &lt;code>www.google.com&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>With this information, we should have more than enough to filter out specific flows easily, whilst being able to aggregate the results where needed. Each one of the properties is added to each one of the diagnostic counters that we generate:&lt;/p>
+&lt;ul>
+&lt;li>Success Counter&lt;/li>
+&lt;li>Error Counter&lt;/li>
+&lt;li>Latency Counter&lt;/li>
+&lt;/ul>
+&lt;p>To allow us to override the implementation later on, we can use the following interface:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IOutboundHttpMetricBuilder&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> IncrementingEventCounter? GetSuccessCounter(HttpRequestMessage request, HttpResponseMessage response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> IncrementingEventCounter? GetErrorCounter(HttpRequestMessage request, HttpResponseMessage response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> EventCounter? GetLatencyCounter(HttpRequestMessage request, HttpResponseMessage response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note:&lt;/strong> &lt;em>For a summary of the different types of event counters, please see &lt;a href="https://im5tu.io/article/2020/01/diagnostics-in-.net-core-3-event-counters/">this article&lt;/a>.&lt;/em>&lt;/p>
+&lt;p>For the sake of brevity of this article, I&amp;rsquo;m not going to explain all of the below, rather the general concept. Here, the intention is to have a core set of dimensions (listed above) that are are also used to de-duplicate the number of counters that we create overall. Lastly, we have a custom comparer so that we can compare the values of the &lt;code>List&lt;/code> that we generate for each type of metric, rather than relying on the default equality comparer. This helps us ensure that we have semantic rather than reference equality.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// &amp;lt;remarks&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// We don&amp;#39;t want to add new event counters all the time to the system. So based on the tags, we maintain a list for success/errors/latency.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// Because we are storing based on semantic equivalents, we need a custom comparer to ensure that we have uniqueness, this is guarenteed in two ways:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// - Ensuring that hashcodes are generated using a semantic method, given that inputs are the always given in the same ordered way&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// - When we check for equality, assuming the hashcodes match, we each that the sequences are equal using a performant version of Enumerable.SequenceEquals (as this is going to be called ALOT!)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">/// &amp;lt;/remarks&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">internal&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DefaultOutboundHttpMetricBuilder&lt;/span> : IOutboundHttpMetricBuilder
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; _successCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; _errorCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, EventCounter&amp;gt; _latencyCounters = &lt;span style="color:#66d9ef">new&lt;/span> ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, EventCounter&amp;gt;(&lt;span style="color:#66d9ef">new&lt;/span> ListOfTupleEqualityComparer());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> IncrementingEventCounter GetSuccessCounter(HttpRequestMessage request, HttpResponseMessage response) =&amp;gt; GetCoreHttpRequestCounter(_successCounters, request, response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> IncrementingEventCounter GetErrorCounter(HttpRequestMessage request, HttpResponseMessage response) =&amp;gt; GetCoreHttpRequestCounter(_errorCounters, request, response);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> EventCounter GetLatencyCounter(HttpRequestMessage request, HttpResponseMessage response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> _latencyCounters.GetOrAdd(GetCoreTags(request, response), key =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> counter = &lt;span style="color:#66d9ef">new&lt;/span> EventCounter(&lt;span style="color:#e6db74">&amp;#34;http-request-latency&amp;#34;&lt;/span>, MyDiagnosticsEventSource.Instance)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;HTTP Request Latency&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;ms&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> dimension &lt;span style="color:#66d9ef">in&lt;/span> key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter.AddMetadata(dimension.key, dimension.&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MyDiagnosticsEventSource.Instance.AddDiagnosticCounter(counter);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> IncrementingEventCounter GetCoreHttpRequestCounter(ConcurrentDictionary&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt;, IncrementingEventCounter&amp;gt; collection, HttpRequestMessage request, HttpResponseMessage response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> collection.GetOrAdd(GetCoreTags(request, response), key =&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Debug.WriteLine(&lt;span style="color:#e6db74">&amp;#34;CREATED NEW COUNTER: &amp;#34;&lt;/span> + &lt;span style="color:#66d9ef">string&lt;/span>.Join(&lt;span style="color:#e6db74">&amp;#34;,&amp;#34;&lt;/span>, key.Select(x =&amp;gt; &lt;span style="color:#e6db74">$&amp;#34;{x.key}:{x.value}&amp;#34;&lt;/span>)));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> counter = &lt;span style="color:#66d9ef">new&lt;/span> IncrementingEventCounter(&lt;span style="color:#e6db74">&amp;#34;http-request&amp;#34;&lt;/span>, MyDiagnosticsEventSource.Instance)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayName = &lt;span style="color:#e6db74">&amp;#34;HTTP Request Count&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> DisplayUnits = &lt;span style="color:#e6db74">&amp;#34;requests&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> dimension &lt;span style="color:#66d9ef">in&lt;/span> key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> counter.AddMetadata(dimension.key, dimension.&lt;span style="color:#66d9ef">value&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MyDiagnosticsEventSource.Instance.AddDiagnosticCounter(counter);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> counter;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span> key, &lt;span style="color:#66d9ef">string&lt;/span> &lt;span style="color:#66d9ef">value&lt;/span>)&amp;gt; GetCoreTags(HttpRequestMessage request, HttpResponseMessage response)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> path = request.RequestUri.PathAndQuery;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrWhiteSpace(path))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (path.Length &amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> initialPartIndex = path.IndexOf(&lt;span style="color:#e6db74">&amp;#39;/&amp;#39;&lt;/span>, &lt;span style="color:#ae81ff">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (initialPartIndex &amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = path.Substring(&lt;span style="color:#ae81ff">0&lt;/span>, initialPartIndex);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> queryIndex = path.IndexOf(&lt;span style="color:#e6db74">&amp;#39;?&amp;#39;&lt;/span>, &lt;span style="color:#ae81ff">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (queryIndex &amp;gt;= &lt;span style="color:#ae81ff">0&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> path = path.Substring(&lt;span style="color:#ae81ff">0&lt;/span>, queryIndex);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> tags = &lt;span style="color:#66d9ef">new&lt;/span> List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-method&amp;#34;&lt;/span>, request.Method.ToString()),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-version&amp;#34;&lt;/span>, request.Version.ToString()),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-scheme&amp;#34;&lt;/span>, request.RequestUri.Scheme),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-request-type&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;outbound&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;http-status-code&amp;#34;&lt;/span>, ((&lt;span style="color:#66d9ef">int&lt;/span>)response.StatusCode).ToString()),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e6db74">&amp;#34;request-path&amp;#34;&lt;/span>, path)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (request.RequestUri.IsAbsoluteUri)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tags.Add((&lt;span style="color:#e6db74">&amp;#34;host&amp;#34;&lt;/span>, request.RequestUri.Authority));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> tags;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ListOfTupleEqualityComparer&lt;/span> : EqualityComparer&amp;lt;List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt;&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">bool&lt;/span> Equals(List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt; left, List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt; right)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (left.Count != right.Count)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (left.Count == &lt;span style="color:#ae81ff">0&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span>; &lt;span style="color:#75715e">// Both are 0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">using&lt;/span> var iterator2 = right.GetEnumerator();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> element &lt;span style="color:#66d9ef">in&lt;/span> left)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// second is shorter than first&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!iterator2.MoveNext())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (!(element.Item1.Equals(iterator2.Current.Item1) &amp;amp;&amp;amp; element.Item2.Equals(iterator2.Current.Item2)))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// If we can get to the next element, first was shorter than second.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Otherwise, the sequences are equal.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> !iterator2.MoveNext();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> GetHashCode(List&amp;lt;(&lt;span style="color:#66d9ef">string&lt;/span>, &lt;span style="color:#66d9ef">string&lt;/span>)&amp;gt; obj)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> code = &lt;span style="color:#ae81ff">17&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">foreach&lt;/span> (&lt;span style="color:#66d9ef">var&lt;/span> element &lt;span style="color:#66d9ef">in&lt;/span> obj)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> code = HashCode.Combine(code, element.Item1.GetHashCode(), element.Item2.GetHashCode());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> code;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Naturally, if you use another method like the response body to figure out whether the request was successful or not then you will need to do additional work with the contents of the request. This will be outside the context of this post. Hopefully, you now have all the bits that you would need to build this out in your own applications. In the next article, we will be taking a look at how we mimic the same technique for accurately tracking inbound requests using a lot of the same components that we have built out in this article. Happy request tracking!&lt;/p></description></item></channel></rss>

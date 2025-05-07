@@ -1,1 +1,40 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>December on CodeWithStu's Blog</title><link>https://im5tu.io/article/2014/12/</link><description>Recent content in December on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2014/12/index.xml" rel="self" type="application/rss+xml"/><item><title>Dev Lunches: What, Why, How</title><link>https://im5tu.io/article/2014/12/dev-lunches-what-why-how/</link><pubDate>Wed, 17 Dec 2014 18:36:09 +0000</pubDate><guid>https://im5tu.io/article/2014/12/dev-lunches-what-why-how/</guid><description>&lt;p>If you&amp;rsquo;re not up-to-date, you fall behind. You fall behind in your work, which leads you to fall behind at home. If continued, it&amp;rsquo;s a never ending circle that can seem like climbing Everest in order to overcome. I propose that we, as developers, start doing is utilizing our free time to help not only ourselves but our co-workers too. We can do this via dev lunches.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>December on CodeWithStu's Blog</title><link>https://im5tu.io/article/2014/12/</link><description>Recent content in December on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2014/12/index.xml" rel="self" type="application/rss+xml"/><item><title>Dev Lunches: What, Why, How</title><link>https://im5tu.io/article/2014/12/dev-lunches-what-why-how/</link><pubDate>Wed, 17 Dec 2014 18:36:09 +0000</pubDate><guid>https://im5tu.io/article/2014/12/dev-lunches-what-why-how/</guid><description>&lt;p>If you&amp;rsquo;re not up-to-date, you fall behind. You fall behind in your work, which leads you to fall behind at home. If continued, it&amp;rsquo;s a never ending circle that can seem like climbing Everest in order to overcome. I propose that we, as developers, start doing is utilizing our free time to help not only ourselves but our co-workers too. We can do this via dev lunches.&lt;/p>
+&lt;h2 id="so-what-is-a-dev-lunch">So what is a dev lunch?&lt;/h2>
+&lt;p>A dev lunch, or developers lunch, is based upon the idea of sacrificing an hours lunch on a specific topic or topics, much like a mini-conference for you and your co-workers. Topics can range for technical deep dives to non-technical, team-wide talks such as &amp;ldquo;What does it mean to be Agile?&amp;rdquo;. The format is typically manifests as one of two styles:&lt;/p>
+&lt;h3 id="single-talks">Single talks&lt;/h3>
+&lt;p>With a single talk, a developer will take the topic in hand, research the subject and present it to the attendees. The talk will typically last about 30-40 minutes leaving time for Q&amp;amp;A etc.&lt;/p>
+&lt;h3 id="lightning-talks">Lightning talks&lt;/h3>
+&lt;p>Lightning talks take the form of a series of individuals from the team presenting for x time on a range of subjects. X is usually around 5-10 minutes. The subjects can be related, or completely unrelated. Essentially, they are multiple, compressed single talks.&lt;/p>
+&lt;p>It is important to remember that the topics are chosen by the presenter themselves. The presenter may ask for ideas/feedback from the team.&lt;/p>
+&lt;h2 id="why-invest-in-dev-lunches">Why invest in dev lunches?&lt;/h2>
+&lt;p>In my opinion, the benefits from the developer and business perspectives are pretty much the same:&lt;/p>
+&lt;ul>
+&lt;li>Knowledge is shared throughout the team&lt;/li>
+&lt;li>Can be used as a sort of team bonding&lt;/li>
+&lt;li>Encourages the use of soft skills&lt;/li>
+&lt;/ul>
+&lt;h2 id="how-do-i-get-started">How do I get started?&lt;/h2>
+&lt;p>For starters, you&amp;rsquo;ve read up until here so the idea is already in your mind. In terms of setting up the event, pick a date/time about 3/4 weeks in the future to give you time to prepare and allow people to keep that hour free. Then you can have a think of an idea like those listed at the bottom of the page. Once you have that sorted, simply send out a meeting request (or similar) letting people know what you are doing, when and where.&lt;/p>
+&lt;p>The presentations don&amp;rsquo;t have to be anything too fancy, just something on &lt;a href="http://slid.es">Slid.es&lt;/a> or Powerpoint will be fine. Just make sure that it is easily readable.&lt;/p>
+&lt;p>Don&amp;rsquo;t forget to talk to your boss and let them know what you are doing. On the off chance see if there is a chance of free food, you never know right?&lt;/p>
+&lt;p>I&amp;rsquo;ve already started this movement at two places I have worked and received exceptional feedback. So I encourage you to try and sort this at your workplace and see if it can help you become better. Here are a couple of tips from my experience:&lt;/p>
+&lt;ul>
+&lt;li>You don&amp;rsquo;t need to be an expert, so don&amp;rsquo;t try and become one overnight,&lt;/li>
+&lt;li>It doesn&amp;rsquo;t matter if things go wrong, the attendees are your friends and can help,&lt;/li>
+&lt;li>Don&amp;rsquo;t pick a topic that is a) no interest to you, it will come off in your presentation; and b) too big, you will end up speed talking.&lt;/li>
+&lt;li>Do remember to have fun!&lt;/li>
+&lt;/ul>
+&lt;h3 id="resources">Resources&lt;/h3>
+&lt;h4 id="list-of-starter-ideas">List of starter ideas&lt;/h4>
+&lt;p>With these topics, explore the title trying to think of what/why/how&amp;hellip;.&lt;/p>
+&lt;ul>
+&lt;li>Principals of SOLID&lt;/li>
+&lt;li>Dependency Injection&lt;/li>
+&lt;li>Grunt Tasks&lt;/li>
+&lt;li>What does it mean to be Agile?&lt;/li>
+&lt;/ul>
+&lt;h4 id="speaker-resources">Speaker Resources&lt;/h4>
+&lt;ul>
+&lt;li>&lt;a href="http://www.hanselman.com/speaking/">http://www.hanselman.com/speaking&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://zachholman.com/talk/the-talk-on-talks/">Talk on Talks&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

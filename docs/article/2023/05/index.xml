@@ -1,1 +1,357 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>May on CodeWithStu's Blog</title><link>https://im5tu.io/article/2023/05/</link><description>Recent content in May on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2023/05/index.xml" rel="self" type="application/rss+xml"/><item><title>Using The Factory Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-factory-design-pattern-in-.net/</link><pubDate>Tue, 09 May 2023 07:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-factory-design-pattern-in-.net/</guid><description>&lt;p>The Factory Design pattern is a popular technique for creating objects in .NET applications. It allows developers to create objects without specifying the exact class of object that will be created, making it an excellent option for improving code flexibility and maintainability. This article will explore the concept behind the Factory Design pattern, its benefits, and how it can be implemented in C# code.&lt;/p></description></item><item><title>Using The Decorator Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-decorator-design-pattern-in-.net/</link><pubDate>Mon, 08 May 2023 07:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-decorator-design-pattern-in-.net/</guid><description>&lt;p>The Decorator design pattern is a widely-used technique for extending the functionality of an existing object or component. By wrapping an object in a series of decorators, you can add new behaviours, features, or properties without modifying the underlying code. This makes it a powerful and flexible way to customize and extend software systems. In .NET, the Decorator design pattern can be used in various ways to enhance and modify existing classes and components, which can help you write more maintainable, extensible, and flexible code.&lt;/p></description></item><item><title>Using The Singleton Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-singleton-design-pattern-in-.net/</link><pubDate>Sun, 07 May 2023 01:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-singleton-design-pattern-in-.net/</guid><description>&lt;p>As a .NET developer, you understand the importance of writing efficient, scalable, and maintainable code. One design pattern that can help achieve these goals is the Singleton pattern. The Singleton pattern is a creational pattern that ensures only one instance of a class is created and provides global access to that instance throughout the application. In this blog post, we’ll look in-depth at the Singleton pattern, exploring its benefits, use cases, and implementation in C#. By the end of this post, you’ll have a solid understanding of how to leverage the Singleton pattern to optimize your .NET applications.&lt;/p></description></item><item><title>Observed No. 12 - Removing Pre-Commit Dependencies With Docker</title><link>https://im5tu.io/article/2023/05/observed-no.-12-removing-pre-commit-dependencies-with-docker/</link><pubDate>Mon, 01 May 2023 01:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/observed-no.-12-removing-pre-commit-dependencies-with-docker/</guid><description>&lt;p>Welcome to the 12th edition of Observed! The newsletter delivers a tip you can implement across many categories like AWS, Terraform and General DevOps practices in your infrastructure. This week&amp;rsquo;s edition looks how we can use Precommit with existing docker images.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>May on CodeWithStu's Blog</title><link>https://im5tu.io/article/2023/05/</link><description>Recent content in May on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2023/05/index.xml" rel="self" type="application/rss+xml"/><item><title>Using The Factory Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-factory-design-pattern-in-.net/</link><pubDate>Tue, 09 May 2023 07:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-factory-design-pattern-in-.net/</guid><description>&lt;p>The Factory Design pattern is a popular technique for creating objects in .NET applications. It allows developers to create objects without specifying the exact class of object that will be created, making it an excellent option for improving code flexibility and maintainability. This article will explore the concept behind the Factory Design pattern, its benefits, and how it can be implemented in C# code.&lt;/p>
+&lt;h2 id="what-is-the-factory-design-pattern">What is the Factory Design Pattern?&lt;/h2>
+&lt;p>The Factory Design pattern is a creational pattern that provides an interface for creating objects in a superclass while allowing subclasses to alter the type of objects created. It enables developers to abstract the object creation process, making it more flexible and adaptable to changing requirements.&lt;/p>
+&lt;p>In the Factory pattern, a factory class creates objects based on parameters passed rather than instantiating them directly. This allows the creation process to be centralized and managed in a single location, making it easier to maintain and update the code.&lt;/p>
+&lt;p>One of the key benefits of using the Factory pattern is that it can improve code quality and maintainability. By abstracting the creation process, the code is more modular and easier to understand. It also makes it easier to modify the code in the future since changes can be made to the factory class rather than the code that creates the objects. It can also reduce code duplication because rather than creating objects in multiple places throughout the code, the Factory pattern centralizes the creation process, making it easier to reuse code across different parts of the application.&lt;/p>
+&lt;h2 id="factory-vs-abstract-factory">Factory vs Abstract Factory&lt;/h2>
+&lt;p>When we look at the Factory design pattern, we may come across one of two implementations: Factory or Abstract Factory. The Factory and Abstract Factory patterns are used to create objects but serve different purposes.&lt;/p>
+&lt;p>The Factory pattern is used to create a single type of object. It provides a way to encapsulate the object creation process so that it can be easily modified or extended in the future. The factory class is responsible for creating instances of the concrete classes that implement a standard interface or inherit from a common base class. This allows the client code to interact with the objects through a common interface without knowing how the objects are created.&lt;/p>
+&lt;p>The Abstract Factory pattern is used to create families of related objects. It provides an interface for creating families of related or dependent objects without specifying their concrete classes. The abstract factory class creates instances of the concrete classes that inherit a common interface or base class.&lt;/p>
+&lt;p>So, when deciding between the Factory and Abstract Factory patterns, it&amp;rsquo;s essential to consider the complexity and relationships between the objects you&amp;rsquo;re trying to create. If you only need to create a single object type, the Factory pattern may be sufficient. The Abstract Factory pattern may be the better choice if you need to create families of related entities.&lt;/p>
+&lt;h2 id="implementing-the-factory-design-pattern-in-c">Implementing The Factory Design Pattern In C#&lt;/h2>
+&lt;p>Let&amp;rsquo;s first look at the simplest form of the Factory pattern by using a logging framework as our example. For simplicity, we&amp;rsquo;ll create a &lt;code>ConsoleLogger&lt;/code> and a &lt;code>FileLogger&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">ILogger&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">void&lt;/span> Log(&lt;span style="color:#66d9ef">string&lt;/span> message);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ConsoleLogger&lt;/span> : ILogger
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Log(&lt;span style="color:#66d9ef">string&lt;/span> message)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Console.WriteLine(&lt;span style="color:#e6db74">$&amp;#34;ConsoleLogger: {message}&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">FileLogger&lt;/span> : ILogger
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Log(&lt;span style="color:#66d9ef">string&lt;/span> message)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// Code to write message to file&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Console.WriteLine(&lt;span style="color:#e6db74">$&amp;#34;FileLogger: {message}&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Then all we need to do is create our &lt;code>LoggerFactory&lt;/code> class, which implements the factory pattern by providing a method to create instances of the concrete &lt;code>ILogger&lt;/code> classes:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">LoggerFactory&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> ILogger CreateLogger(&lt;span style="color:#66d9ef">string&lt;/span> providerType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">switch&lt;/span> (providerType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">case&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Console&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ConsoleLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">case&lt;/span> &lt;span style="color:#e6db74">&amp;#34;File&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> FileLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">default&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentException(&lt;span style="color:#e6db74">&amp;#34;Invalid provider type&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>CreateLogger()&lt;/code> method takes a string parameter that specifies the type of logger to create. It uses a switch statement to create and return an instance of the appropriate concrete &lt;code>ILogger&lt;/code> class. Here&amp;rsquo;s an example of how you could use the LoggerFactory to create an instance of a logger:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> logger = LoggerFactory.CreateLogger(&lt;span style="color:#e6db74">&amp;#34;File&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>logger.Log(&lt;span style="color:#e6db74">&amp;#34;This is a log message&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Prints: &amp;#34;FileLogger: This is a log message&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In this example, we create an instance of a &lt;code>FileLoggerProvider&lt;/code> using the &lt;code>LoggerFactory&lt;/code>. We then use the &lt;code>CreateLogger()&lt;/code> method of the &lt;code>FileLoggerProvider&lt;/code> to create an instance of a &lt;code>FileLogger&lt;/code>. Finally, we call the &lt;code>Log()&lt;/code> method of the FileLogger to log a message.&lt;/p>
+&lt;h2 id="implementing-the-abstract-factory-design-pattern-in-c">Implementing The Abstract Factory Design Pattern In C#&lt;/h2>
+&lt;p>You may also need to create factories that have dependencies on other entities, which is where the abstract factory comes in. First, we&amp;rsquo;ll create an interface for our logging provider:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">ILoggerProvider&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ILogger CreateLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This interface defines a method &lt;code>CreateLogger()&lt;/code> that returns an instance of an &lt;code>ILogger&lt;/code>. We&amp;rsquo;ll use this interface to define different logging providers that can be created by our factory. Next, we&amp;rsquo;ll create a couple of concrete logging providers that implement the &lt;code>ILoggerProvider&lt;/code> interface. For simplicity, we&amp;rsquo;ll create a &lt;code>ConsoleLoggerProvider&lt;/code> and a &lt;code>FileLoggerProvider&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ConsoleLoggerProvider&lt;/span> : ILoggerProvider
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> ILogger CreateLogger()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ConsoleLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">FileLoggerProvider&lt;/span> : ILoggerProvider
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> ILogger CreateLogger()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> FileLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>ConsoleLoggerProvider&lt;/code> and &lt;code>FileLoggerProvider&lt;/code> classes both implement the &lt;code>CreateLogger()&lt;/code> method to return an instance of a &lt;code>ConsoleLogger&lt;/code> or a &lt;code>FileLogger&lt;/code>, respectively. By defining the &lt;code>CreateLogger()&lt;/code> method in the &lt;code>ILoggerProvider&lt;/code> interface, we&amp;rsquo;re able to provide a common interface that can be used to create different types of loggers. The client code doesn&amp;rsquo;t need to know the details of how the loggers are created, only how to interact with them through the common &lt;code>ILogger&lt;/code> interface. Next, we&amp;rsquo;ll change our &lt;code>LoggerFactory&lt;/code> class to return the provider that we will use to create the ultimate class:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">LoggerFactory&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> ILoggerProvider CreateLoggerProvider(&lt;span style="color:#66d9ef">string&lt;/span> providerType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">switch&lt;/span> (providerType)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">case&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Console&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ConsoleLoggerProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">case&lt;/span> &lt;span style="color:#e6db74">&amp;#34;File&amp;#34;&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> FileLoggerProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">default&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> ArgumentException(&lt;span style="color:#e6db74">&amp;#34;Invalid provider type&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Lastly, we need to update the calling code:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> provider = LoggerFactory.CreateLoggerProvider(&lt;span style="color:#e6db74">&amp;#34;File&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> logger = provider.CreateLogger();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>logger.Log(&lt;span style="color:#e6db74">&amp;#34;This is a log message&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// Prints: &amp;#34;FileLogger: This is a log message&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>With this implementation, we don’t need to pass any arguments to the create logger method, as we’ve requested a specific factory implementation on the first line. This approach is much more extensible but only warranted when you need the extensibility. I would personally stick to the initial factory implementation until such time as the extensibility is required.&lt;/p>
+&lt;h2 id="frequently-asked-questions-about-the-factory-design-pattern">Frequently Asked Questions About The Factory Design Pattern&lt;/h2>
+&lt;h3 id="what-are-some-real-world-usages-of-the-factory-design-pattern">What Are Some Real-World Usages Of The Factory Design Pattern?&lt;/h3>
+&lt;ul>
+&lt;li>Logging: A logging framework can use the factory pattern to create instances of loggers, allowing for different logging behaviours (e.g., logging to the console, to a file, or to a remote server) to be added without modifying the client code that uses the loggers.&lt;/li>
+&lt;li>Caching: A caching framework can use the factory pattern to create cache instances, allowing for different caching strategies (e.g., in-memory, disk-based, or distributed caching) to be added without modifying the client code that uses the caches.&lt;/li>
+&lt;li>Database access: A database access framework can use the factory pattern to create instances of data access objects, allowing for different database drivers (e.g., for SQL Server, Oracle, or MySQL) to be added without modifying the client code uses the data access objects. An example of this is &lt;code>DBCommand&lt;/code>.&lt;/li>
+&lt;li>User interface: A user interface framework can use the factory pattern to create instances of user interface elements, allowing for different styles (e.g., for desktop, web, or mobile applications) to be added without modifying the client code that uses the user interface elements.&lt;/li>
+&lt;li>Plugin systems: A plugin system can use the factory pattern to create instances of plugins, allowing for different plugins to be added dynamically without modifying the client code that uses the plugins.&lt;/li>
+&lt;/ul>
+&lt;h3 id="when-should-i-use-the-factory-design-pattern">When Should I Use The Factory Design Pattern?&lt;/h3>
+&lt;p>You should consider using the factory design pattern when:&lt;/p>
+&lt;ol>
+&lt;li>You want to decouple object creation from the client code that uses the objects.&lt;/li>
+&lt;li>You need to create families of related objects.&lt;/li>
+&lt;li>You need to provide a way to switch between different families of objects at runtime.&lt;/li>
+&lt;/ol></description></item><item><title>Using The Decorator Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-decorator-design-pattern-in-.net/</link><pubDate>Mon, 08 May 2023 07:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-decorator-design-pattern-in-.net/</guid><description>&lt;p>The Decorator design pattern is a widely-used technique for extending the functionality of an existing object or component. By wrapping an object in a series of decorators, you can add new behaviours, features, or properties without modifying the underlying code. This makes it a powerful and flexible way to customize and extend software systems. In .NET, the Decorator design pattern can be used in various ways to enhance and modify existing classes and components, which can help you write more maintainable, extensible, and flexible code.&lt;/p>
+&lt;h2 id="what-is-the-decorator-design-pattern">What Is The Decorator Design Pattern?&lt;/h2>
+&lt;p>The idea behind the Decorator design pattern is to wrap the object you want to modify in a series of decorators, each adding a specific behaviour or feature to the object. In the Decorator design pattern, there are several key components:&lt;/p>
+&lt;ol>
+&lt;li>Component: This is the base object or interface you want to modify. It defines the basic behaviour or features of the object.&lt;/li>
+&lt;li>Concrete Component: This is the concrete implementation of the component interface. It provides the base functionality of the object.&lt;/li>
+&lt;li>Decorator: This is the abstract base class or interface for all decorators. It defines the basic structure of the decorators and how they should interact with the component.&lt;/li>
+&lt;li>Concrete Decorator: This is the concrete implementation of the decorator interface. It provides the specific functionality or behaviour you want to add to the component.&lt;/li>
+&lt;/ol>
+&lt;p>The Decorator design pattern is often used when you need to add new functionality to an object but want to keep its underlying structure the same. This can be useful when you want to keep the existing codebase intact.&lt;/p>
+&lt;p>One of the benefits of using the Decorator design pattern is that it allows you to add new behaviours or features to an object without modifying the underlying code. This can make your code more maintainable and extensible, allowing you to add new functionality to an object without changing existing behaviour. By wrapping an object in a series of decorators, you can create complex and customizable objects tailored to your specific needs.&lt;/p>
+&lt;h2 id="implementing-the-decorator-design-pattern-in-c">Implementing The Decorator Design Pattern In C#&lt;/h2>
+&lt;p>There are two different ways of implementing the decorator pattern. Like &lt;a href="https://im5tu.io/article/2023/05/using-the-singleton-design-pattern-in-.net/">the singleton design pattern&lt;/a>, we can construct the pattern manually or with dependency injection. We&amp;rsquo;ll take a look at both, starting with manual creation:&lt;/p>
+&lt;ol>
+&lt;li>Define the Component interface or abstract class. This is the base object or interface that you want to modify. It defines the basic behaviour or features of the object:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">interface&lt;/span> &lt;span style="color:#a6e22e">IComponent&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">void&lt;/span> Operation();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>Create the Concrete Component class. This is the concrete implementation of the component interface. It provides the base functionality of the object.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ConcreteComponent&lt;/span> : IComponent
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Operation()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Console.WriteLine(&lt;span style="color:#e6db74">&amp;#34;ConcreteComponent.Operation()&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="3">
+&lt;li>Create the Decorator abstract class. This is the abstract base class or interface for all decorators. It defines the basic structure of the decorators and how they should interact with the component.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">abstract&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">Decorator&lt;/span> : IComponent
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">protected&lt;/span> IComponent _component;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> Decorator(IComponent component)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _component = component;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Operation()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _component.Operation();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="4">
+&lt;li>Create the Concrete Decorator class. This is the concrete implementation of the decorator interface. It provides the specific functionality or behaviour that you want to add to the component.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ConcreteDecoratorA&lt;/span> : Decorator
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> ConcreteDecoratorA(IComponent component) : &lt;span style="color:#66d9ef">base&lt;/span>(component)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Operation()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">base&lt;/span>.Operation();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Console.WriteLine(&lt;span style="color:#e6db74">&amp;#34;ConcreteDecoratorA.Operation()&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">ConcreteDecoratorB&lt;/span> : Decorator
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> ConcreteDecoratorB(IComponent component) : &lt;span style="color:#66d9ef">base&lt;/span>(component)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> Operation()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">base&lt;/span>.Operation();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Console.WriteLine(&lt;span style="color:#e6db74">&amp;#34;ConcreteDecoratorB.Operation()&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="5">
+&lt;li>Implement the Decorator design pattern by wrapping components in decorators.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>IComponent component = &lt;span style="color:#66d9ef">new&lt;/span> ConcreteComponent();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>component = &lt;span style="color:#66d9ef">new&lt;/span> ConcreteDecoratorA(component);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>component = &lt;span style="color:#66d9ef">new&lt;/span> ConcreteDecoratorB(component);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>component.Operation();
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When the above code is run, we end up with the following output:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>ConcreteComponent.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ConcreteDecoratorA.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ConcreteDecoratorB.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The order of the output can easily be changed by changing the implementation of the decorators. Note that by using interfaces and abstract classes, we can create a flexible and extensible system that can be easily customized and modified.&lt;/p>
+&lt;h2 id="the-decorator-design-pattern--dependency-injection">The Decorator Design Pattern &amp;amp; Dependency Injection&lt;/h2>
+&lt;p>The Decorator design pattern can also easily be used with dependency injection frameworks using NuGet packages like &lt;a href="https://github.com/khellang/Scrutor">Scrutor&lt;/a>. If we use the classes/interfaces that we&amp;rsquo;ve previously declared, we can add dependency injection as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">using&lt;/span> Microsoft.Extensions.DependencyInjection;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> services = &lt;span style="color:#66d9ef">new&lt;/span> ServiceCollection()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .AddScoped&amp;lt;IComponent, ConcreteComponent&amp;gt;()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .Decorate&amp;lt;IComponent, ConcreteDecoratorA&amp;gt;()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .Decorate&amp;lt;IComponent, ConcreteDecoratorB&amp;gt;()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .BuildServiceProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>services.GetRequiredService&amp;lt;IComponent&amp;gt;().Operation();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// ...component definitions below...&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This helps prevent the need for manual construction of objects which could reduce a large amount of repetitive code when the object being decorated has a lot of dependencies. The above code produces this output:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>ConcreteComponent.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ConcreteDecoratorA.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ConcreteDecoratorB.Operation&lt;span style="color:#f92672">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="frequently-asked-questions-about-the-decorator-design-pattern">Frequently Asked Questions About The Decorator Design Pattern&lt;/h2>
+&lt;h3 id="what-are-some-real-world-usages-of-the-decorator-design-pattern">What Are Some Real-World Usages Of The Decorator Design Pattern?&lt;/h3>
+&lt;ul>
+&lt;li>Adding logging or error handling to a database access component&lt;/li>
+&lt;li>Adding caching or throttling to a web service client&lt;/li>
+&lt;li>Adding encryption or compression to a file storage component&lt;/li>
+&lt;li>Adding formatting or validation to a user input component&lt;/li>
+&lt;/ul>
+&lt;h3 id="can-the-decorator-design-pattern-be-used-to-modify-existing-behaviour-of-an-object">Can The Decorator Design Pattern Be Used To Modify Existing Behaviour Of An Object?&lt;/h3>
+&lt;p>No, the Decorator pattern is designed to add new behaviours or features to an object, not to remove or modify existing behaviour. If you need to change existing behaviour in an object, consider other patterns like the Strategy pattern or the Template Method pattern.&lt;/p>
+&lt;h3 id="how-does-the-decorator-design-pattern-differ-from-inheritance">How Does The Decorator Design Pattern Differ From Inheritance?&lt;/h3>
+&lt;p>Inheritance is another way to add new behaviours or features to an object, but it differs from the Decorator pattern in several ways. Inheritance is a static relationship between classes, whereas the Decorator pattern is a dynamic relationship between objects. Inheritance can lead to a problematic class hierarchy to maintain and extend, whereas the Decorator pattern allows for more flexible and modular code.&lt;/p></description></item><item><title>Using The Singleton Design Pattern in .NET</title><link>https://im5tu.io/article/2023/05/using-the-singleton-design-pattern-in-.net/</link><pubDate>Sun, 07 May 2023 01:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/using-the-singleton-design-pattern-in-.net/</guid><description>&lt;p>As a .NET developer, you understand the importance of writing efficient, scalable, and maintainable code. One design pattern that can help achieve these goals is the Singleton pattern. The Singleton pattern is a creational pattern that ensures only one instance of a class is created and provides global access to that instance throughout the application. In this blog post, we’ll look in-depth at the Singleton pattern, exploring its benefits, use cases, and implementation in C#. By the end of this post, you’ll have a solid understanding of how to leverage the Singleton pattern to optimize your .NET applications.&lt;/p>
+&lt;h2 id="what-is-the-singleton-design-pattern">What Is The Singleton Design Pattern?&lt;/h2>
+&lt;p>The Singleton pattern is a creational pattern that ensures only one instance of a class is created throughout the application and provides global access to that instance. This means that when multiple parts of your application need to use the same object, they can all reference the same Singleton instance rather than creating numerous instances that may not be synchronized.&lt;/p>
+&lt;p>In the Singleton pattern, the class is responsible for ensuring that only one instance is created and accessible throughout the application. Typically, this is done using a private constructor that can only be called by the Singleton class itself and a static method or property that returns the single instance of the class.&lt;/p>
+&lt;p>The Singleton pattern is often used for resources that are expensive to create or that need to be shared across the application, such as thread pools, logging services, and configuration objects.&lt;/p>
+&lt;blockquote>
+&lt;p>Given the rapid popularity of dependency injection over the last ten years, it&amp;rsquo;s becoming more common to think about Singletons differently. When speaking about a Singleton with my development teams, they refer to it as a single instance of a given class within a given scope - usually one per application.
+This is because of the way it is registered within the IoC container. These container instances take care of your lifecycle management whilst guaranteeing a single object in your specified scope. We will look at this later on.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="implementing-the-singleton-design-pattern-in-c">Implementing The Singleton Design Pattern In C#&lt;/h2>
+&lt;p>Implementing the Singleton pattern was quite lengthy in early versions of C#. Fortunately, we now have the ability to generate it very quickly using the &lt;code>Lazy&amp;lt;T&amp;gt;&lt;/code> class:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MySingleton&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> Lazy&amp;lt;MySingleton&amp;gt; _instance = &lt;span style="color:#66d9ef">new&lt;/span> Lazy&amp;lt;MySingleton&amp;gt;(() =&amp;gt; &lt;span style="color:#66d9ef">new&lt;/span> MySingleton());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> MySingleton()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// constructor logic goes here&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> MySingleton Instance =&amp;gt; _instance.Value;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In this implementation, the &lt;code>Lazy&amp;lt;MySingleton&amp;gt;&lt;/code> instance is created only when it is first accessed and is initialized in a thread-safe manner by the &lt;code>Lazy&amp;lt;T&amp;gt;&lt;/code> class. This approach simplifies the code needed to create a thread-safe Singleton instance and ensures that the instance is initialized correctly without needing locks or other synchronization primitives.&lt;/p>
+&lt;p>The &lt;code>Lazy&amp;lt;T&amp;gt;&lt;/code> class helps create lazy-initialized objects in .NET. It can be used to simplify the creation of Singleton instances and other types of objects that should be initialized only when needed. By using &lt;code>Lazy&amp;lt;T&amp;gt;&lt;/code> in conjunction with the Singleton pattern, you can ensure that your Singleton instances are thread-safe and initialized correctly without adding unnecessary complexity to your code.&lt;/p>
+&lt;h2 id="real-life-usage-of-the-singleton-design-pattern">Real-life Usage Of The Singleton Design Pattern&lt;/h2>
+&lt;p>While the Singleton pattern has been used to manage the lifetime of objects in .NET applications, it is not generally used in modern .NET development. Instead, the preferred approach is to use Dependency Injection (DI) to manage the lifetime of objects and ensure that only a single instance is created and shared across the entire application.&lt;/p>
+&lt;p>That being said, some legacy applications and frameworks still use the Singleton pattern, and it can be helpful to understand how the pattern works in these contexts.&lt;/p>
+&lt;p>In modern .NET development, when people talk about implementing a single object in their application, they typically mean how to implement a single instance of that object using Dependency Injection. In the next section, I&amp;rsquo;ll show you how this is achieved by registering the object as a Singleton with the DI container using the AddSingleton method.&lt;/p>
+&lt;h2 id="the-singleton-pattern--dependency-injection">The Singleton Pattern &amp;amp; Dependency Injection&lt;/h2>
+&lt;p>In dependency injection frameworks, a Singleton is referred to as a single instance of an object that can be shared across all components that depend on it. This can help reduce memory usage and improve application performance by reducing the number of object allocations. Let&amp;rsquo;s look at a couple of simple examples:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">using&lt;/span> Microsoft.Extensions.DependencyInjection;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> services = &lt;span style="color:#66d9ef">new&lt;/span> ServiceCollection().AddSingleton&amp;lt;MySingleton&amp;gt;().BuildServiceProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Console.WriteLine(ReferenceEquals(services.GetRequiredService&amp;lt;MySingleton&amp;gt;(), services.GetRequiredService&amp;lt;MySingleton&amp;gt;())); &lt;span style="color:#75715e">// Prints true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MySingleton&lt;/span> {}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The above approach would be used when we are implementing dependency injection in either a lambda or console application that doesn&amp;rsquo;t use the host builder approach. When we use AspNetCore, we can make the same &lt;code>AddSingleton&lt;/code> call through the application builder:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> builder = WebApplication.CreateBuilder(args);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>builder.Services.AddSingleton&amp;lt;MySingleton&amp;gt;();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> app = builder.Build();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// The rest of your code&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When using a DI container, it is common to register a Singleton instance using the AddSingleton method. However, it is important to note that even when using AddSingleton, multiple instances of the Singleton object can still be created if the container is not correctly configured or if the object is created outside the scope of the DI container. Let&amp;rsquo;s take a look at how this can occur:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">using&lt;/span> Microsoft.Extensions.DependencyInjection;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> services1 = &lt;span style="color:#66d9ef">new&lt;/span> ServiceCollection().AddSingleton&amp;lt;MySingleton&amp;gt;().BuildServiceProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">var&lt;/span> services2 = &lt;span style="color:#66d9ef">new&lt;/span> ServiceCollection().AddSingleton&amp;lt;MySingleton&amp;gt;().BuildServiceProvider();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Console.WriteLine(ReferenceEquals(services1.GetRequiredService&amp;lt;MySingleton&amp;gt;(), services2.GetRequiredService&amp;lt;MySingleton&amp;gt;())); &lt;span style="color:#75715e">// Prints false&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MySingleton&lt;/span> {}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="frequently-asked-questions-about-the-singleton-design-pattern">Frequently Asked Questions About The Singleton Design Pattern&lt;/h2>
+&lt;h3 id="how-do-i-ensure-thread-safety-when-using-the-singleton-design-pattern">How Do I Ensure Thread-Safety When Using The Singleton Design Pattern?&lt;/h3>
+&lt;p>One potential drawback of the Singleton pattern is that it can be challenging to ensure thread safety when multiple threads access the Singleton instance simultaneously. To ensure that your Singleton instance is thread-safe, you can use one of several techniques:&lt;/p>
+&lt;ol>
+&lt;li>Thread-safe lazy initialization: This technique uses a lazy initialization technique to create the Singleton instance only when it is first accessed. This can improve performance by avoiding unnecessary object creation. &lt;a href="#implementing-the-singleton-design-pattern-in-c">This is the approach we showed above&lt;/a>&lt;/li>
+&lt;li>Double-checked locking: This technique involves checking if the Singleton instance is null before acquiring a lock on a synchronization object. A new instance is created and assigned to the Singleton variable if the instance is null. This technique can improve performance by avoiding locking when the Singleton instance already exists.&lt;/li>
+&lt;/ol>
+&lt;p>Here&amp;rsquo;s an example of how you might use double-checked locking to implement a thread-safe Singleton in C#:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">sealed&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">MySingleton&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">readonly&lt;/span> &lt;span style="color:#66d9ef">object&lt;/span> _lock = &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#66d9ef">object&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> MySingleton _instance = &lt;span style="color:#66d9ef">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> MySingleton() {}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> MySingleton Instance
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">get&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (_instance == &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lock&lt;/span> (_lock)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (_instance == &lt;span style="color:#66d9ef">null&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> _instance = &lt;span style="color:#66d9ef">new&lt;/span> MySingleton();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> _instance;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="are-there-any-drawbacks-to-using-the-singleton-pattern">Are there any drawbacks to using the Singleton pattern?&lt;/h3>
+&lt;p>While the Singleton pattern can be a powerful tool for managing global access to shared resources in your application, there are some potential drawbacks to be aware of:&lt;/p>
+&lt;ol>
+&lt;li>Global state: Because the Singleton pattern creates a global instance of a class that can be accessed from anywhere in your application, it can lead to state that is difficult to manage and maintain.&lt;/li>
+&lt;li>Tight coupling: By relying on a single instance of a class throughout your application, the Singleton pattern can lead to tight coupling between different parts of your code, making it difficult to modify and test individual components.&lt;/li>
+&lt;li>Thread-safety: While the Singleton pattern can be made thread-safe with appropriate locking mechanisms, it can be difficult to ensure that all parts of your application use the Singleton instance in a thread-safe manner.&lt;/li>
+&lt;li>Overuse: The Singleton pattern can be overused, leading to unnecessary complexity and making it difficult to reason about the behaviour of your application.&lt;/li>
+&lt;li>Testability: Unit tests are designed to test individual units of code in isolation. The Singleton pattern can make unit testing more difficult. When using the Singleton pattern, isolating the code that depends on the Singleton instance can be difficult. This is because the Singleton is typically tightly coupled to the rest of the application, making it problematic to substitute the Singleton instance with a mock or stub during testing.&lt;/li>
+&lt;/ol></description></item><item><title>Observed No. 12 - Removing Pre-Commit Dependencies With Docker</title><link>https://im5tu.io/article/2023/05/observed-no.-12-removing-pre-commit-dependencies-with-docker/</link><pubDate>Mon, 01 May 2023 01:00:00 +0000</pubDate><guid>https://im5tu.io/article/2023/05/observed-no.-12-removing-pre-commit-dependencies-with-docker/</guid><description>&lt;p>Welcome to the 12th edition of Observed! The newsletter delivers a tip you can implement across many categories like AWS, Terraform and General DevOps practices in your infrastructure. This week&amp;rsquo;s edition looks how we can use Precommit with existing docker images.&lt;/p>
+&lt;h2 id="what-is-pre-commit">What is Pre-Commit?&lt;/h2>
+&lt;p>Pre-commit is a tool that helps developers to ensure that the code they commit is consistent with the project&amp;rsquo;s guidelines and standards. This framework allows developers to define a set of hooks or scripts to run before a commit is made to a Git repository. These hooks can perform various checks and tests, such as code formatting, syntax checking, linting, and security scanning.&lt;/p>
+&lt;p>Pre-commit provides a convenient way to automate these checks and ensure that code is consistently formatted and meets the project&amp;rsquo;s quality standards. It can be configured to run automatically on every commit or manually by running a command in the terminal. Pre-commit is written in Python and is available as an open-source tool that can be used with any programming language. There are many community-built hooks for languages such as Terraform &amp;amp; .NET.&lt;/p>
+&lt;h2 id="why-should-we-use-pre-commit">Why should we use Pre-Commit?&lt;/h2>
+&lt;p>If you aren&amp;rsquo;t already using Pre-Commit, there are several reasons why you should consider using Pre-commit in your projects:&lt;/p>
+&lt;ol>
+&lt;li>Consistency: Pre-commit helps ensure that code is consistently formatted and adheres to the project&amp;rsquo;s guidelines and standards. This can make it easier for developers to read and understand code and reduce errors and bugs.&lt;/li>
+&lt;li>Efficiency: Pre-commit allows developers to automate checks and tests that would otherwise need to be done manually. This can save time and reduce the risk of human error.&lt;/li>
+&lt;li>Security: Before code is committed to the repository, Pre-Commit can be configured to run security checks, such as scanning for vulnerabilities or checking for sensitive data. This can help reduce the risk of security breaches.&lt;/li>
+&lt;/ol>
+&lt;h2 id="why-are-dependencies-a-problem-for-pre-commit">Why Are Dependencies A Problem For Pre-Commit?&lt;/h2>
+&lt;p>Dependencies can be problematic for Pre-Commit because they can lead to compatibility issues or version conflicts. Pre-commit hooks are executed in a separate environment from the main project, and this environment may have different dependencies or versions of dependencies installed.&lt;/p>
+&lt;p>If a hook relies on a specific version of a package or library that is not installed on the machine, it may fail to execute. Similarly, if multiple hooks require different versions of the same package, conflicts may prevent one or more hooks from running correctly.&lt;/p>
+&lt;p>To avoid these issues, we can, where available, use the docker functionality of pre-commit to isolate the dependencies of our Pre-Commit hooks from the machine running the checks, resulting in a more stable and consistent output.&lt;/p>
+&lt;h2 id="how-to-use-docker-images-with-pre-commit">How To Use Docker Images With Pre-Commit&lt;/h2>
+&lt;p>Pre-commit hooks can be run via Docker to ensure they are executed consistently across different environments. This can be especially useful for developers who need the necessary tools or dependencies installed on their local machines.&lt;/p>
+&lt;p>To use Docker with pre-commit, you&amp;rsquo;ll need to specify a Docker image for each hook in your &lt;code>.pre-commit-config.yaml&lt;/code> file. Here’s an example from &lt;a href="https://terraform-docs.io/how-to/pre-commit-hooks/">Terraform Docs&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">repos&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">repo&lt;/span>: &lt;span style="color:#ae81ff">local&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">hooks&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">id&lt;/span>: &lt;span style="color:#ae81ff">terraform-docs&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">terraform-docs&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">language&lt;/span>: &lt;span style="color:#ae81ff">docker_image&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">entry&lt;/span>: &lt;span style="color:#ae81ff">quay.io/terraform-docs/terraform-docs:latest &lt;/span> &lt;span style="color:#75715e"># or, change latest to pin to a specific version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">args&lt;/span>: [&lt;span style="color:#e6db74">&amp;#34;ARGS&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;TO PASS&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;INCLUDING PATH&amp;#34;&lt;/span>] &lt;span style="color:#75715e"># e.g. [&amp;#34;--output-file&amp;#34;, &amp;#34;README.md&amp;#34;, &amp;#34;./mymodule/path&amp;#34;]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">pass_filenames:false&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that building a Docker image from the repo can be slow, so it is recommended to download the pre-built image instead, as shown in the example. As these are docker references, we can change the tag we wish Pre-Commit to pull, enabling easy versioning of dependencies.&lt;/p>
+&lt;p>In addition to specifying the Docker image, you can pass arguments to the pre-commit hook using the args key. This can be useful for customizing the behaviour of the hook, such as specifying the output file or passing additional command-line arguments.&lt;/p>
+&lt;p>To build custom docker images for Pre-Commit, check &lt;a href="https://pre-commit.com/index.html#docker">this section of the Pre-Commit documentation&lt;/a>. As mentioned above, it’s advised that you pre-build your docker images for your team&amp;rsquo;s performance.&lt;/p>
+&lt;p>&lt;strong>📣 Get the Weekly Newsletter Straight to Your Inbox! 📣&lt;/strong>&lt;/p>
+&lt;p>Don&amp;rsquo;t miss out on the latest updates! Subscribe to the &lt;a href="https://news.codewithstu.tv">Observed! Newsletter&lt;/a> now and stay up-to-date with the latest tips and tricks across AWS, Devops and Architecture. &lt;a href="https://news.codewithstu.tv">Click here&lt;/a> to subscribe and start receiving your weekly dose of tech news!&lt;/p></description></item></channel></rss>

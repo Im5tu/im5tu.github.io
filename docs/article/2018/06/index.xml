@@ -1,1 +1,252 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2018/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2018/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Building Service Fabric Apps With VSTS YML Build Definitions</title><link>https://im5tu.io/article/2018/06/building-service-fabric-apps-with-vsts-yml-build-definitions/</link><pubDate>Sat, 30 Jun 2018 19:40:00 +0100</pubDate><guid>https://im5tu.io/article/2018/06/building-service-fabric-apps-with-vsts-yml-build-definitions/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/">previous article&lt;/a>, we setup a standarised build using the new YML build definitions within VSTS, using the .Net CLI tooling. In this article, we will use the same setup as our base, but we will build and publish a service fabric application.&lt;/p></description></item><item><title>Automated Builds in VSTS with YML Build Definitions</title><link>https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/</link><pubDate>Sun, 17 Jun 2018 21:35:00 +0100</pubDate><guid>https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/</guid><description>&lt;p>In this article we will explore a preview feature inside of Visual Studio Team Services (VSTS) called YML Build Definitions. In essence, this allows you to change your build process from a &lt;code>.yml&lt;/code> file in your git repository much in the same way as you can do with other services such as AppVeyor. During the article, we will setup a build definition for an Aspnet Core website.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2018/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2018/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Building Service Fabric Apps With VSTS YML Build Definitions</title><link>https://im5tu.io/article/2018/06/building-service-fabric-apps-with-vsts-yml-build-definitions/</link><pubDate>Sat, 30 Jun 2018 19:40:00 +0100</pubDate><guid>https://im5tu.io/article/2018/06/building-service-fabric-apps-with-vsts-yml-build-definitions/</guid><description>&lt;p>In my &lt;a href="https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/">previous article&lt;/a>, we setup a standarised build using the new YML build definitions within VSTS, using the .Net CLI tooling. In this article, we will use the same setup as our base, but we will build and publish a service fabric application.&lt;/p>
+&lt;p>Our &lt;a href="https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/">sample build file&lt;/a> has the following steps:&lt;/p>
+&lt;ol>
+&lt;li>Clean Sources&lt;/li>
+&lt;li>Install the Dotnet CLI&lt;/li>
+&lt;li>Restore Packages&lt;/li>
+&lt;li>Build Projects&lt;/li>
+&lt;li>Test Projects&lt;/li>
+&lt;li>Publish the Web App&lt;/li>
+&lt;li>Publish Build Artifacts&lt;/li>
+&lt;li>Tag VSTS Build&lt;/li>
+&lt;/ol>
+&lt;p>For our service fabric build, we will need the following steps:&lt;/p>
+&lt;ol>
+&lt;li>Clean Sources&lt;/li>
+&lt;li>Install the Dotnet CLI&lt;/li>
+&lt;li>Restore Packages - csproj&lt;/li>
+&lt;li>&lt;em>&lt;em>Restore Packages - sfproj (&lt;/em> New)&lt;/em>*&lt;/li>
+&lt;li>Build Projects&lt;/li>
+&lt;li>Test Projects&lt;/li>
+&lt;li>&lt;em>&lt;em>Publish the Service Fabric App (&lt;/em> New)&lt;/em>*&lt;/li>
+&lt;li>&lt;em>&lt;em>Update the Service Fabric App Version (&lt;/em> New)&lt;/em>*&lt;/li>
+&lt;li>&lt;em>&lt;em>Copy Publish Profiles (&lt;/em> New)&lt;/em>*&lt;/li>
+&lt;li>Publish Build Artifacts&lt;/li>
+&lt;li>Tag VSTS Build&lt;/li>
+&lt;/ol>
+&lt;p>For the sake of brevity, I am going to only talk about the new steps in the sequence and the reasoning behind their existance but i&amp;rsquo;ll include a full sample file at the end of the post.&lt;/p>
+&lt;h2 id="restore-packages-sfproj">Restore Packages (SFPROJ)&lt;/h2>
+&lt;p>At first, this step may seem a little strange. Currently, the service fabric tooling does not support the dotnet CLI properly, though it&amp;rsquo;s getting better. The major hurdle is the restoring of the msbuild package that contains the targets - this does not seem to restore properly with the CLI, so I use an additional step using the old nuget commands:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">NuGetCommand@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Restore Packages (SF Projects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">restoreSolution&lt;/span>: &lt;span style="color:#ae81ff">$(packageProjects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">restoreDirectory&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;..\..\packages&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">feedsToUse&lt;/span>: &lt;span style="color:#ae81ff">config&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nugetConfigPath&lt;/span>: &lt;span style="color:#ae81ff">nuget.config&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">noCache&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">verbosityRestore&lt;/span>: &lt;span style="color:#ae81ff">Normal&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here, &lt;code>$(packageProjects)&lt;/code> is defined as &lt;code>**/*.sfproj&lt;/code> allowing for multiple service fabric applications in a single solution. The only real difference between this step and the &lt;code>dotnet restore&lt;/code> step from the previous article is the fact that we restore to the solution level packages folder instead of &lt;code>dotnet restore&lt;/code>&amp;rsquo;s default location. This is because the targets in the sfproj are looking in this directory. Adjust &lt;code>restoreDirectory&lt;/code> according to your own folder structure - I place all the sources under an &lt;code>/src&lt;/code> folder for reference.&lt;/p>
+&lt;h2 id="publishing-the-service-fabric-app">Publishing the Service Fabric App&lt;/h2>
+&lt;p>When it comes around to publishing the application(s), I usually create two versions, one in a debug build and one in release. Both are then published to the artifacts. The debug build is useful for downloading by other developers for use on their local machines and the release build is what is used for deployments. If you wish to mirror this, duplicate the step and replace Release with Debug.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreCLI@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Package Projects (Publish - Release)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">projects&lt;/span>: &lt;span style="color:#ae81ff">$(packageProjects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">packDirectory&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;$(Build.ArtifactStagingDirectory)\\drop\\release&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">arguments&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;-c Release /p:Platform=x64 /p:Version=$(Build.BuildNumber) /t:Package /p:PackageLocation=$(Build.ArtifactStagingDirectory)\drop\release\applicationpackage&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;em>&lt;strong>Note&lt;/strong>&lt;/em>: &lt;em>Sorry about the formatting, see the full file at the end of the article for the proper formatting.&lt;/em>&lt;/p>
+&lt;p>In this step, we package directly to the artifact staging directory to make publishing to the build artifacts a lot easier later in the process. All of the output is placed inside of the &lt;code>drop&lt;/code> folder as a way of differentiating between this artifact and others. Under the &lt;code>drop&lt;/code> folder, we split based on the configuration type: Debug/Release. Both the debug and the release folder mirror the same folder structure which is an &lt;code>applicationpackage&lt;/code> folder, containing the packaged code and the &lt;code>projectartifacts&lt;/code> folder which will contain the publish profiles. So the full folder structure appears like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">/drop&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/debug&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/applicationpackage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/projectartifacts&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/release&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/applicationpackage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">/projectartifacts&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The only other element that I wish to point out is that service fabric applications have to be built as the &lt;code>x64&lt;/code> platform.&lt;/p>
+&lt;h2 id="update-the-service-fabric-app-version">Update the Service Fabric App Version&lt;/h2>
+&lt;p>I am currently unaware of the correct msbuild switch to set the version number of the service fabric application, so I use a built in step to change the manifest numbers to match the assembly numbers and ensure a rolling upgrade is possible on the service fabric cluster.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Update the service fabric build numbers&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">ServiceFabricUpdateManifests@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Update Service Fabric Version (Release)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">applicationPackagePath&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;$(Build.ArtifactStagingDirectory)\\drop\\release\\applicationpackage&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">versionSuffix&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;$(Build.BuildNumber)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">versionBehavior&lt;/span>: &lt;span style="color:#ae81ff">Replace&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>versionBehavior&lt;/code> parameter has two modes: Append/Replace. Since I always use the build number, which is always a semver version, I use the replacement mode. We look inside of the &lt;code>applicationpackage&lt;/code> folder to find the manifest file, which is the location we previously published the application to.&lt;/p>
+&lt;h2 id="copying-publish-profiles">Copying Publish Profiles&lt;/h2>
+&lt;p>In order to publish the service fabric application from the release area in VSTS, we need to copy the publish profiles that are defined with the project (unless you want to re-create them in the release pipeline, everytime!).&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">CopyFiles@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Copy XML Files To Artifacts (Release)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">SourceFolder&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;src\&amp;#39;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Contents: |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> **\*.ServiceFabric\PublishProfiles\*.xml
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> **\*.ServiceFabric\ApplicationParameters\*.xml
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> TargetFolder: &amp;#39;&lt;/span>&lt;span style="color:#ae81ff">$(Build.ArtifactStagingDirectory)\drop\release\projectartifacts\&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">CleanTargetFolder&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As mentioned previously, I keep the sourcecode under an &lt;code>src&lt;/code> folder in the repository. Inside of that folder, we need to search for any xml files in the &lt;code>PublishProfiles&lt;/code> and &lt;code>ApplicationParameters&lt;/code> folders and place them in the &lt;code>projectartifacts&lt;/code> folder as described previously. The only convention here is that my service fabric applications end in &lt;code>.ServiceFabric&lt;/code> so you may need to adjust this for your own build scripts.&lt;/p>
+&lt;p>If you put all the pieces together, you should have a working service fabric build pipeline, along the lines of the following sample:&lt;/p>
+&lt;script src="https://gist.github.com/Im5tu/3f114127c4174cb4e6602d6295b8c827.js">&lt;/script></description></item><item><title>Automated Builds in VSTS with YML Build Definitions</title><link>https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/</link><pubDate>Sun, 17 Jun 2018 21:35:00 +0100</pubDate><guid>https://im5tu.io/article/2018/06/automated-builds-in-vsts-with-yml-build-definitions/</guid><description>&lt;p>In this article we will explore a preview feature inside of Visual Studio Team Services (VSTS) called YML Build Definitions. In essence, this allows you to change your build process from a &lt;code>.yml&lt;/code> file in your git repository much in the same way as you can do with other services such as AppVeyor. During the article, we will setup a build definition for an Aspnet Core website.&lt;/p>
+&lt;h2 id="prerequisites">Prerequisites&lt;/h2>
+&lt;p>Before we take a look at the struture of the file, you will need to complete the following tasks:&lt;/p>
+&lt;ol>
+&lt;li>Setup a git repository inside of VSTS&lt;/li>
+&lt;li>Enable the preview feature (requires account level administration access)&lt;/li>
+&lt;/ol>
+&lt;p>For the sake of brevity, I will assume that you already have administrator access to your VSTS account and that you have a git repository already setup. If you need to know how to setup a git repository inside of VSTS, please use &lt;a href="https://docs.microsoft.com/en-us/vsts/git/create-new-repo?view=vsts">this guide&lt;/a>.&lt;/p>
+&lt;p>Enabling a preview feature inside of VSTS requires that you have administration access to your account, not just your team project. If you do not have access, or unable to obtain access, you will be unable to follow the rest of the article. Once you have secured administrator level access, use the &lt;a href="https://docs.microsoft.com/en-us/vsts/project/navigation/preview-features?view=vsts">following guide&lt;/a> to enable the &amp;ldquo;YML Build Definition&amp;rdquo; preview feature.&lt;/p>
+&lt;h2 id="say-hello-to-vsts-ciyml">Say hello to &lt;code>.vsts-ci.yml&lt;/code>&lt;/h2>
+&lt;p>The way that VSTS has implemented the automated build system, is nothing short of excellent. They have used a convention based approach to locating the file and have built the system on top of existing tasks in your VSTS account. Unfortunately, task groups do not work as yet, but there is a templating feature which may be useful in some instances.&lt;/p>
+&lt;p>In order to use the feature, you need to create a &lt;code>.vsts-ci.yml&lt;/code> file in the root of the repository. It is worth noting that this file is white-space sensitive so pay attention to that from the outset. Once this file is committed to the repository, it will automatically run everytime one or more commits are pushed to VSTS. Just like regular builds, the YML Build Definition builds integrate seamlessly into the pull request system inside of VSTS.&lt;/p>
+&lt;p>The first build, once the file has been pushed, takes a little longer than use as VSTS has to create all the required build parts for the first time. In your build definitions inside of VSTS, you will see a new definition in the following naming convention:&lt;/p>
+&lt;pre>&lt;code>&amp;lt;repository name&amp;gt; CI
+&lt;/code>&lt;/pre>
+&lt;p>If I had a repository called &lt;code>hello-world-web&lt;/code> then the build defintion that you can search for will be &lt;code>hello-world-web CI&lt;/code>.&lt;/p>
+&lt;p>The file we will create follows the following structure:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">&amp;lt;version number&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">triggers&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">&amp;lt;list of triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">variables&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">&amp;lt;list of variables&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">steps&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">&amp;lt;our build process&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>name&lt;/code> property, from what I can tell, represents the build number which we can extract later on in the build process. &lt;code>triggers&lt;/code> allows us to only trigger when the required conditions are met. &lt;code>variables&lt;/code> are an invaluable part of the build definition. I always try and variable anything useful as the build files can become quite lengthy depending on your desired process. Lastly, &lt;code>steps&lt;/code> is where all of the build process is defined. The build files do support phases, but i am keeping that out of scope for this article. For the remainder of the article, we will assume the build number is &lt;code>0.1.0&lt;/code> or &lt;code>name: 0.1.0&lt;/code> in the yml file.&lt;/p>
+&lt;p>&lt;strong>Note:&lt;/strong> &lt;em>At the end of this article, there is a complete file that you can use as a template.&lt;/em>&lt;/p>
+&lt;h2 id="setting-up-triggers">Setting up triggers&lt;/h2>
+&lt;p>If you do not specify a trigger section, VSTS will run a build for every branch that you ever commit/push to regardless of what it&amp;rsquo;s called. I usually setup my builds to automatically trigger on any feature/bugfix/release/hotfix branch and, naturally, the master branch. To do this, configure the section as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">trigger&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">branches&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">include&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">master&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">hotfix/*&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">release/*&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">feature/*&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">bugfix/*&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The full syntax, if you choose to use it, is:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">trigger&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">branches&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">include&lt;/span>: [&lt;span style="color:#ae81ff">string]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">exclude&lt;/span>: [&lt;span style="color:#ae81ff">string]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">paths&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">include&lt;/span>: [&lt;span style="color:#ae81ff">string]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">exclude&lt;/span>: [&lt;span style="color:#ae81ff">string]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The shorter, inclusive only syntax is:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">trigger&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> [&lt;span style="color:#ae81ff">string]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Personally, I prefer the full syntax, but it doesn&amp;rsquo;t make a difference as I typically only use inclusive only filters. Where &lt;code>[string]&lt;/code> is present, either place a single entry or if multiple entries are required, follow my example where I place &lt;code>-&lt;/code> on the start of each new line of the element.&lt;/p>
+&lt;p>One last point to note, if you setup your branching policies in VSTS to require a build from the yml build definition, this will always be triggered regardless of the settings in this section - as far as I am aware.&lt;/p>
+&lt;h2 id="using-variables">Using variables&lt;/h2>
+&lt;p>You do not have to use variables in your scripts. If you decide to, they can be extremly powerful. The variables can be passed to task inputs using the macro syntax &lt;code>$(variableName)&lt;/code>, or accessed within a script using the environment variable. For an example of how the alternative syntaxes, see the &lt;a href="https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted-phase.md">documentation&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">variables&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">buildConfiguration&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;Release&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">buildProjects&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;**/*.csproj&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">testProjects&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;**/*Tests*.csproj&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">publishProject&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;src\CHANGEME\CHANGEME.csproj&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">dotnetCliVersion&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;2.1.300&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In our script that we are building, we have some simple variables for some of the key sections of our code. It can be incredibly easy to parameterise everything, but I would advise only do that which is necessary.&lt;/p>
+&lt;h2 id="the-build-pipeline">The build pipeline&lt;/h2>
+&lt;p>As mentioned earlier in the article, I will be walking through how to create a build pipeline for a sample Aspnet Core website. In order for us to have something to publish-able at the end of the build, I will take you through the following:&lt;/p>
+&lt;ol>
+&lt;li>Cleaning the sources (Issue #4 at the end of the article)&lt;/li>
+&lt;li>Ensure the dotnet CLI is installed&lt;/li>
+&lt;li>Run the build in release mode&lt;/li>
+&lt;li>Run the tests in release mode&lt;/li>
+&lt;li>Publish the website to the artifact directory of the VSTS build&lt;/li>
+&lt;li>Label the VSTS build with the build number&lt;/li>
+&lt;/ol>
+&lt;h2 id="cleaning-sources">Cleaning Sources&lt;/h2>
+&lt;p>As a best practise, the first thing that I do in a build process is to reset the state of the repository. This prevents any issues such as false positives from previous builds etc. In order to do this, we can execute a small git magic:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">steps&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">script&lt;/span>: |&lt;span style="color:#e6db74">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> git clean -d -x -f
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> displayName: Clean Sources&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This portion is declared directly under the &lt;code>steps:&lt;/code> section in the yml file. Inline scripts, as shown above, are limited to around 500 characters at the time of writing. So you may need to get inventive with your scripts or use an external file (out of scope for this article). As the file is whitespace sensitive, there is no need for quotation marks around most things, so we can just type &lt;code>Clean Sources&lt;/code> and the space will be preserved in the name of the step when we view it inside of VSTS.&lt;/p>
+&lt;p>For completeness, the git options entered are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>-d&lt;/code>: Removes untracked files&lt;/li>
+&lt;li>&lt;code>-x&lt;/code>: Basically removes everything regardless of whether or not it&amp;rsquo;s in the &lt;code>.gitignore&lt;/code>&lt;/li>
+&lt;li>&lt;code>-f&lt;/code>: Force the clean operation&lt;/li>
+&lt;/ul>
+&lt;p>In my testing, these options successfully remove the build output if present.&lt;/p>
+&lt;h2 id="ensuring-the-dotnet-cli-in-installed">Ensuring the dotnet CLI in installed&lt;/h2>
+&lt;p>Depending on where you are running your build process, you may or may not need this step, but I always include it for completeness. This steps checks for the specified version of the dotnet CLI and installs it if it is not present. We pull the version from a variable, which I&amp;rsquo;ll cover later.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreInstaller@0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">DotNet CLI Installer&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">version&lt;/span>: &lt;span style="color:#ae81ff">$(dotnetCliVersion)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This should be placed under the definition of Clean Sources above. For each of the remaining steps, place them directly after the last step you entered, unless you want to change the order of the process (the build executes the steps from top to bottom - so the first one in the file is the first one to be run).&lt;/p>
+&lt;h2 id="building-the-projects">Building the projects&lt;/h2>
+&lt;p>In order to build the project(s), I use a two step process: restore the required nuget packages using a nuget.config file, followed by building the projects.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreCLI@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Restore Packages&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">command&lt;/span>: &lt;span style="color:#ae81ff">restore&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">feedsToUse&lt;/span>: &lt;span style="color:#ae81ff">config&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nugetConfigPath&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;nuget.config&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">projects&lt;/span>: &lt;span style="color:#ae81ff">$(buildProjects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">noCache&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">verbosityRestore&lt;/span>: &lt;span style="color:#ae81ff">Normal&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In the above snippet, the first thing that I want to mention is that I am using a variable to decide which projects I want nuget packages to be restored for.The projects directive supports a wildcard approach, so we can declare a folder structure such as &lt;code>**/*.csproj&lt;/code> should we want to. Next, I had to set the &lt;code>noCache: true&lt;/code> directive as I always wanted the latest versions from the nuget feeds. This shouldn&amp;rsquo;t be required on hosted build servers, but may be needed for your own build servers. Lastly, I set the verbosity level back to normal, where the default is detailed. This massively cleans up the corresponding build logs. I&amp;rsquo;ll leave it up to you, the reader, to extract this to a variable should you wish too.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreCLI@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Build Projects&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">projects&lt;/span>: &lt;span style="color:#ae81ff">$(buildProjects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">packDirectory&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;$(Build.ArtifactStagingDirectory)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">arguments&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;-c $(buildConfiguration) /p:Version=$(Build.BuildNumber)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once again, I have used a couple of variables. The first is the projects to build which is the exact same definition as in the previous step. The second variable is the configuration that we wish to build. In this case, I always have my automated builds built in &lt;code>Release&lt;/code> mode - so this is how i&amp;rsquo;ve defined this variable. Last but by no means least, I set version number in the arguments so the assemblies are versioned correctly.&lt;/p>
+&lt;h2 id="testing-the-projects">Testing the projects&lt;/h2>
+&lt;p>Testing is always a part of my pipeline, regardless of whether or not the solution actually contains any tests at the current time. Luckily, if tests are not present when this step runs, then there is a only a warning on the step rather than a failing build.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreCLI@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Test Projects&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">command&lt;/span>: &lt;span style="color:#ae81ff">test&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">projects&lt;/span>: &lt;span style="color:#ae81ff">$(testProjects)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">publishTestResults&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">arguments&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;--no-build -c $(buildConfiguration)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You may of noticed that I used a separate variable for the projects that I wish to test (&lt;code>$(testProjects)&lt;/code>). For me, this is just a subset of the projects that I have already built and I always want to run in the same configuration that I built in. This allows me to pass in the &lt;code>--no-build&lt;/code> argument, saving a small amount of time on executing the tests. Luckily, the built in task for tests can automatically publish the test results (if available) via the &lt;code>publishTestResults: true&lt;/code> input.&lt;/p>
+&lt;h2 id="publishing-the-website">Publishing the website&lt;/h2>
+&lt;p>&lt;em>Sorry about some of the formatting in this section. See the full file at the end of this article for the proper formatting. I will sort this out eventually.&lt;/em>&lt;/p>
+&lt;p>There are two steps in publishing our website. The first is to build the project with the runtime, placing the output in a staging directory. The second part is taking the build output from the staging directory and publishing it to the artificts of the build.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">DotNetCoreCLI@2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Publish Web App&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">condition&lt;/span>: &lt;span style="color:#ae81ff">and(succeeded(), eq(variables[&amp;#39;Build.SourceBranch&amp;#39;], &amp;#39;refs/heads/master&amp;#39;))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">command&lt;/span>: &lt;span style="color:#ae81ff">publish&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">projects&lt;/span>: &lt;span style="color:#ae81ff">$(publishProject)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">arguments&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;-c Release --self-contained -r win7-x64 -o $(Build.ArtifactStagingDirectory)/drop /p:Version=$(Build.BuildNumber)&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This is the first time that we have used a condition. The default condition is &lt;code>succeeded()&lt;/code> which means &amp;ldquo;only run this step if the previous one completed successfully&amp;rdquo;. Here I have said, where the previous step completed successfully and the branch that&amp;rsquo;s being built is the &lt;code>master&lt;/code> branch. For some of our builds we only publish on the master branch, though it can be handy to have this step in place for pull requests etc. It purely depends on the requirements on your build pipeline.&lt;/p>
+&lt;p>Taking a look at the arguments, I want to point out the use of: &lt;code>--self-contained&lt;/code>, &lt;code>-r&lt;/code> and &lt;code>-o&lt;/code>. They have the following attributes:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>--self-contained&lt;/code>: Publish the .NET Core runtime with your application so the runtime doesn&amp;rsquo;t need to be installed on the target machine.&lt;/li>
+&lt;li>&lt;code>-r &amp;lt;runtime&amp;gt;&lt;/code>: Publish the project for a given runtime.&lt;/li>
+&lt;li>&lt;code>-o &amp;lt;directory&amp;gt;&lt;/code>: This places the build output into the specified directory. In our case, it&amp;rsquo;s a folder called &lt;code>drop&lt;/code> inside of the VSTS staging directory. You do not need to manually create these folders, VSTS takes care of this for you.&lt;/li>
+&lt;/ul>
+&lt;p>The next step is to publish the artifacts so we can use it after the build completes:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">PublishBuildArtifacts@1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">condition&lt;/span>: &lt;span style="color:#ae81ff">and(succeeded(), eq(variables[&amp;#39;Build.SourceBranch&amp;#39;], &amp;#39;refs/heads/master&amp;#39;))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">pathtoPublish&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;$(Build.ArtifactStagingDirectory)/drop&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">artifactName&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;drop&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">publishLocation&lt;/span>: &lt;span style="color:#ae81ff">Container&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This step takes the contents of the &lt;code>drop&lt;/code> folder in the staging area, and copies it to the published artifacts &lt;code>drop&lt;/code> directory. Occassionally, I build and package multiple projects, so I have them split out in the staging/published areas in separate folders. This, however, is not required.&lt;/p>
+&lt;h2 id="labelling-the-build">Labelling the Build&lt;/h2>
+&lt;p>This section requires the &lt;a href="https://marketplace.visualstudio.com/items?itemName=YodLabs.VariableTasks">following extension&lt;/a> to be installed. Though there may be another, built in, way to complete the same task. In my real builds, I usually have multiple tags for our release process. To add additional tags, enter another line at the same indentation as &lt;code>Build-$(Build.BuildNumber)&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">task&lt;/span>: &lt;span style="color:#ae81ff">YodLabs.VariableTasks.AddTag.AddTag@0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#ae81ff">Tag VSTS Build&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">condition&lt;/span>: &lt;span style="color:#ae81ff">and(succeeded(), eq(variables[&amp;#39;Build.SourceBranch&amp;#39;], &amp;#39;refs/heads/master&amp;#39;))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">inputs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">tags&lt;/span>: |&lt;span style="color:#e6db74">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> Build-$(Build.BuildNumber)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Once this task completes, you should have a tag on your build like: &lt;code>Build-0.1.0&lt;/code>.&lt;/p>
+&lt;h2 id="final-file">Final file&lt;/h2>
+&lt;p>As I mentioned near the start of the article, the &lt;code>.vsts-ci.yml&lt;/code> file is whitespace sensitive, so for completeness, here is a sample file that you can use for your own builds.&lt;/p>
+&lt;script src="https://gist.github.com/Im5tu/3ed84e07f4db212440b56a4b84d4ad3e.js">&lt;/script>
+&lt;h2 id="teaching-yourself">Teaching yourself&lt;/h2>
+&lt;p>Although I have covered a very basic process here, there are two ways that you can discover the features currently available in the preview feature. Firstly, you can create a build definition manually adding in the relevant tasks to your process. Once you are ready, click on the phase that you are interested in then look for the &lt;code>View YAML&lt;/code> option in the right hand pane. Alternatively, there is the &lt;a href="https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted.md">preview documentation&lt;/a>. I used both approaches to teach myself how to do the builds. The documentation could do with a little bit more detail in places, so a lot of this is currently experimentation.&lt;/p>
+&lt;h2 id="potential-issues">Potential Issues&lt;/h2>
+&lt;p>I wanted to include this section, because there are a few things that I have noticed that doesn&amp;rsquo;t quite work as expected, or at all in some cases:&lt;/p>
+&lt;ol>
+&lt;li>Changing the queue using the &lt;code>queue:&lt;/code> setting does not appear to work. I have tried using a variety of syntaxes in a few different places (top level/phases) but nothing seems to work at the moment. So you have to change the build manually if this is an issue for you.&lt;/li>
+&lt;li>In order to perform git operations from the command line, you need to either:
+&lt;ul>
+&lt;li>Use the VSTS API and API token system to perform the action&lt;/li>
+&lt;li>Give the project collection build user account &lt;code>Contributor&lt;/code> access to your repository&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>When I experimented with using the git command line to tag our repositories, the command to push to the repository seemed never to complete or timeout (it was &amp;ldquo;pushing&amp;rdquo; for well over 5 minutes)&lt;/li>
+&lt;li>You can get build server re-use which can lead to incremental builds rather than a clean build, which can have some disasterous consequences. So for all of my builds, I force git to clean all of the sources before I do anything for the current build.&lt;/li>
+&lt;/ol>
+&lt;p>I&amp;rsquo;m sure that all of these issues will be resolved in due course as more and more support is added to the feature. It is well worth using if it works for your scenario. In a future article, I will show you how to publish a SQL project, Service Fabric project and Nuget package all from a YML Build Definition.&lt;/p></description></item></channel></rss>

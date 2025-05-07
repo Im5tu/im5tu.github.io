@@ -1,1 +1,235 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2014/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2014/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Finding Reducible Expressions</title><link>https://im5tu.io/article/2014/06/finding-reducible-expressions/</link><pubDate>Tue, 24 Jun 2014 09:21:19 +0000</pubDate><guid>https://im5tu.io/article/2014/06/finding-reducible-expressions/</guid><description>&lt;p>Today I just wanted to share a quick note regarding &lt;a href="http://stackoverflow.com/a/2040097/315711">a Stack Overflow answer&lt;/a> that I recently came across. In the answer the author explains that a call to &lt;code>Expression.CanReduce&lt;/code> will typically return false, while &lt;code>Expression.Reduce()&lt;/code> will return the current expression. The author continues to state that one of the types that overrides &lt;code>Expression.Reduce()&lt;/code> and &lt;code>Expression.CanReduce&lt;/code> is &lt;code>MemberInitExpression&lt;/code>.&lt;/p></description></item><item><title>How your binary search implementation is broken and how to fix it</title><link>https://im5tu.io/article/2014/06/how-your-binary-search-implementation-is-broken-and-how-to-fix-it/</link><pubDate>Fri, 20 Jun 2014 18:21:04 +0000</pubDate><guid>https://im5tu.io/article/2014/06/how-your-binary-search-implementation-is-broken-and-how-to-fix-it/</guid><description>&lt;p>I have recently begun studying the theory and implementations of algorithms. During this study, I came across &lt;a href="http://googleresearch.blogspot.co.uk/2006/06/extra-extra-read-all-about-it-nearly.html">this post&lt;/a> which describes how a bug exists in most implementations of a binary search algorithm.&lt;/p></description></item><item><title>Unit Testing Equals The Forgotten Tests</title><link>https://im5tu.io/article/2014/06/unit-testing-equals-the-forgotten-tests/</link><pubDate>Wed, 18 Jun 2014 18:20:25 +0000</pubDate><guid>https://im5tu.io/article/2014/06/unit-testing-equals-the-forgotten-tests/</guid><description>&lt;p>Today I wanted to cover something that is not often covered when unit testing an object. If an object has the &lt;code>Equals&lt;/code> method overridden, then there are a number of tests that we should be running as a minimum:&lt;/p></description></item><item><title>Enabling HTTP Strict Transport Security HSTS via Web Config</title><link>https://im5tu.io/article/2014/06/enabling-http-strict-transport-security-hsts-via-web-config/</link><pubDate>Tue, 10 Jun 2014 18:19:47 +0000</pubDate><guid>https://im5tu.io/article/2014/06/enabling-http-strict-transport-security-hsts-via-web-config/</guid><description>&lt;p>In my previous post, I discussed how to &lt;a href="https://im5tu.io/article/2014/04/enabling-http-strict-transport-security-hsts-via-asp-net-mvc-actionfilters/">enable HSTS via MVC Action Filters&lt;/a>. I thought that I would just do a follow up post showing you how to enable it via the web.config.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>June on CodeWithStu's Blog</title><link>https://im5tu.io/article/2014/06/</link><description>Recent content in June on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><atom:link href="https://im5tu.io/article/2014/06/index.xml" rel="self" type="application/rss+xml"/><item><title>Finding Reducible Expressions</title><link>https://im5tu.io/article/2014/06/finding-reducible-expressions/</link><pubDate>Tue, 24 Jun 2014 09:21:19 +0000</pubDate><guid>https://im5tu.io/article/2014/06/finding-reducible-expressions/</guid><description>&lt;p>Today I just wanted to share a quick note regarding &lt;a href="http://stackoverflow.com/a/2040097/315711">a Stack Overflow answer&lt;/a> that I recently came across. In the answer the author explains that a call to &lt;code>Expression.CanReduce&lt;/code> will typically return false, while &lt;code>Expression.Reduce()&lt;/code> will return the current expression. The author continues to state that one of the types that overrides &lt;code>Expression.Reduce()&lt;/code> and &lt;code>Expression.CanReduce&lt;/code> is &lt;code>MemberInitExpression&lt;/code>.&lt;/p>
+&lt;p>I wanted to find out when &lt;code>Expression.CanReduce&lt;/code> would actually return &lt;code>true&lt;/code>. I discovered the &lt;a href="http://www.codeplex.com/Download?ProjectName=dlr&amp;amp;DownloadId=246540">173 page Expression Tree Specification&lt;/a> which provides an additional insight to &lt;code>CanReduce&lt;/code> and &lt;code>Reduce()&lt;/code>.&lt;/p>
+&lt;h2 id="canreduce">CanReduce&lt;/h2>
+&lt;blockquote>
+&lt;p>This property returns whether the Reduce method returns a different but semantically equivalent ET. By default, this property returns false.
+In the typical case, the resulting ET contains all common ET nodes suitable for passing to any common compilation or ET processing code. Sometimes the result is only partially reduced, and when walking the resulting ET, you&amp;rsquo;ll need to further reduce some nodes.
+The value returned by this property should never change for a given object. Here&amp;rsquo;s the signature:&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> Boolean CanReduce { &lt;span style="color:#66d9ef">get&lt;/span>; }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="reduce">Reduce&lt;/h2>
+&lt;blockquote>
+&lt;p>This method returns a semantically equivalent ET representing the same expression. By default, this method returns the object on which it was invoked.
+Typically the result comprises only common ET types, ET nodes suitable for passing to any compilation or ET processing code. Usually the result is only partially reduced (that is, only the root node). You&amp;rsquo;ll probably need to further reduce some nodes. Here&amp;rsquo;s the signature:&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">virtual&lt;/span> Expression Reduce();
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="reducible-types-inside-systemlinqexpressions">Reducible Types Inside System.Linq.Expressions&lt;/h2>
+&lt;p>Using &lt;a href="http://www.telerik.com/products/decompiler.aspx">Telerik&amp;rsquo;s JustDecompile&lt;/a>, I went through each public class to see which had an override on either &lt;code>CanReduce&lt;/code> or &lt;code>Reduce()&lt;/code>. The result came up with the following list:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="http://msdn.microsoft.com/en-us/library/system.linq.expressions.binaryexpression.aspx">BinaryExpression&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://msdn.microsoft.com/en-us/library/system.linq.expressions.listinitexpression.aspx">ListInitExpression&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://msdn.microsoft.com/en-GB/library/system.linq.expressions.memberinitexpression.aspx">MemberInitExpression&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://msdn.microsoft.com/en-us/library/system.linq.expressions.unaryexpression.aspx">UnaryExpression&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Furthermore, I searched for descendant types of the list above and found the following reducible classes that were marked as internal, as such I couldn&amp;rsquo;t find any official documentation for them:&lt;/p>
+&lt;ul>
+&lt;li>AssignBinaryExpression&lt;/li>
+&lt;li>CoalesceConversionBinaryExpression&lt;/li>
+&lt;li>LogicalBinaryExpression&lt;/li>
+&lt;li>SimpleBinaryExpression&lt;/li>
+&lt;/ul>
+&lt;h2 id="further-reading">Further Reading&lt;/h2>
+&lt;p>Inside the expression tree specification, I would also be inclined to read section 2.2 entitled &lt;em>Reducible Nodes&lt;/em>.&lt;/p>
+&lt;p>If there are any additional expressions that can be reduced that I have missed, please send me a message and I will add it to the list.&lt;/p></description></item><item><title>How your binary search implementation is broken and how to fix it</title><link>https://im5tu.io/article/2014/06/how-your-binary-search-implementation-is-broken-and-how-to-fix-it/</link><pubDate>Fri, 20 Jun 2014 18:21:04 +0000</pubDate><guid>https://im5tu.io/article/2014/06/how-your-binary-search-implementation-is-broken-and-how-to-fix-it/</guid><description>&lt;p>I have recently begun studying the theory and implementations of algorithms. During this study, I came across &lt;a href="http://googleresearch.blogspot.co.uk/2006/06/extra-extra-read-all-about-it-nearly.html">this post&lt;/a> which describes how a bug exists in most implementations of a binary search algorithm.&lt;/p>
+&lt;p>I&amp;rsquo;ll begin with the example given in the post, which is taken from &lt;code>java.util.Arrays&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> BinarySearch(&lt;span style="color:#66d9ef">int&lt;/span>[] a, &lt;span style="color:#66d9ef">int&lt;/span> key) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> low = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> high = a.length - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">while&lt;/span> (low &amp;lt;= high) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> mid = (low + high) / &lt;span style="color:#ae81ff">2&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> midVal = a[mid];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;lt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> low = mid + &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;gt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> high = mid - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> mid; &lt;span style="color:#75715e">// key found&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> -(low + &lt;span style="color:#ae81ff">1&lt;/span>); &lt;span style="color:#75715e">// key not found.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>For all intensive purposes this implementation is correct. Except for a bug which can raise an Overflow Exception. The problematic line is this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> mid = (low + high) / &lt;span style="color:#ae81ff">2&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If the result of &lt;code>low + high&lt;/code> is greater than maximum value of an 32-bit integer, the exception is raised. Luckily, there are ways that we can fix this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> mid = low + (high - low) / &lt;span style="color:#ae81ff">2&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or if you&amp;rsquo;re in Java:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> mid = (low + high) &amp;gt;&amp;gt;&amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you are working in .Net languages you will need to work with the &lt;code>unchecked&lt;/code> keyword in order to use the bit shift method:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> mid;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">unchecked&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> mid = (low + high) &amp;gt;&amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>The &lt;code>unchecked&lt;/code> keyword is used to suppress overflow-checking for integral-type arithmetic operations and conversions.&lt;/p>
+&lt;p>In an unchecked context, if an expression produces a value that is outside the range of the destination type, the overflow is not flagged. For example, because the calculation in the following example is performed in an unchecked block or expression, the fact that the result is too large for an integer is ignored, and int1 is assigned the value -2,147,483,639.&lt;/p>
+&lt;/blockquote>
+&lt;p>(&lt;a href="http://msdn.microsoft.com/en-GB/library/a569z7k8.aspx">Source&lt;/a>)&lt;/p>
+&lt;p>So here is the differential method in C#:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> BinarySearch(&lt;span style="color:#66d9ef">int&lt;/span>[] a, &lt;span style="color:#66d9ef">int&lt;/span> key) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> low = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> high = a.length - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">while&lt;/span> (low &amp;lt;= high) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> mid = low + (high - low) / &lt;span style="color:#ae81ff">2&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> midVal = a[mid];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;lt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> low = mid + &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;gt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> high = mid - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> mid; &lt;span style="color:#75715e">// key found&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> -&lt;span style="color:#ae81ff">1&lt;/span>; &lt;span style="color:#75715e">// key not found.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And using the bit shift method:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">static&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> BinarySearch(&lt;span style="color:#66d9ef">int&lt;/span>[] a, &lt;span style="color:#66d9ef">int&lt;/span> key) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> low = &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> high = a.length - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">while&lt;/span> (low &amp;lt;= high) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> mid;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">unchecked&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> mid = (low + high) &amp;gt;&amp;gt; &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> midVal = a[mid];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;lt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> low = mid + &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (midVal &amp;gt; key)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> high = mid - &lt;span style="color:#ae81ff">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> mid; &lt;span style="color:#75715e">// key found&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> -&lt;span style="color:#ae81ff">1&lt;/span>; &lt;span style="color:#75715e">// key not found.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Personally, I prefer the differential version over the bit shift version but I have provided both for completeness. Even though this bug only manifests itself with well over a billion elements in an array, I still thought it was worth pointing out. I encourage you to read the other articles for more complete context.&lt;/p></description></item><item><title>Unit Testing Equals The Forgotten Tests</title><link>https://im5tu.io/article/2014/06/unit-testing-equals-the-forgotten-tests/</link><pubDate>Wed, 18 Jun 2014 18:20:25 +0000</pubDate><guid>https://im5tu.io/article/2014/06/unit-testing-equals-the-forgotten-tests/</guid><description>&lt;p>Today I wanted to cover something that is not often covered when unit testing an object. If an object has the &lt;code>Equals&lt;/code> method overridden, then there are a number of tests that we should be running as a minimum:&lt;/p>
+&lt;ul>
+&lt;li>Reflexive Tests&lt;/li>
+&lt;li>Symmetric Tests&lt;/li>
+&lt;li>Transitive Tests&lt;/li>
+&lt;li>Consistency Tests&lt;/li>
+&lt;li>Not-Null Tests&lt;/li>
+&lt;/ul>
+&lt;h2 id="reflexive-tests">Reflexive Tests&lt;/h2>
+&lt;p>A reflexive test is one where an object is equal to itself. In other words, the following expression should be true: &lt;code>x.Equals(x)&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> ReflexiveTest()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(x));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="symmetric-tests">Symmetric Tests&lt;/h2>
+&lt;p>A symmetric test is one where an object (&lt;code>x&lt;/code>) is equal to another instance (&lt;code>y&lt;/code>), only if the second instance (&lt;code>y&lt;/code>) is also equal to the first instance (&lt;code>x&lt;/code>). In essence, if &lt;code>x.Equals(y)&lt;/code> then &lt;code>y.Equals(x)&lt;/code> should also be true.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> SymmetricTest()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> y = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(y.Equals(x));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="transitive-tests">Transitive Tests&lt;/h2>
+&lt;p>A transitive tests is one where if object &lt;code>x&lt;/code> is equal to &lt;code>y&lt;/code>, and &lt;code>y&lt;/code> is equal to &lt;code>z&lt;/code>, then &lt;code>x&lt;/code> should also be equal to &lt;code>z&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> TransitiveTest()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> y = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> z = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(y.Equals(z));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(z));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="consistency-tests">Consistency Tests&lt;/h2>
+&lt;p>A consistent test should ensure that regardless of how many invocations of the &lt;code>Equals&lt;/code> method occurs, the result should remain the same. For example, both of the following tests should pass:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> ConsistencyTest_2Invocations()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> y = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> ConsistencyTest_3Invocations()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> y = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsTrue(x.Equals(y));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="not-null-tests">Not-Null Tests&lt;/h2>
+&lt;p>If the &lt;code>Equals&lt;/code> method is called with a null argument, the result of the test should always be &lt;code>false&lt;/code>. This is because an instance of an object is never equal to a null reference.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">[Test]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">void&lt;/span> NullTest()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> x = &lt;span style="color:#66d9ef">new&lt;/span> TestClass();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Assert.IsFalse(x.Equals(&lt;span style="color:#66d9ef">null&lt;/span>));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="other-notes-about-overriding-equals">Other notes about overriding Equals&lt;/h2>
+&lt;ul>
+&lt;li>If you override &lt;code>Equals()&lt;/code>, ensure that you override &lt;code>GetHashCode()&lt;/code> as well.
+&lt;ul>
+&lt;li>If two objects are equal, then they must return the same value for &lt;code>GetHashCode()&lt;/code>&lt;/li>
+&lt;li>If &lt;code>GetHashCode()&lt;/code> is equal, it is not necessary for them to be the same; this is a collision and &lt;code>Equals()&lt;/code> should be called to see if the objects are equal in reality&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>If possible, always implement the &lt;code>IEquatable&amp;lt;T&amp;gt;&lt;/code> interface on your custom objects as this provides type safety for other programmers and prevents boxing on value-types.&lt;/li>
+&lt;/ul></description></item><item><title>Enabling HTTP Strict Transport Security HSTS via Web Config</title><link>https://im5tu.io/article/2014/06/enabling-http-strict-transport-security-hsts-via-web-config/</link><pubDate>Tue, 10 Jun 2014 18:19:47 +0000</pubDate><guid>https://im5tu.io/article/2014/06/enabling-http-strict-transport-security-hsts-via-web-config/</guid><description>&lt;p>In my previous post, I discussed how to &lt;a href="https://im5tu.io/article/2014/04/enabling-http-strict-transport-security-hsts-via-asp-net-mvc-actionfilters/">enable HSTS via MVC Action Filters&lt;/a>. I thought that I would just do a follow up post showing you how to enable it via the web.config.&lt;/p>
+&lt;p>In order to do this via a web configuration file, you must be running IIS 7.0 or higher, &lt;a href="http://www.iis.net/configreference/system.webserver/httpprotocol/customheaders#002">according to this compatability chart&lt;/a>. The reason for this, is that the &lt;code>HttpProtocol&lt;/code> element was added in IIS 7.0. This is the element that is responsible for generating custom headers.&lt;/p>
+&lt;p>Below is a small sample configuration that enables a custom header called &lt;code>Header Name&lt;/code> with the value &lt;code>Header Value&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-xml" data-lang="xml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;add&lt;/span> &lt;span style="color:#a6e22e">name=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;Header Name&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">value=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;Header Value&amp;#34;&lt;/span> &lt;span style="color:#f92672">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;/configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>In order to enable HSTS, we need to change the header name to be &lt;code>Strict-Transport-Security&lt;/code> and the value to be &lt;code>max-age=x&lt;/code> (where x is, replace with the maximum age in seconds). If you wish to enable this for sub-domains as well, append &lt;code>; includeSubDomains&lt;/code> to the header value.&lt;/p>
+&lt;p>The end result for enabling HSTS with a 300 second limit is:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-xml" data-lang="xml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;add&lt;/span> &lt;span style="color:#a6e22e">name=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;Strict-Transport-Security&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">value=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;max-age=300&amp;#34;&lt;/span> &lt;span style="color:#f92672">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;/configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Including the sub-domain protection:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-xml" data-lang="xml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;add&lt;/span> &lt;span style="color:#a6e22e">name=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;Strict-Transport-Security&amp;#34;&lt;/span> &lt;span style="color:#a6e22e">value=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;max-age=300; includeSubDomains&amp;#34;&lt;/span> &lt;span style="color:#f92672">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/customHeaders&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/httpProtocol&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;lt;/system.webServer&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">&amp;lt;/configuration&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

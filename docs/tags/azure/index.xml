@@ -1,1 +1,106 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>azure on CodeWithStu's Blog</title><link>https://im5tu.io/tags/azure/</link><description>Recent content in azure on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Wed, 26 Dec 2018 14:00:00 +0000</lastBuildDate><atom:link href="https://im5tu.io/tags/azure/index.xml" rel="self" type="application/rss+xml"/><item><title>Quick Tip: Accessing a Azure DevOps secret from within a scripted step</title><link>https://im5tu.io/article/2018/12/quick-tip-accessing-a-azure-devops-secret-from-within-a-scripted-step/</link><pubDate>Wed, 26 Dec 2018 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2018/12/quick-tip-accessing-a-azure-devops-secret-from-within-a-scripted-step/</guid><description>&lt;p>In today&amp;rsquo;s quick tip, we are going to see how we can access a secret that we&amp;rsquo;ve defined in a variable group as part of a Azure DevOps yml based build.&lt;/p></description></item><item><title>Building a custom build agent image with Docker and Azure DevOps pipelines</title><link>https://im5tu.io/article/2018/12/building-a-custom-build-agent-image-with-docker-and-azure-devops-pipelines/</link><pubDate>Mon, 24 Dec 2018 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2018/12/building-a-custom-build-agent-image-with-docker-and-azure-devops-pipelines/</guid><description>&lt;p>In this article, we will learn how to use a custom dockerfile as the bases for a customised Azure DevOps build agent. There are many reasons why you might want to do this, including running custom tooling that takes a while to setup or tooling that isn&amp;rsquo;t supported yet.&lt;/p></description></item><item><title>3 Easy Steps To Configuring Azure With Powershell</title><link>https://im5tu.io/article/2015/02/3-easy-steps-to-configuring-azure-with-powershell/</link><pubDate>Tue, 17 Feb 2015 18:37:00 +0000</pubDate><guid>https://im5tu.io/article/2015/02/3-easy-steps-to-configuring-azure-with-powershell/</guid><description>&lt;p>Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>azure on CodeWithStu's Blog</title><link>https://im5tu.io/tags/azure/</link><description>Recent content in azure on CodeWithStu's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Wed, 26 Dec 2018 14:00:00 +0000</lastBuildDate><atom:link href="https://im5tu.io/tags/azure/index.xml" rel="self" type="application/rss+xml"/><item><title>Quick Tip: Accessing a Azure DevOps secret from within a scripted step</title><link>https://im5tu.io/article/2018/12/quick-tip-accessing-a-azure-devops-secret-from-within-a-scripted-step/</link><pubDate>Wed, 26 Dec 2018 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2018/12/quick-tip-accessing-a-azure-devops-secret-from-within-a-scripted-step/</guid><description>&lt;p>In today&amp;rsquo;s quick tip, we are going to see how we can access a secret that we&amp;rsquo;ve defined in a variable group as part of a Azure DevOps yml based build.&lt;/p>
+&lt;p>By design, any variable from a linked variable set will:&lt;/p>
+&lt;ul>
+&lt;li>Be hidden from logs; and&lt;/li>
+&lt;li>Not be placed in as an environment variable&lt;/li>
+&lt;/ul>
+&lt;p>In the blog posts that I&amp;rsquo;ve seen to date, they&amp;rsquo;ve mentioned about using the &lt;code>##vso[task.setvariable name]value&lt;/code> command inside of a script. I personally dislike this way as it clutters the build with extra steps that I feel are unnecessary and it makes it harder to find when looking at the configuration file. You may still have to use this approach when the following tip does not work.&lt;/p>
+&lt;p>In order to pull in a value from a variable group, you must link the variables by using the following snippet:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">variables&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">group&lt;/span>: &lt;span style="color:#ae81ff">MY_VARIABLE_GROUP_NAME&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;em>Replace &lt;code>MY_VARIABLE_GROUP_NAME&lt;/code> with your variable group name.&lt;/em>&lt;/p>
+&lt;p>Multiple groups can be added like so:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">variables&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">group&lt;/span>: &lt;span style="color:#ae81ff">MY_VARIABLE_GROUP_NAME&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">group&lt;/span>: &lt;span style="color:#ae81ff">MY_VARIABLE_GROUP_NAME_2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And then in the steps, and the &lt;code>env:&lt;/code> section linking the &lt;code>SECRET_TOKEN&lt;/code> variable as follows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">steps&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>- &lt;span style="color:#f92672">script&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;echo Your script here&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">displayName&lt;/span>: &lt;span style="color:#e6db74">&amp;#39;My Test Script&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">env&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">SECRET_TOKEN&lt;/span>: &lt;span style="color:#ae81ff">$(SECRET_TOKEN)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;em>Replace &lt;code>SECRET_TOKEN&lt;/code> with the name of your variable that you wish to access.&lt;/em>&lt;/p>
+&lt;p>That&amp;rsquo;s it. From now you should be able to access your secret variables from within your scripts and not have them written out to logs.&lt;/p>
+&lt;h2 id="further-reading">Further Reading&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=vsts&amp;amp;tabs=yaml%2Cbatch">Build variables - Microsoft Azure Docs&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/Im5tu/dns/blob/master/azure-pipelines.yml">Sample YML - Github - Im5tu/dns&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Building a custom build agent image with Docker and Azure DevOps pipelines</title><link>https://im5tu.io/article/2018/12/building-a-custom-build-agent-image-with-docker-and-azure-devops-pipelines/</link><pubDate>Mon, 24 Dec 2018 14:00:00 +0000</pubDate><guid>https://im5tu.io/article/2018/12/building-a-custom-build-agent-image-with-docker-and-azure-devops-pipelines/</guid><description>&lt;p>In this article, we will learn how to use a custom dockerfile as the bases for a customised Azure DevOps build agent. There are many reasons why you might want to do this, including running custom tooling that takes a while to setup or tooling that isn&amp;rsquo;t supported yet.&lt;/p>
+&lt;h2 id="tldr">TL;DR&lt;/h2>
+&lt;p>You need to this &lt;code>Dockerfile&lt;/code> snippet:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> microsoft/vsts-agent:ubuntu-16.04&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#75715e"># Install your stuff here&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">&lt;/span>&lt;span style="color:#66d9ef">CMD&lt;/span> /bin/sh&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And this &lt;code>azure-pipelines.yml&lt;/code> snippet:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">resources&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">containers&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">octodns&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">image&lt;/span>: &lt;span style="color:#ae81ff">im5tu/octodns:latest&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">octodns&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">steps&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Your steps go here&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="starting-with-a-dockerfile">Starting with a Dockerfile&lt;/h2>
+&lt;p>In order to use a custom image as part of the build process, we need to start off with a shell of a docker file. Microsoft have graciously given us a series of base images to start from. You can find them &lt;a href="https://hub.docker.com/r/microsoft/vsts-agent">here&lt;/a>. For this article, I will use the &lt;code>ubuntu-16.04&lt;/code> release.&lt;/p>
+&lt;p>In the repository of your choice, create a file called &lt;code>Dockerfile&lt;/code>. Note that the name is case sensitive because of the docker builds that we will do later on. I found this out the hard way, and if you&amp;rsquo;ve made the mistake too - run the following command to reset it within git: &lt;code>git mv -f dockerfile Dockerfile&lt;/code>&lt;/p>
+&lt;p>At the top of the Dockerfile, start off with the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">FROM&lt;/span>&lt;span style="color:#e6db74"> microsoft/vsts-agent:ubuntu-16.04&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>During the build, this will instruct docker to pull the image called &lt;code>vsts-agent&lt;/code> tagged with &lt;code>ubuntu-16.04&lt;/code> from the user &lt;code>microsoft&lt;/code>.&lt;/p>
+&lt;p>Then at the bottom of the Dockerfile, place the following line:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-dockerfile" data-lang="dockerfile">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">CMD&lt;/span> /bin/sh&lt;span style="color:#960050;background-color:#1e0010">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This instructs the built image to leave a command prompt as the entrypoint so that we can run the rest of our scripts.&lt;/p>
+&lt;h3 id="a-note-on-the-base-image-choice">A note on the base image choice&lt;/h3>
+&lt;p>I did initially try experimenting with an Alpine base image, but there seems to be some requirements around what the image contains. Unfortunately, I don&amp;rsquo;t know what the requirements are/I haven&amp;rsquo;t gone to figure them out. If you want to, feel free to browse the dockerfiles &lt;a href="https://github.com/Microsoft/vsts-agent-docker/">here&lt;/a> to see what&amp;rsquo;s required, but I would just stick with the hosted images supplied by Microsoft as your base.&lt;/p>
+&lt;h2 id="building-with-dockerhub">Building with DockerHub&lt;/h2>
+&lt;p>If your repository is hosted on either Bitbucket or Github, you can get your docker image built and hosted for free by Docker. In order to do this, you need to link either your Github or Bitbucket account from the following page: &lt;code>https://cloud.docker.com/u/&amp;lt;your user id&amp;gt;/settings&lt;/code>&lt;/p>
+&lt;p>Once that is complete, if you navigate to the page &lt;a href="https://cloud.docker.com/repository/create">https://cloud.docker.com/repository/create&lt;/a> you should see the following:&lt;/p>
+&lt;p>&lt;img src="Create-Repository.png" alt="Docker - Create Repository Screen">&lt;/p>
+&lt;p>From here we can create a link to our hosted repository and setup a build that is associated with the repository.&lt;/p>
+&lt;h3 id="existing-repositories">Existing repositories&lt;/h3>
+&lt;p>If you need to edit an existing repository or build, you can do that from the following page: &lt;code>https://cloud.docker.com/repository/docker/&amp;lt;user id&amp;gt;/&amp;lt;repo name&amp;gt;/builds&lt;/code>&lt;/p>
+&lt;p>&lt;img src="Build-Page.png" alt="Docker - Builds Screen">&lt;/p>
+&lt;h2 id="using-the-dockerfile-in-a-azure-devops-pipeline">Using the Dockerfile in a Azure DevOps pipeline&lt;/h2>
+&lt;p>Once the build agent has successfully built, we can start to create our &lt;code>azure-pipelines.yml&lt;/code> file around the new custom container. Above the &lt;code>steps&lt;/code> section of the file, add the following snippet:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">resources&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">containers&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">&amp;lt;name&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">image&lt;/span>: &lt;span style="color:#ae81ff">&amp;lt;user id&amp;gt;/&amp;lt;repo name&amp;gt;:&amp;lt;tag&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">&amp;lt;name&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Which, when populated looks like the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yml" data-lang="yml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">resources&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">containers&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">octodns&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">image&lt;/span>: &lt;span style="color:#ae81ff">im5tu/octodns:latest&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">container&lt;/span>: &lt;span style="color:#ae81ff">octodns&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>That&amp;rsquo;s it, you should now have a functioning customised Azure DevOps build agent. After that you can play with any additional steps, triggers, variables or what ever your heart desires. Here&amp;rsquo;s what it looks like when it&amp;rsquo;s running instead of Azure DevOps (with the container initialization step highlighted):&lt;/p>
+&lt;p>&lt;img src="Running-Agent.png" alt="Azure DevOps - Running Custom Containers">&lt;/p>
+&lt;p>To view the Dockerfile that I am currently using as a custom agent, &lt;a href="https://github.com/Im5tu/octodns-docker/blob/master/Dockerfile">go here&lt;/a>.&lt;/p>
+&lt;p>To view the full usage of the docker file that I am using, &lt;a href="https://github.com/Im5tu/dns/blob/master/azure-pipelines.yml">go here&lt;/a>.&lt;/p>
+&lt;h3 id="further-reading">Further Reading&lt;/h3>
+&lt;ul>
+&lt;li>&lt;a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=vsts&amp;amp;tabs=yaml">Container Jobs&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://docs.docker.com/docker-hub/builds/">Docker Automated Builds&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/">Docker Multi-Stage Builds&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>3 Easy Steps To Configuring Azure With Powershell</title><link>https://im5tu.io/article/2015/02/3-easy-steps-to-configuring-azure-with-powershell/</link><pubDate>Tue, 17 Feb 2015 18:37:00 +0000</pubDate><guid>https://im5tu.io/article/2015/02/3-easy-steps-to-configuring-azure-with-powershell/</guid><description>&lt;p>Recently, I had to automate some tasks in Azure. This is the easiest way I could get started.&lt;/p>
+&lt;p>Before we begin, ensure that you have a administrative powershell window and have set the execution policy to unrestricted:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>Set-ExecutionPolicy Unrestricted
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#Confirm the settings afterwards with Get-ExecutionPolicy&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="step-1---download-settings">Step 1 - Download Settings&lt;/h2>
+&lt;p>In order to download the settings you need to have a valid Azure administrative account and be logged in. Once you are logged in, use the powershell window to run the following command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>Get-AzurePublishSettingsFile
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This will open up the Azure portal and download the file to disk. Remember the path to the downloaded file as you will need this in the next step.&lt;/p>
+&lt;h2 id="step-2---import-settings">Step 2 - Import Settings&lt;/h2>
+&lt;p>Using the file downloading in the previous step, we can import the settings using the following commands, replacing &lt;code>&amp;lt;pathToFile&amp;gt;&lt;/code> with the actual file:&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-ppowershells" data-lang="ppowershells">$settingsFile = &amp;#34;&amp;lt;pathToFile&amp;gt;&amp;#34;
+Import-AzurePublishSettingsFile -PublishSettingsFile $settingsFile
+&lt;/code>&lt;/pre>&lt;p>This command sets up all of the available subscriptions for you in a nice easy manner.&lt;/p>
+&lt;h2 id="step-3---verify">Step 3 - Verify&lt;/h2>
+&lt;p>The last step is to verify that everything has been setup correctly. To do this, simply run the &lt;code>Get-AzureSubscription&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-powershell" data-lang="powershell">&lt;span style="display:flex;">&lt;span>Get-AzureSubscription
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You should see all of your settings in the powershell window. Profit!&lt;/p>
+&lt;p>&lt;em>Don&amp;rsquo;t forget how to remove your details once you are done!&lt;/em>&lt;/p></description></item></channel></rss>
