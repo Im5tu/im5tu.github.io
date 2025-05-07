@@ -30,5 +30,6 @@ publishDate = ["publishDate", "date"]
 expiryDate = ["expiryDate"]
 
 [outputs]
-  home = ["HTML"]
+  home = ["HTML", "RSS"]
+  page = ["HTML", "RSS"]
   taxonomy = ["HTML", "RSS"]
