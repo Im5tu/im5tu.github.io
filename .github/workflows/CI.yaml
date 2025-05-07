@@ -25,14 +25,14 @@ jobs:
           extended: true
 
       - name: use node.js 16.x
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v3
         with:
-          node-version: '>=16.0.0'
+          node-version: '18.x'
           check-latest: true
 
       - name: Run tailwindcss
         run: |
-          npm install --global tailwindcss
+          npm install --global tailwindcss@3.3.3
           npx tailwindcss -w -o ./assets/app.css -i ./src/css/base.css --minify
 
       - name: Build
