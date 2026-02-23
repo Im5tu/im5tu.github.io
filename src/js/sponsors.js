@@ -28,16 +28,16 @@
                 sponsorText = "<b>Sponsored by: </b>" + sponsor.name + ". " + sponsor.message;
                 sponsorLink = sponsor.url;
                 sponsorLinkElement.onclick = function() {
-                    gtag('event', 'sponsor_view', {
+                    window?.datafast("sponsor_view", {
                         "company": sponsor.name,
                         "url": sponsor.url,
-                        "week": sponsor.week
+                        "week": String(sponsor.week)
                     });
                     return true;
                 }
             } else {
                 sponsorLinkElement.onclick = function() {
-                    gtag('event', 'sponsorship_view', {});
+                    window?.datafast("sponsorship_view");
                     return true;
                 }
             }
